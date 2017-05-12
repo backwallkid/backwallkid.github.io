@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Walter&#39;s Garden</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="https://backwallkid.github.io/"/>
+  <updated>2017-05-11T03:50:36.316Z</updated>
+  <id>https://backwallkid.github.io/</id>
+  
+  <author>
+    <name>Walter Huang</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题</title>
+    <link href="http://bwk.gi.com/2017-05/android-wechat-cannot-analysis-gzip-video.html"/>
+    <id>http://bwk.gi.com/2017-05/android-wechat-cannot-analysis-gzip-video.html</id>
+    <published>2017-05-10T07:52:06.000Z</published>
+    <updated>2017-05-11T03:50:36.316Z</updated>
+    
+    <summary type="html">
+    
+      2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题
+    
+    </summary>
+    
+      <category term="Tech" scheme="https://backwallkid.github.io/categories/Tech/"/>
+    
+  </entry>
+</feed>

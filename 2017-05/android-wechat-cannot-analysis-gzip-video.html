@@ -11,20 +11,20 @@
     
 
     
-    <meta name="description" content="前言今天投产了一个小项目，一个很简单的H5，有播放视频功能，使用了videojs插件。之前也做过数个视频播放，视频的转压都按照既定流程进行，文件放到FTP后，iphone和安卓机测试下来都没有问题。于是给链接，业务组直接在微信公众号里投放了。那个企业号有不少关注的人，推送发出去1分钟就有近千阅读量。但是我在点击链接后，发现项目打不开了，而且该企业官网的主站也挂了，在经过pc端和手机4G下测试发现问">
+    <meta name="description" content="通过一个小项目的投产折射出自己考虑不周的地方。顺带发现了安卓微信内置浏览器和gzip压缩之间的苟且。">
 <meta name="keywords" content="PHP,Apache">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题">
 <meta property="og:url" content="https://backwallkid.github.io/2017-05/android-wechat-cannot-analysis-gzip-video.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="前言今天投产了一个小项目，一个很简单的H5，有播放视频功能，使用了videojs插件。之前也做过数个视频播放，视频的转压都按照既定流程进行，文件放到FTP后，iphone和安卓机测试下来都没有问题。于是给链接，业务组直接在微信公众号里投放了。那个企业号有不少关注的人，推送发出去1分钟就有近千阅读量。但是我在点击链接后，发现项目打不开了，而且该企业官网的主站也挂了，在经过pc端和手机4G下测试发现问">
+<meta property="og:description" content="通过一个小项目的投产折射出自己考虑不周的地方。顺带发现了安卓微信内置浏览器和gzip压缩之间的苟且。">
 <meta property="og:image" content="https://backwallkid.github.io/images/vt_pc_chrome.jpg">
 <meta property="og:image" content="https://backwallkid.github.io/images/vt_hw_comb.jpg">
 <meta property="og:image" content="https://backwallkid.github.io/images/vt_s6_comb_fix.jpg">
-<meta property="og:updated_time" content="2017-05-11T09:39:19.338Z">
+<meta property="og:updated_time" content="2017-05-12T06:46:30.106Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题">
-<meta name="twitter:description" content="前言今天投产了一个小项目，一个很简单的H5，有播放视频功能，使用了videojs插件。之前也做过数个视频播放，视频的转压都按照既定流程进行，文件放到FTP后，iphone和安卓机测试下来都没有问题。于是给链接，业务组直接在微信公众号里投放了。那个企业号有不少关注的人，推送发出去1分钟就有近千阅读量。但是我在点击链接后，发现项目打不开了，而且该企业官网的主站也挂了，在经过pc端和手机4G下测试发现问">
+<meta name="twitter:description" content="通过一个小项目的投产折射出自己考虑不周的地方。顺带发现了安卓微信内置浏览器和gzip压缩之间的苟且。">
 <meta name="twitter:image" content="https://backwallkid.github.io/images/vt_pc_chrome.jpg">
 
     
@@ -53,7 +53,7 @@
 				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
 				<h2 class="blog-motto">I love $</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -63,7 +63,7 @@
 					
 						<li><a href="/archives">Archives</a></li>
 					
-						<li><a href="/about">About</a></li>
+						<li><a href="/sitemap.xml">Sitemap</a></li>
 					
 					<li>
  					
@@ -92,14 +92,14 @@
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-11T04:30:00.000Z" itemprop="datePublished"> 发表于 2017-05-11</time>
+    <time datetime="2017-05-11T04:30:00.000Z" itemprop="datePublished"> 發表於 2017-05-11</time>
     
   </p>
 </header>
 	<div class="article-content">
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用于测试的安卓机型"><span class="toc-number">2.</span> <span class="toc-text">用于测试的安卓机型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">3.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟环境"><span class="toc-number">4.</span> <span class="toc-text">模拟环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
@@ -178,17 +178,17 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用于测试的安卓机型"><span class="toc-number">2.</span> <span class="toc-text">用于测试的安卓机型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">3.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模拟环境"><span class="toc-number">4.</span> <span class="toc-text">模拟环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -196,7 +196,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
@@ -209,7 +209,7 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
@@ -225,7 +225,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -247,7 +247,7 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
@@ -476,7 +476,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
