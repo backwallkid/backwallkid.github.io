@@ -5,7 +5,7 @@
 # Site
 title: Walter's Garden
 subtitle: I love $
-description: "PHP,Python"
+description: "关于后端,个人成长,PHP,Python"
 author: Walter Huang
 language: zh-Hans
 timezone: Asia/Shanghai
@@ -69,4 +69,7 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+  type: git
+  repo: https://github.com/backwallkid/backwallkid.github.io
+  branch: master
+  message: hexo auto update
