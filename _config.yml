@@ -64,12 +64,14 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
+theme: jacman
+stylus:
+  compress: true
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/backwallkid/backwallkid.github.io
+  repo: git@github.com:backwallkid/backwallkid.github.io.get
   branch: master
   message: hexo auto update
