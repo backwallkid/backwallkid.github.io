@@ -5,28 +5,56 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <style type="text/css">
         body, html{width: 100%;height: 100%;margin:0;font-family:"微软雅黑";}
-        #allmap{height:100%;width:100%;}
+        #allmap{height:90%;width:100%}
+        #search-bar{height: 60px;text-align: center;font-size: 18px;padding-top: 8px}
+        #search-bar label{}
+        #search-bar select{height: 20px}
         /*#r-result{width:100%; font-size:14px;line-height:20px;}*/
     </style>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=OxKHSZuFHiZcrSej9rQXzPpLHK2w8cTw"></script>
+    <script src="https://api.map.baidu.com/api?v=2.0&ak=OxKHSZuFHiZcrSej9rQXzPpLHK2w8cTw&s=1" type="text/javascript"></script>
+    <script src="https://cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
     <title>Leka Shanghai Point</title>
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
 </head>
 <body>
+<div id="search-bar">
+    <label for="search-district">行政区</label>
+    <select name="district" id="search-district">
+        <option value="">==请选择==</option>
+        <option value="卢湾">卢湾区</option>
+        <option value="徐汇">徐汇区</option>
+        <option value="普陀">普陀区</option>
+        <option value="杨浦">杨浦区</option>
+        <option value="浦东">浦东新区</option>
+        <option value="虹口">虹口区</option>
+        <option value="长宁">长宁区</option>
+        <option value="闵行">闵行区</option>
+        <option value="闸北">闸北区</option>
+        <option value="静安">静安区</option>
+        <option value="黄浦">黄浦区</option>
+    </select>
+    <label for="search-circle">商圈</label>
+    <select name="circle" id="search-circle">
+        <option value="">==请选择==</option>
+    </select><br>
+    <label for="search-position-text">位置</label>
+    <input type="text" name="position" id="search-position-text">
+    <button id="search-position">搜索周边</button>
+</div>
 <div id="allmap"></div>
-<!--<div id="r-result">
-    <input type="button" onclick="add_overlay();" value="添加覆盖物" />
-    <input type="button" onclick="remove_overlay();" value="删除覆盖物" />
-</div>-->
-<!--<div id="r-result">
-    <input type="button" value="批量地址解析" onclick="bdGEO()" />
-    <div id="result"></div>
-</div>-->
 </body>
 </html>
 <script type="text/javascript">
     //http://bbs.mayitec.cn/tools/lekaMapOnline.html
     // 百度地图API功能
-    var cp={x:121.476213,y:31.231612};
     var myLocation=[{'circle':'','shop_name':'Zoo Coffee-恒基名人广场店','district':'黄浦','address':'南京东路300号恒基名人购物中心311号','x':'121.490992','y':'31.243455'},
         {'circle':'','shop_name':'咖啡陪你-汇暻店','district':'黄浦','address':'瞿溪路988号 汇暻生活广场B2层','x':'121.484105','y':'31.205069'},
         {'circle':'','shop_name':'雕刻时光-学院咖啡馆','district':'杨浦','address':'大学路318号','x':'121.514002','y':'31.308689'},
@@ -326,22 +354,120 @@
         {'circle':'','shop_name':'华士达电影院','district':'徐汇','address':'上海市徐汇区东安路599号绿地中心正大乐城3楼','x':'121.46399','y':'31.191887'},
         {'circle':'','shop_name':'华谊兄弟影院','district':'长宁','address':'大渡河路178号长风景畔广场4楼售票处','x':'121.402412','y':'31.229258'}
     ];
+    var search={'c':'','d':'',cp:{x:121.476213,y:31.231612},'p':{x:0,y:0}};
+    var opts = {
+        width : 250,     // 信息窗口宽度
+        height: 80,     // 信息窗口高度
+        title : "乐卡点详情" , // 信息窗口标题
+        enableMessage:true//设置允许信息窗发送短息
+    };
 
     var map = new BMap.Map("allmap");
-    var point = new BMap.Point(cp.x,cp.y);
-    map.centerAndZoom(point, 14);
+
+    function zoom_to(level){
+        level = arguments[1] ? arguments[1] : 14;
+        let point = new BMap.Point(search.cp.x,search.cp.y);
+        map.centerAndZoom(point, level);
+        map.enableScrollWheelZoom(true);
+    }
+    zoom_to();
 
     // 创建点
-    for(let i in myLocation){
-        let loc=myLocation[i];
-        var marker = new BMap.Marker(new BMap.Point(loc.x,loc.y),{title:"店名:"+loc.shop_name+"||详址:"+loc.address});
-        map.addOverlay(marker);            //增加点
+    function add_overlay() {
+        for(let i in myLocation){
+            let loc=myLocation[i];
+            if((search.c&&search.c==loc.circle)||(search.d&&search.d==loc.district)){
+                let marker = new BMap.Marker(new BMap.Point(loc.x,loc.y),{title:"店名:"+loc.shop_name+"\r\n详址:"+loc.address});
+                map.addOverlay(marker);            //增加点
+                addClickHandler("店名:"+loc.shop_name+"<br>详址:"+loc.address,marker);
+            }else if(search.p.x&&search.p.y){
+                if((Math.pow(search.p.x-loc.x,2)+Math.pow(search.p.y-loc.y,2))<Math.pow(0.008,2)){
+                    let marker = new BMap.Marker(new BMap.Point(loc.x,loc.y),{title:"店名:"+loc.shop_name+"\r\n详址:"+loc.address});
+                    map.addOverlay(marker);            //增加点
+                    addClickHandler("店名:"+loc.shop_name+"<br>详址:"+loc.address,marker);
+                }
+            }
+        }
     }
+
+    function add_person(){
+        var pt = new BMap.Point(search.p.x,search.p.y);
+        var myIcon = new BMap.Icon("/leka/image/pointer32_purple.png", new BMap.Size(32,32));
+        var marker2 = new BMap.Marker(pt,{icon:myIcon});  // 创建标注
+        map.addOverlay(marker2);              // 将标注添加到地图中
+    }
+
+    function do_search(circle,district,position){
+        search.c=search.d=search.p='';
+        let dcp={'卢湾':{x:'121.472695',y:'31.221171'},
+            '徐汇':{x:'121.443823',y:'31.199957'},
+            '普陀':{x:'121.433297',y:'31.252533'},
+            '杨浦':{x:'121.521528',y:'31.305647'},
+            '浦东':{x:'121.533099',y:'31.235089'},
+            '虹口':{x:'121.488758',y:'31.271208'},
+            '长宁':{x:'121.410785',y:'31.216932'},
+            '闵行':{x:'121.391382',y:'31.172079'},
+            '闸北':{x:'121.458719',y:'31.280343'},
+            '静安':{x:'121.455054',y:'31.229284'},
+            '黄浦':{x:'121.488471',y:'31.237374'}};
+        let ccp={};
+        if(district){
+            search.cp=dcp[district];
+            search.d=district;
+        }
+        if(circle){
+            search.cp=ccp[circle];
+            search.c=circle;
+        }
+        if(typeof(position)=='object'&&position.x&&position.y){
+            search.cp=search.p=position;
+        }
+    }
+
+    $('#search-district').on('change',function(){
+        remove_overlay();
+        if($(this).val()!=''){
+            do_search('',$(this).val(),'');
+            zoom_to(15);
+            add_overlay();
+        }
+    });
+
+    $('#search-position').on('click',function(){
+        myGeo.getPoint($('#search-position-text').val(), function(point){
+            if (point) {
+                remove_overlay();
+                do_search('','',{'x':point.lng,'y':point.lat});
+                zoom_to(15);
+                add_person();
+                add_overlay();
+            }
+        }, "上海市");
+    });
 
     //清除覆盖物
     function remove_overlay(){
         map.clearOverlays();
     }
-    map.enableScrollWheelZoom(true);
 
+    function addClickHandler(content,marker){
+        marker.addEventListener("click",function(e){
+            openInfo(content,e)}
+        );
+    }
+    function openInfo(content,e){
+        var p = e.target;
+        var point = new BMap.Point(p.getPosition().lng, p.getPosition().lat);
+        var infoWindow = new BMap.InfoWindow(content,opts);  // 创建信息窗口对象
+        map.openInfoWindow(infoWindow,point); //开启信息窗口
+    }
+    // 编写自定义函数,创建标注
+    function addMarker(point,label){
+        var marker = new BMap.Marker(point);
+        map.addOverlay(marker);
+        marker.setLabel(label);
+    }
+
+    var myGeo = new BMap.Geocoder();
+    
 </script>
