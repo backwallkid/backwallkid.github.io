@@ -25,7 +25,6 @@
     </script>
 </head>
 <body>
-<div id="container">
 <div id="search-bar">
     <label for="search-district">行政区</label>
     <select name="district" id="search-district">
@@ -85,7 +84,6 @@
     <button id="search-position">搜索周边</button>
 </div>
 <div id="allmap"></div>
-</div>
 </body>
 </html>
 <script type="text/javascript">
@@ -479,7 +477,6 @@
             '延中绿地':{'x':'121.471899','y':'31.230486'},
             '南京西路':{'x':'121.463957','y':'31.234902'},
             '人广':{'x':'121.481223','y':'31.237202'}};
-        let ccp={};
         if(district){
             search.cp=dcp[district];
             search.d=district;
