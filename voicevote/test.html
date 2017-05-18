@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html data-dpr="3" style="font-size: 129.375px;"><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0, minimum-scale=1.0,user-scalable=no">
+    <title>test jquery</title>
+    <script src="https://cdn.bootcss.com/jquery/1.12.3/jquery.min.js"></script>
+</head>
+<body>
+test
+<hr>
+<div id="msg"></div>
+</body>
+</html>
+<script type="text/javascript">
+$.post('https://morning-lowlands-84535.herokuapp.com/vote.php',{'id':1,'data':'aabb'},function(e){
+	console.log(e);
+	$('#msg').html(e.toString());
+})
+</script>
