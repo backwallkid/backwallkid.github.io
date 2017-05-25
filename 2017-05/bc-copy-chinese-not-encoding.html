@@ -4,26 +4,26 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>乐卡上海网点地图制作心得 | 百度地图API使用心得 | Walter&#39;s Garden</title>
+    <title>记一次小型生产事故 | BeyondComper跨编码方式复制文件内容 | Walter&#39;s Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Walter Huang">
     
 
     
-    <meta name="description" content="通过动手制作一个小项目，熟悉百度地图API的用法，方便日后项目开发。">
-<meta name="keywords" content="Html+js+css">
+    <meta name="description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
+<meta name="keywords" content="Html+js+css,Tools">
 <meta property="og:type" content="article">
-<meta property="og:title" content="乐卡上海网点地图制作心得 | 百度地图API使用心得">
-<meta property="og:url" content="https://backwallkid.github.io/2017-05/leka-shanghai-map-program.html">
+<meta property="og:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
+<meta property="og:url" content="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="通过动手制作一个小项目，熟悉百度地图API的用法，方便日后项目开发。">
-<meta property="og:image" content="https://backwallkid.github.io/images/lbsyun_key_alert_wm.jpg">
-<meta property="og:updated_time" content="2017-05-25T06:41:17.296Z">
+<meta property="og:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
+<meta property="og:image" content="https://backwallkid.github.io/images/bc_chinese_copy.jpg">
+<meta property="og:updated_time" content="2017-05-25T06:49:47.645Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="乐卡上海网点地图制作心得 | 百度地图API使用心得">
-<meta name="twitter:description" content="通过动手制作一个小项目，熟悉百度地图API的用法，方便日后项目开发。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/lbsyun_key_alert_wm.jpg">
+<meta name="twitter:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
+<meta name="twitter:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/bc_chinese_copy.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -83,14 +83,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017-05/leka-shanghai-map-program.html" title="乐卡上海网点地图制作心得 | 百度地图API使用心得" itemprop="url">乐卡上海网点地图制作心得 | 百度地图API使用心得</a>
+      <a href="/2017-05/bc-copy-chinese-not-encoding.html" title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容" itemprop="url">记一次小型生产事故 | BeyondComper跨编码方式复制文件内容</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-17T12:32:00.000Z" itemprop="datePublished"> Published 2017-05-17</time>
+    <time datetime="2017-05-25T12:25:00.000Z" itemprop="datePublished"> Published 2017-05-25</time>
     
   </p>
 </header>
@@ -99,25 +99,22 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#材料单"><span class="toc-number">2.</span> <span class="toc-text">材料单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行过程"><span class="toc-number">3.</span> <span class="toc-text">执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>事情的起因是我的爱人喜欢收集一些美丽的乐卡(明信片的一种，正面是美丽壮阔的风景照)。作为一个坚实的后盾自然要支持她！于是我经常借着午休穿梭在大街小巷，凭借乐卡官方提供的<a href="https://site.douban.com/leka/widget/forum/7386134/discussion/613542250/" target="_blank" rel="external">乐卡网点地址</a>进行寻找并取卡。在搜寻过程中，萌生了制作一张基于那些地址的专门戳点地图的想法。<br>期间也看到蚂蚁家制作的<a href="http://bbs.mayitec.cn/tools/lekaMapOnline.html" target="_blank" rel="external">北京乐卡地图</a>使用的是百度地图API，但是该网页仅能运行于PC端，手机打开巨卡。刚好我的<a href="https://backwallkid.github.io/">github博客站</a>最近配置完成了，准备自己也写一个。</p>
-<h3 id="材料单"><a href="#材料单" class="headerlink" title="材料单"></a>材料单</h3><ol>
-<li><a href="http://lbsyun.baidu.com/" target="_blank" rel="external">百度开放平台</a>账号一个</li>
-<li>百度开放平台浏览器端启用了Javascript API的AK一条</li>
-<li>一个有效的域名，不乐意花钱买域名和服务器的学生党，推荐用Github Pages</li>
-</ol>
-<h3 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h3><p>怎么调用API的百度地图的<a href="http://lbsyun.baidu.com/jsdemo.htm#a1_2" target="_blank" rel="external">JSDEMO</a>已经写得很清楚了，哪怕写不来js的人(比如我)对照着demo，也能写完初版。<br>记录一下绊子：</p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>今天组长在做站内巡检的时候，发现header内有一条meta标签的content显示为乱码。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">content</span>=<span class="string">"�����򰮶����������򰮶������������������ϰ������أ�����������Դ���Ƚ����ա���ѧ�䷽���ϸ��ʿأ���������й����Ƚ�ˮƽ�����ʺ��й������Ĳ�Ʒ��ʼ�������Ա���������������ġ�"</span> /&gt;</span></div></pre></td></tr></table></figure></p>
+<p>我们版本是由svn控制的，组长使用<em>blame</em>看见是我提交的文件，就丢给我。<br>虽然已经是2个月前的提交，但是我还是稍微有点印象。<br>那是一次从测试站到正式站的代码合并，使用了<strong>BeyondCompare</strong>(下文简称为<strong>BC</strong>)的文件夹对比功能，逐个文件进行对比合并。</p>
+<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a>发现</h3><p>首先确认了测试站和正式站文件的内容是一样的，而测试站中头部文件的编码方式是<em>UTF-8</em>，而正式站中头部文件的编码方式是<em>GB2312</em>。这让我感到非常奇怪，因为不论是用<em>BC</em>文件拷贝还是<em>IDE</em>的文件创建，都不会出现<em>非UTF-8</em>编码的文件。</p>
+<p>追溯查询了上一次提交所有文件的编码方式后发现，<em>非UTF-8</em>编码的文件还有很多。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>于是我打算造个环境测试一下，建了两个空文件夹test1、test2，test1中放入一个随意汉字内容的UTF-8编码test.html。</p>
 <ol>
-<li>本地的测试随便搞个开了Javascript API的AK就能测，但是一旦放到服务器上一定要把AK的Refer白名单设为自己域名。</li>
-<li>由于我是在github pages中调用百度地图API，我的github注册也比较晚，被限制了必须使用https协议。在https中调用http的js会报错，好在百度地图开放了免认证的<a href="http://lbsyun.baidu.com/index.php?title=jspopular/guide/introduction#Https_.E8.AF.B4.E6.98.8E" target="_blank" rel="external">https支持</a>。</li>
-<li>用来放地图的div的层级必须<strong>直接处于body之下</strong>，就算外面套了一层div也会导致地图显示不出来（初版我只用了1小时就写好了，为了定位这个bug居然也用了1小时QAQ）。</li>
-<li>假如将项目放到域名下，用手机测试的时候出现如下弹框，请检查所用AK的<u>应用类型</u>是<strong>浏览器端</strong>并且<u>启用服务</u>勾选了<strong>Javascript API</strong>。<br><img src="/images/lbsyun_key_alert_wm.jpg" alt="image"></li>
+<li>先使用BC的<em>目录复制到右边</em>功能，从test1复制到test2，经查test2/test.html的编码方式还是UTF-8。</li>
+<li>清空test2/test.html的内容，并将编码方式改为ansi。</li>
+<li>再使用BC的<em>打开文件复制到右边</em>功能，从test1/test.html复制到test2/test.html，汉字复制过去了。<br><img src="/images/bc_chinese_copy.jpg" alt="image"><br>如红框显示，只是文字内容复制过去，编码方式却没有。</li>
 </ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>虽然心理上我比较倾向于使用谷歌地图API进行制作，但是即使做出来，也不是人人手机上都有特殊工具可以正常访问。<br>最后贴一下我做的<a href="https://backwallkid.github.io/leka/shanghai.html">乐卡上海网点地图</a>，经测ios手机可用，PC限chrome,opera,IE11下运行，使用行政区、商圈、地址进行筛选。</p>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="http://bbs.mayitec.cn/tools/lekaMapOnline.html" target="_blank" rel="external">蚂蚁家的乐卡北京网点地图</a><br><a href="http://lbsyun.baidu.com/jsdemo.htm" target="_blank" rel="external">百度地图JavaScript API示例DEMO</a><br><a href="http://lbsyun.baidu.com/index.php?title=jspopular/guide/introduction#Https_.E8.AF.B4.E6.98.8E" target="_blank" rel="external">百度地图API的Https说明</a><br><a href="https://help.github.com/articles/what-is-github-pages/" target="_blank" rel="external">what is github pages</a></p>
+<h3 id="推测"><a href="#推测" class="headerlink" title="推测"></a>推测</h3><p>于是我推测出2个月前的经过是这样的：<br>在进行文件夹内容合并的时候，我发现正式站文件夹内已经有了一个空的头部文件html。<br>于是我在使用BC进行内容合并的时候不是直接拷贝文件，而是点进文件内复制了内容，却没有看到BC右上角提示的不同的文件编码方式。导致一个GB2312的汉字头部文件进了UTF-8编码的网站。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>去追究谁造的GB2312空头部文件已经没有意义了，组长真正的责难点在于我在复制文字的过程中没有检查编码方式不同，还把这个文件投产了。<br>通过这个生产事故，再次敲响警钟，始终要记得<strong>检查文件编码方式</strong>。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -131,7 +128,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a>
+  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a><a href="/tags/Tools/">Tools</a>
   </div>
 
 </div>
@@ -140,7 +137,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://backwallkid.github.io/2017-05/leka-shanghai-map-program.html" data-title="乐卡上海网点地图制作心得 | 百度地图API使用心得 | Walter&#39;s Garden" data-tsina="null" class="share clearfix">
+	  <div data-url="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html" data-title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容 | Walter&#39;s Garden" data-tsina="null" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -153,19 +150,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017-05/bc-copy-chinese-not-encoding.html" title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
-  <strong>上一篇：</strong><br/>
-  <span>
-  记一次小型生产事故 | BeyondComper跨编码方式复制文件内容</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017-05/android-wechat-cannot-analysis-gzip-video.html"  title="2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题">
+<a href="/2017-05/leka-shanghai-map-program.html"  title="乐卡上海网点地图制作心得 | 百度地图API使用心得">
  <strong>下一篇：</strong><br/> 
- <span>2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题
+ <span>乐卡上海网点地图制作心得 | 百度地图API使用心得
 </span>
 </a>
 </div>
@@ -180,7 +169,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#材料单"><span class="toc-number">2.</span> <span class="toc-text">材料单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#执行过程"><span class="toc-number">3.</span> <span class="toc-text">执行过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">5.</span> <span class="toc-text">Reference</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
