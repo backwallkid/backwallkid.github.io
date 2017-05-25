@@ -18,12 +18,12 @@
 <meta property="og:url" content="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
 <meta property="og:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta property="og:image" content="https://backwallkid.github.io/images/bc_chinese_copy.jpg">
-<meta property="og:updated_time" content="2017-05-25T06:49:47.645Z">
+<meta property="og:image" content="https://backwallkid.github.io/images/bc_chinese_copy_wm.jpg">
+<meta property="og:updated_time" content="2017-05-25T06:53:33.571Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
 <meta name="twitter:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/bc_chinese_copy.jpg">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/bc_chinese_copy_wm.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -111,7 +111,7 @@
 <ol>
 <li>先使用BC的<em>目录复制到右边</em>功能，从test1复制到test2，经查test2/test.html的编码方式还是UTF-8。</li>
 <li>清空test2/test.html的内容，并将编码方式改为ansi。</li>
-<li>再使用BC的<em>打开文件复制到右边</em>功能，从test1/test.html复制到test2/test.html，汉字复制过去了。<br><img src="/images/bc_chinese_copy.jpg" alt="image"><br>如红框显示，只是文字内容复制过去，编码方式却没有。</li>
+<li>再使用BC的<em>打开文件复制到右边</em>功能，从test1/test.html复制到test2/test.html，汉字复制过去了。<br><img src="/images/bc_chinese_copy_wm.jpg" alt="image"><br>如红框显示，只是文字内容复制过去，编码方式却没有。</li>
 </ol>
 <h3 id="推测"><a href="#推测" class="headerlink" title="推测"></a>推测</h3><p>于是我推测出2个月前的经过是这样的：<br>在进行文件夹内容合并的时候，我发现正式站文件夹内已经有了一个空的头部文件html。<br>于是我在使用BC进行内容合并的时候不是直接拷贝文件，而是点进文件内复制了内容，却没有看到BC右上角提示的不同的文件编码方式。导致一个GB2312的汉字头部文件进了UTF-8编码的网站。</p>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>去追究谁造的GB2312空头部文件已经没有意义了，组长真正的责难点在于我在复制文字的过程中没有检查编码方式不同，还把这个文件投产了。<br>通过这个生产事故，再次敲响警钟，始终要记得<strong>检查文件编码方式</strong>。</p>
