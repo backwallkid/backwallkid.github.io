@@ -1,11 +1,12 @@
 ---
 title: 2017年05月10日记一次微项目投产 | 安卓版微信内置浏览器不能解析gzip压缩过的mp4视频的问题
-date: 2017-05-11 12:30:00
+date: 2017-05-11 20:30:00
 categories:
 - Tech
 tags:
 - PHP
 - Apache
+description: 通过一个小项目的投产折射出自己考虑不周的地方。顺带发现了安卓微信内置浏览器和gzip压缩之间的苟且。
 ---
 ### 前言
 今天投产了一个小项目，一个很简单的H5，有播放视频功能，使用了videojs插件。
@@ -114,11 +115,11 @@ $header=get_head('http://10.*.*.*/video/video.mp4');
 </html>
 ```
 使用PC端chrome运行后，页面如下图，同一局域网内手机也能够获取差不多的数据。
-![image](/images/vt_pc_chrome.jpg)
+![image](/images/vt_pc_chrome_wm.jpg)
 同一局域网内华为P10PLUS微信内置浏览器和华为浏览器运行video test的截图如下：
-![image](/images/vt_hw_comb.jpg)
+![image](/images/vt_hw_comb_wm.jpg)
 三星Galaxy S6 edge+微信内置浏览器和三星默认浏览器运行video test的截图如下：
-![image](/images/vt_s6_comb_fix.jpg)
+![image](/images/vt_s6_comb_fix_wm.jpg)
 经过详细的测试后，证实了安卓版微信6.5.7内置浏览器不能正确处理gzip压缩过的视频的问题。
 
 ### 总结

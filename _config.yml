@@ -75,3 +75,18 @@ deploy:
   repo: git@github.com:backwallkid/backwallkid.github.io.get
   branch: master
   message: hexo auto update
+  
+# Extensions
+Plugins:
+- hexo-generator-feed
+- hexo-generator-sitemap
+
+#Feed Atom
+feed:
+  type: atom
+  path: atom.xml
+  limit: 20
+
+#sitemap
+sitemap:
+  path: sitemap.xml
