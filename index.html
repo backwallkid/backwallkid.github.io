@@ -81,6 +81,277 @@
         <header class="article-info clearfix">
   <h1 itemprop="name">
     
+      <a href="/2017-06/a-php-vote_project.html" title="记一次投票项目" itemprop="url">记一次投票项目</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-06T12:32:00.000Z" itemprop="datePublished"> Published 2017-06-06</time>
+    
+  </p>
+</header>
+    <div class="article-content">
+        
+        <h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ol>
+<li><a href="#front">项目背景</a></li>
+<li><a href="#limits">GithubPages&amp;Heroku limits</a></li>
+<li><a href="#beian">工信部备案和公安局备案</a></li>
+<li><a href="#dev_start">开发过程</a></li>
+<li><a href="#operate">投产过程</a></li>
+<li><a href="#sum">总结</a></li>
+</ol>
+<p></p><h3 id="front">前言</h3><br>　　几周前接到一个亲戚的留言，说是他们公司的工会想做个网页。由于最近朗读者之类的节目比较火，又是临近一个不大不小的节日，于是想做一个可以播放儿童朗诵的投票页面，可以在手机端访问，并且进行投票。<br>　　这家公司人数规模比较大，有上千人，儿童比例也不少。亲戚听说我是做网页的，想拜托我做这个。制作时间只有一周，时间略紧。<p></p>
+<h3 id="确定需求"><a href="#确定需求" class="headerlink" title="确定需求"></a>确定需求</h3><p>　　和对方公司工会的秘书沟通后，对方的需求很明确。</p>
+<ol>
+<li>给了一个有效的网页，样式可以照搬，对于我一个不咋写样式的后端程序员来说可以省下一不少麻烦。</li>
+<li>投票时间为3天。</li>
+<li>需要限制为lifetime的一人三票，每票必须投给不同的目标。</li>
+</ol>
+<p>　　但是缺点同样很明显</p>
+<ol>
+<li>没有服务器，没有域名，没有公众号，不肯出执照。</li>
+</ol>
+<p>　　于是问题来了，服务器和域名可以在阿里云上面买，阿里云是付费即时到货的，但是现在除了在<strong>通管局备案</strong>外还要进行<strong>公安局备案</strong>，一周的时间不知道够不够。</p>
+<p>　　好在我之前学习使用了Github Pages和Heroku于是先写了个demo测试一下备选方案。</p>
+<p></p><h3 id="limits">制定备选方案</h3><br>　　Github Pages只能运行html代码，Heroku能运行php代码，阿里云数据库的话，不进行备案也是可以用的。<p></p>
+<ul>
+<li>在Github Pages上随便搞了个html，请求Heroku上的api，往阿里云数据库里存数据，成功。</li>
+<li>Github Pages有每月100G或100,000请求数[?]的带宽限制，由<a href="https://www.quora.com/What-are-bandwidth-and-traffic-limits-for-GitHub-pages" target="_blank" rel="external">此处</a>得知</li>
+</ul>
+<blockquote>
+<p>GitHub Pages sites have a recommended bandwidth limit of <strong>100GB</strong> or <strong>100,000 requests</strong> per month. If your site exceeds that quota, you may receive a polite email from GitHub Support suggesting strategies for reducing your site’s impact on our servers, including moving to a different hosting service that might better fit your needs.</p>
+</blockquote>
+<p>　　然而在该回答所引用的<a href="https://help.github.com/articles/what-is-github-pages/#usage-limits" target="_blank" rel="external">source</a>中并没有找到关于100,000请求数的限制。</p>
+<blockquote>
+<p>GitHub Pages source repositories have a recommended limit of 1GB .<br>Published GitHub Pages sites may be no larger than 1 GB.<br>GitHub Pages sites have a soft bandwidth limit of 100GB per month.<br>GitHub Pages sites have a soft limit of 10 builds per hour.</p>
+</blockquote>
+<ul>
+<li>Heroku有每月550h的免费使用时间，没有请求数或带宽限制</li>
+<li>使用移动4G和电信wifi下实测demo链接速度，Github Pages比Heroku用时少得多。</li>
+</ul>
+<p>　　综合上面得出备选方案</p>
+<ol>
+<li>Github Pages(html)+Heroku(php)+aliyun数据库(MySql)</li>
+<li>Heroku(html+php)+aliyun数据库(MySql)</li>
+</ol>
+<p>　　虽然Github Pages的usage limits里没有关于100,000请求数的限制描述，宁可信其有不可信其无。<br>　　鉴于客户的使用人群广大（该公司员工数上千，朋友圈一发分分钟破万），决定若一周时间无法通过两次备案则使用2号备选方案。</p>
+<h3 id="检查需要的素材"><a href="#检查需要的素材" class="headerlink" title="检查需要的素材"></a>检查需要的素材</h3><ol>
+<li>网页样式已有，经过测试，该样式适用于大部分常用手机内置浏览器和微信浏览器。</li>
+<li>该网页内使用的是audio标签，js控制载入所播放的mp3文件地址。<br>2.1 通过<a href="http://caniuse.com/#search=audio" target="_blank" rel="external">caniuse audio</a>可得该标签被除Opera Mini外所有浏览器支持。<br>2.2 通过<a href="http://caniuse.com/#search=mp3" target="_blank" rel="external">caniuse mp3</a>可得mp3格式的音频文件被除Opera Mini外所有浏览器支持。</li>
+<li>投稿图片需切成4:3的大小，使用ps切一下图也用不了很多时间。</li>
+</ol>
+<h3 id="告知客户既定事项"><a href="#告知客户既定事项" class="headerlink" title="告知客户既定事项"></a>告知客户既定事项</h3><p>　　接下来就是把一些事项和客户工会的秘书罗列清楚，假如他们都可以接受，再进行开发。</p>
+<ul>
+<li>声明网页访问速度可能会比较慢（一周的时间比较紧张，如果备案过不了审，则需要用备选2号）。</li>
+<li>每份投稿必须包含一张图片和一个mp3音频，音频长度不得超过4分钟。</li>
+<li>由于网页内图片显示的合适高宽比是4:3，对于一般的照片会进行裁剪。</li>
+<li>非mp3格式的文件会被转为mp3格式，假如转换后无法播放，则需要重新提供文件。</li>
+<li>音频会进行码率和采样率的压缩，所以音质会有所下降。</li>
+<li>由于开发周期较短，所以这些事项确定后，不能再变了。</li>
+<li>投产前一日会提供测试链接，并于测试通过后，提供一枚特别定制的二维码与正式链接以供投放。</li>
+<li>项目结束当天，会提供所有参赛者以及相应票数的excel表。</li>
+</ul>
+<h3 id="网站资源"><a href="#网站资源" class="headerlink" title="网站资源"></a>网站资源</h3><h4 id="网站空间"><a href="#网站空间" class="headerlink" title="网站空间"></a>网站空间</h4><p>　　<a href="https://wanwang.aliyun.com/" target="_blank" rel="external">购买</a>域名、<a href="https://www.aliyun.com/easybuy" target="_blank" rel="external">租</a>服务器，上阿里巴巴都能快速搞定，支付宝扫一扫付钱，域名和服务器即时到帐。<br>　　由于这次时间较紧，我没有买云ECS而是买了预装PHP+MySQL环境的独享虚拟机，这里有个<strong>坑</strong>需要了解</p>
+<ol>
+<li>云服务器ECS：买完给一个空的linux或windows环境（可选），用yum或其他什么装软件，自己配置运行环境，可以使用putty远程连接。底配1核1G1Mbps40G云盘空间可选系统一个月68块，一年8.5折693.6块。</li>
+<li>云虚拟主机：买完给个虚拟主机，环境都搭配好了，只有网页上的控制面板，给有限的PHP5.1～5.5环境选择，MySql只有5.1没得选，php.ini只给了有限的几个选项，可以随意删除<code>/tmp</code>目录（session的保存目录）下的和<code>/dev/home/username/htdocs</code>目录下的文件。底配1核1G1Mbps5G网页空间500M数据库一年298块。</li>
+</ol>
+<p></p><h3 id="beian">工信部备案</h3><br>　　新买的域名都要先去<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="external">工信部备案</a>，跟着流程一步步走。<br>　　由于我是在阿里云上买的域名和服务器，工信部备案可委托阿里云进行（这也是我选择阿里云的一个理由）。<br>　　只要打印一张委托书，打印出来填上姓名日期拍个照，剩下交给阿里云。<br>　　备案审核通过后，预留的手机号会收到【工信部备案系统】发来的短信通知，邮箱也会收到【阿里云备案】发来的《通管局审核通过》邮件。<p></p>
+<blockquote>
+<p>工信部备案审核通过（收到短信和邮件）后需要约1日的时间，才能在<a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" rel="external">工信部查询网</a>上查到。</p>
+</blockquote>
+<p>　　必须要确保能够在<a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" rel="external">工信部查询网</a>上查到自己的备案号，才能进行公安局网站备案，查不到的话即使提交了备案也会被驳回。<br>　　这一步操作我用了3天（包括一个周末），不知道是不是委托了阿里云的关系。</p>
+<h4 id="公安局备案"><a href="#公安局备案" class="headerlink" title="公安局备案"></a>公安局备案</h4><p>　　根据公安局的一个通知，所有的网站必须在当地公安局进行网站备案，上海的通知长<a href="https://help.aliyun.com/noticelist/articleid/13464849.html" target="_blank" rel="external">这样</a>。<br>　　<a href="http://www.beian.gov.cn" target="_blank" rel="external">公安局备案</a>得自己来搞，分为两步。</p>
+<ol>
+<li>第一步，增加开办主体，这里有个需要<strong>注意</strong>的地方，常住地址一定要写<strong>常住</strong>地址，按照实际情况填写，不一定必须是户口所在地址，公安局的信息都是联网的，这个信息自己斟酌。</li>
+<li>第二步，新办网站申请，这里有用到通管局给的备案号，必须要能够在<a href="http://www.miitbeian.gov.cn/publish/query/indexFirst.action" target="_blank" rel="external">工信部查询网</a>上查到自己的备案号后，再填写。</li>
+</ol>
+<ul>
+<li>有些信息，比如服务器存放物理地址、域名注册服务商、接入方式等，可以下阿里云的<strong>工单</strong>，阿里云工程师回复得特别迅速，一般2小时内就有解答。</li>
+<li>另外上海的公安局备案流程可能和其他地儿有些不同，第一次提交会被驳回，然后给个qq号，加群以后要填一个excel表，单独发给群主，再提交。信息都对的话，就能通过了。</li>
+</ul>
+<p>　　这一步我用了2天，其中第一步主体审核可以和工信部备案一起做，互不影响。公安局审批还是挺迅速的，一般提交后过个把小时，就能收到通过或拒绝的短信通知。</p>
+<p></p><h3 id="dev_start">开始开发</h3><p></p>
+<h4 id="样式"><a href="#样式" class="headerlink" title="样式"></a>样式</h4><p>　　网页样式这块直接拉过来就能用，唯一需要变动的是页首的图片背景，对彩色渐变文字以及一些小图标进行替换 小图标可以上<a href="https://www.iconfinder.com/" target="_blank" rel="external">iconfinder</a>找，有免费使用的。</p>
+<h4 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h4><p>　　终于用上了我<a href="https://github.com/backwallkid/common-functions/" target="_blank" rel="external">自己造</a>的api根文件和db类。<br>　　由于客户要求要将投票方限制为个人，却又没有微信公众号，而且不允许增加短信验证和图形验证，说是怕影响参与人数。无奈下只能进行IP限制，将私有地址和广播地址进行排除。以防万一顺便加了个自定义ip地址排除。</p>
+<h4 id="投稿图片裁切"><a href="#投稿图片裁切" class="headerlink" title="投稿图片裁切"></a>投稿图片裁切</h4><p>　　客户发过来的照片需要按照4:3的大小把脸切出来，使用PS的矩形工具(U)固定大小、自由变换Ctrl+T、按比例缩放Shift+拖、裁剪工具(C)、调整图像大小Alt+Ctrl+I，对某些倾斜的照片摆正后使用仿制图章工具(S)进行修复等操作。五十多张图切下来，对PS的快捷键有了大致的了解。</p>
+<h4 id="音频压制"><a href="#音频压制" class="headerlink" title="音频压制"></a>音频压制</h4><p>　　之前想着这个音频随便一压，就用<a href="http://www.pcfreetime.com/formatfactory/CN/index.html" target="_blank" rel="external">格式工厂</a>（FormatFactory，简称FF），没想到在客户发来的音频各种各样格式都有，有些格式的音频被FF转压过以后会缺斤少两。<br>　　犹豫间想到了大学时压片用的<a href="https://sourceforge.net/projects/megui/" target="_blank" rel="external">MeGUI</a>（下称MG），凭借记忆，稍微配置了一下。经测，针对同一个音频进行mp3转换并压缩，MG压制的速度和FF差不多且不会缺斤少两。MG可以将音频码率压到8bit，而FF只能压16bit。</p>
+<h4 id="微信跳转"><a href="#微信跳转" class="headerlink" title="微信跳转"></a>微信跳转</h4><p>　　开发过程中用到微信扫一扫进行测试，发现会先进入蓝色感叹号页面，进行站内跳转也会先显示蓝色感叹号。按照页面内提示，提交了通管局的备案号，约2天后，蓝色感叹号页面便不出现了。</p>
+<p></p><h3 id="operate">投产</h3><br>　　投产前一日，将一个测试地址发给客户秘书，客户内部查看样式并进行微调。<br>　　当晚，清表清tmp，将带宽提升到7M。客户秘书告知将于约定日的上午八点半进行二维码与链接的投放。<br>　　约定日当天，上午八点半，带宽用量飙升，又加了2M，提到9M。经观测没有再出现破峰值。<br><img src="/images/vote_bw_til1547_wm.png" alt="阿里云控制器用量截图"><br>图为投产日下午阿里云控制器显示的用量截图。<p></p>
+<h4 id="增加带宽的坑"><a href="#增加带宽的坑" class="headerlink" title="增加带宽的坑"></a>增加带宽的坑</h4><p>　　阿里云虚拟机增加带宽有个<strong>坑</strong>，如下表所示。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">M数</th>
+<th style="text-align:center">月数</th>
+<th style="text-align:center">页面显示应付金额</th>
+<th style="text-align:center">按25/M/月计算应为</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">25</td>
+<td style="text-align:center">25</td>
+</tr>
+<tr>
+<td style="text-align:center"><font color="green">2</font></td>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><font color="green">50</font></td>
+<td style="text-align:center">50</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center"><font color="red">79</font></td>
+<td style="text-align:center">75</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">179</td>
+<td style="text-align:center">100</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">1</td>
+<td style="text-align:center">279</td>
+<td style="text-align:center">125</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">50</td>
+<td style="text-align:center">50</td>
+</tr>
+<tr>
+<td style="text-align:center"><font color="green">2</font></td>
+<td style="text-align:center">2</td>
+<td style="text-align:center"><font color="green">100</font></td>
+<td style="text-align:center">100</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">175</td>
+<td style="text-align:center">150</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">2</td>
+<td style="text-align:center">358</td>
+<td style="text-align:center">200</td>
+</tr>
+<tr>
+<td style="text-align:center"><font color="green">2</font></td>
+<td style="text-align:center">3</td>
+<td style="text-align:center"><font color="green">150</font></td>
+<td style="text-align:center">150</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">3</td>
+<td style="text-align:center">237</td>
+<td style="text-align:center">225</td>
+</tr>
+<tr>
+<td style="text-align:center"><font color="green">2</font></td>
+<td style="text-align:center">4</td>
+<td style="text-align:center"><font color="green">200</font></td>
+<td style="text-align:center">200</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">4</td>
+<td style="text-align:center">316</td>
+<td style="text-align:center">300</td>
+</tr>
+</tbody>
+</table>
+<p>　　由此表可得，假如要买带宽，每次2M的买比较划算，经实测一天至少可连买4次。由于业务用量已够，也没有测试更多的购买量。</p>
+<h4 id="刷票封禁"><a href="#刷票封禁" class="headerlink" title="刷票封禁"></a>刷票封禁</h4><p>　　因为客户这个不准那个不准，在投放当日的10点多果然出事了。有一名参赛者的票数异军突起，高出第二名800多票。经过查看记录，有600多票是在近20分钟内投出的，显示的来源IP均不同，且IP为正常值，符合先前制定的规则。在做表的时，抓取了投票请求的请求头，经过分析发现了不同。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">\</th>
+<th style="text-align:center">正常请求值</th>
+<th style="text-align:center">刷票请求值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">$_SERVER[‘HTTP_ORIGIN’]</td>
+<td style="text-align:center"><code>&#39;http://www.xxx.com&#39;</code></td>
+<td style="text-align:center"><code>&#39;&#39;</code></td>
+</tr>
+<tr>
+<td style="text-align:center">getallheaders()[‘Origin’]</td>
+<td style="text-align:center"><code>&#39;http://www.xxx.com&#39;</code></td>
+<td style="text-align:center"><code>2</code></td>
+</tr>
+</tbody>
+</table>
+<p>　　发现问题后，和客户进行了沟通，客户协商后决定将刷票方的票数退回，并由客户方领导对享受刷票的参赛者进行口头劝诫。<br>　　虽然出现了刷票问题，客户也表示不需要增加限制，但是还是对这一现象增加了代码限制。<br>　　之后直到投票结束，没有发现其他的突发情况。</p>
+<h3 id="项目结束"><a href="#项目结束" class="headerlink" title="项目结束"></a>项目结束</h3><p>　　项目结束当天早上，导出以票数为排序的参赛选手excel表发给客户秘书。</p>
+<p></p><h3 id="sum">总结</h3><br>　　经过这次完成的这个完整的项目，归纳下来制作一个项目需要的能力和资源有<p></p>
+<ul>
+<li>网站，域名（硬件）</li>
+<li>创意或者借鉴能力（设计师）</li>
+<li>基本PS制图能力（美工）</li>
+<li>根据项目的需要，一些其他的技术，比如这个项目中用到了压片技术（技术，杂项）</li>
+<li>沟通，接单前和客户方代表的需求了解，分析（AC，PM）</li>
+<li>应变，监控票数，根据已遭遇的刷票手段尽快的给出解决方案（技术，经验）</li>
+</ul>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://www.quora.com/What-are-bandwidth-and-traffic-limits-for-GitHub-pages" target="_blank" rel="external">What are bandwidth and traffic limits for GitHub pages? - quora</a><br><a href="https://help.github.com/articles/what-is-github-pages/" target="_blank" rel="external">What is GitHub Pages? - github</a><br><a href="https://bbs.aliyun.com/read/286714.html" target="_blank" rel="external">为你揭开阿里云公安备案的神秘面纱！申请到成功历时22小时 - 阿里云开发者论坛</a></p>
+
+        
+        
+        <p class="article-more-link">
+          
+       </p>
+    </div>
+    <footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/PHP/">PHP</a>
+  </div>
+
+</div>
+
+
+
+
+<div class="comments-count">
+	
+</div>
+
+</footer>
+
+
+    </article>
+
+
+
+
+
+
+   
+    
+    <article class="post-expand post" itemprop="articleBody"> 
+        <header class="article-info clearfix">
+  <h1 itemprop="name">
+    
       <a href="/2017-05/bc-copy-chinese-not-encoding.html" title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容" itemprop="url">记一次小型生产事故 | BeyondComper跨编码方式复制文件内容</a>
   </h1>
   <p class="article-author">By
@@ -333,7 +604,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>3</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>4</sup></a></li>
 		  
 		
 		</ul>
@@ -346,11 +617,11 @@
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>2</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>1</sup></a></li>
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
 			
 		
 			
@@ -527,7 +798,7 @@ $(document).ready(function(){
 var _hmt = _hmt || [];
 (function() {
   var hm = document.createElement("script");
-  hm.src = "//hm.baidu.com/hm.js?3f40512b6f470aa41880d0559c346c1b";
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
   var s = document.getElementsByTagName("script")[0]; 
   s.parentNode.insertBefore(hm, s);
 })();
