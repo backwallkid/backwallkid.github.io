@@ -1,0 +1,561 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>向Git前进（二） | GitLab项目开发流程 | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
+<meta name="keywords" content="GitLab,Linux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="向Git前进（二） | GitLab项目开发流程">
+<meta property="og:url" content="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-push-master-rejected.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-before.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-ing.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-after.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-a.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-push-origin-icecream.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-push-origin-change-error.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-fetch-p.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-d-icecream.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-clean.png">
+<meta property="og:updated_time" content="2017-06-26T07:08:03.941Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="向Git前进（二） | GitLab项目开发流程">
+<meta name="twitter:description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/git-push-master-rejected.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017-06/git-2-project-develop-flow.html" title="向Git前进（二） | GitLab项目开发流程" itemprop="url">向Git前进（二） | GitLab项目开发流程</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-06-25T12:25:00.000Z" itemprop="datePublished"> Published 2017-06-25</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+	<p>
+		<a href="/images/david-marcu-4652-25.jpg" title="Unsplash" class="fancybox" rel="article0">
+			<img src="/images/david-marcu-4652-25.jpg" alt="Unsplash">
+		</a><br>
+		<a href="http://unsplash.com/photos/T1-nZX0OPvI" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@davidmarcu" target="_blank" rel="external">David Marcu</a>
+		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
+	</p>
+	
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一篇"><span class="toc-number">11.</span> <span class="toc-text">下一篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>在<a href="https://backwallkid.github.io/2017-06/git-1-virtual-centos-create-gitlab.html">虚拟机里安装完了GitLab</a>，报告上去，管理员在公司内部服务器也配置好了，接下来整理Git开发流程。</p>
+<h3 id="安装Git-for-Windows"><a href="#安装Git-for-Windows" class="headerlink" title="安装Git for Windows"></a>安装Git for Windows</h3><ol>
+<li><a href="http://msysgit.github.io/" target="_blank" rel="external">下载</a></li>
+<li>选择安装目录</li>
+<li>select Components<br>3.1 勾中Windows Explorer Intergration/Simple Content Menu(Gui+Bash)<br>3.2 勾中关联.git*,.sh等</li>
+<li>选择Run Git from the Windows Command Prompt</li>
+<li>选择Checkout as-is, commit as-is</li>
+<li>安装</li>
+</ol>
+<h3 id="配置SSH"><a href="#配置SSH" class="headerlink" title="配置SSH"></a>配置SSH</h3><ol>
+<li>进入Git Bash</li>
+<li>检查是否含有.ssh/id_rsa文件<br>2.1 有则复制id_rsa.pub内公钥文本<br>windows下<br><code>cat ~/.ssh/id_rsa.pub</code>后复制命令行，或<br><code>clip &lt; ~/.ssh/id_rsa.pub</code><br>linux下<br><code>xsel &lt; ~/.ssh/id_rsa.pub</code><br>mac下<br><code>pbcopy &lt; ~/.ssh/id_rsa.pub</code><br>2.2 没有则创建，一路回车，执行2.1<br><code>ssh-keygen -t rsa -C &quot;EMAIL@E.C&quot;</code></li>
+<li>将复制的ssh的public key放入项目<br>3.1 github.com-右上角头像-Settings-侧边栏SSH and GPG keys-New SSH Key<br>3.2 gitlab-右上角头像-Settings-顶部SSH Keys-Add Key</li>
+<li>设置全局变量<br><code>git config --global user.name &quot;name&quot;</code><br><code>git config --global user.email &quot;mail@box.com&quot;</code></li>
+</ol>
+<h3 id="创建项目或拉取项目"><a href="#创建项目或拉取项目" class="headerlink" title="创建项目或拉取项目"></a>创建项目或拉取项目</h3><ol>
+<li>初始化路径<br><code>git init</code></li>
+<li>将SSH路径添加为origin<br><code>git remote add origin git@*.*.*.*:topjob/www.git</code></li>
+<li>添加文件提交并上传或拉取目录<br>3.1 【创建】<br><code>git add .</code><br><code>git commit -m &quot;Initial commit&quot;</code><br><code>git push origin master</code>第一次上传需要添加<code>-u</code>或<code>--set-upstream</code>参数<br>3.2 【拉取】<br><code>git pull</code></li>
+</ol>
+<h4 id="跟踪空目录"><a href="#跟踪空目录" class="headerlink" title="跟踪空目录"></a>跟踪空目录</h4><p>由于git只跟踪文件而不跟踪目录，所以假如要将一个空目录加入追踪，该目录下必须有至少一个文件。<br>假如空目录是为了保持项目的整洁性而存在的，比如<code>Runtime</code>或<code>Temp</code>。<br>该类目录下可放入一个<code>.gitignore</code>，里面写入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line">!.gitignore</div></pre></td></tr></table></figure></p>
+<p>假如空目录是为了留出给即将创建的文件，则可放入一个空的<code>.gitignore</code>。</p>
+<p>在目录下搜索空的并且没有gitignore占位文件的目录并创建一个空的<code>.gitignore</code>：<br><code>find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;</code><br>或只搜索空的并且没有gitignore占位文件目录：<br><code>find . \( -type d -empty \) -and \( -not -regex ./\.git.* \);</code></p>
+<h3 id="项目开发流程"><a href="#项目开发流程" class="headerlink" title="项目开发流程"></a>项目开发流程</h3><ol>
+<li>配置git并拉取master，每次push前都pull一下防止失败<br><code>git pull</code></li>
+<li>查看分支<br><code>git branch</code><br>2.1 没有分支则创建并切换分支<br><code>git checkout -b NEW_BRANCH</code><br>2.2 有分支则切换分支<br><code>git checkout BRANCH</code></li>
+<li>在分支中开发，提交<br><code>git status</code>查看可添加的文件<br><code>git add .</code>添加文件<br><code>git diff --cached --name-only</code>查看已添加的文件<br><code>git commit -m &quot;MSG&quot;</code>提交并输入信息<br><code>git push origin --set-upstream BRANCH</code>上传</li>
+<li>[网页]发起Merge Request</li>
+<li>[网页]项目master通过MR请求<br>5.1 或删除分支<br><code>git branch --delete BRANCH</code></li>
+</ol>
+<p><strong>注</strong>：在GitLab默认权限管理中，只有Owner和Master才能对项目的master分支进行push，其他身份（比如developer）对master进行push操作会被驳回。<br><img src="/images/git-push-master-rejected.png" alt=""></p>
+<h3 id="修改bug流程"><a href="#修改bug流程" class="headerlink" title="修改bug流程"></a>修改bug流程</h3><ol>
+<li>从master创建并切换分支<br><code>git checkout -b issue-NAME master</code></li>
+<li>在issue分支中修复bug</li>
+<li>将issue分支合并到master<br><code>git checkout master</code><br><code>git merge issue-NAME</code></li>
+<li>提交master<br><code>git push</code></li>
+</ol>
+<h3 id="分支开发过程中，主线有紧急修改需要合并"><a href="#分支开发过程中，主线有紧急修改需要合并" class="headerlink" title="分支开发过程中，主线有紧急修改需要合并"></a>分支开发过程中，主线有紧急修改需要合并</h3><ol>
+<li>合并前先提交<br><code>git add .</code><br><code>git commit -m &quot;MSG&quot;</code></li>
+<li>切换到master，拉取最新<br><code>git checkout master</code><br><code>git pull</code></li>
+<li>查看需要合并的commit id<br><code>git log --oneline</code></li>
+<li>记下commit id，切换到分支，摘樱桃<br><code>git checkout BRANCH</code><br><code>git cherry-pick COMMIT_ID</code></li>
+</ol>
+<h3 id="回滚"><a href="#回滚" class="headerlink" title="回滚"></a>回滚</h3><ol>
+<li>樱桃摘错了怎么办？<br>1.1 查看版本日志<br><code>git log --oneline</code><br><img src="/images/git-revert-before.png" alt=""><br>1.2 使用revert回退版本，并编辑回退消息<br><code>git revert COMMIT_ID</code><br><img src="/images/git-revert-ing.png" alt=""><br>1.3 回退完成查看日志<br><img src="/images/git-revert-after.png" alt=""></li>
+<li>一个否认历史的做法，<strong>不建议</strong>在多人合作开发中使用<br><code>git reset --hard COMMIT_ID</code>退回版本<br>===继续开发===<br><code>git push -f</code>force提交</li>
+</ol>
+<h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><ol>
+<li>查看所有分支<br><code>git branch -a</code><br>在Git Bash中，跟踪的远程分支显示为红色，当前分支显示为绿色，其他分支显示为白色。<br><img src="/images/git-branch-a.png" alt=""></li>
+<li>删除跟踪的远程分支<br><code>git push origin :REMOTE_BRANCH</code><br><img src="/images/git-push-origin-icecream.png" alt=""><br>2.1 可能会遇到跟踪的远程分支删除不了的情况，<br><img src="/images/git-push-origin-change-error.png" alt="git push origin error" title="git push origin error"><br>使用<code>git fetch -p</code>来清除，参照<a href="https://ruby-china.org/topics/24360" target="_blank" rel="external">此处</a><br><img src="/images/git-fetch-p.png" alt="git fetch -p" title="git fetch -p"><br><strong>注</strong>：按照git手册上<code>-p -prune</code>的<a href="https://git-scm.com/docs/fetch-options#fetch-options---prune" target="_blank" rel="external">说明</a><br>该命令可以去除所有本地在跟踪的且远程不存在的远程分支。</li>
+<li>删除本地分支<br><code>git branch -d LOCAL_BRANCH</code><br><img src="/images/git-branch-d-icecream.png" alt=""><br>3.1 假如出现<br><code>error: The branch &#39;store&#39; is not fully merged.</code><br><code>If you are sure you want to delete it, run &#39;git branch -D store&#39;.</code><br>则按照提示，运行<br><code>git branch -D LOCAL_BRANCH</code></li>
+</ol>
+<p>展示一下删干净的分支列表<br><img src="/images/git-branch-clean.png" alt=""></p>
+<h3 id="打包更新文件"><a href="#打包更新文件" class="headerlink" title="打包更新文件"></a>打包更新文件</h3><p><code>git archive -o update.zip NEW_ID $(git diff --name-only OLD_ID NEW_ID)</code><br><code>git archive -o update.zip HEAD $(git diff --name-only OLD_ID HEAD)</code></p>
+<h3 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h3><p>【预留】向Git前进 | 稀疏检出sparse checkout</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://www.v2ex.com/t/162720" target="_blank" rel="external">关于 GIT 生成更新包的问题 - v2ex</a><br><a href="https://ruby-china.org/topics/5312" target="_blank" rel="external">Git 如何从某个Commit后导出所有修改过的文件? - ruby-china</a><br><a href="https://stackoverflow.com/a/348234" target="_blank" rel="external">How to undo ‘git add’ before commit? - so</a><br><a href="https://stackoverflow.com/a/18137512" target="_blank" rel="external">what is the difference between origin/master vs origin master? - so</a><br><a href="http://www.cnblogs.com/vitah/p/3612473.html" target="_blank" rel="external">Git for Windows安装和基本设置 - vitah</a><br><a href="https://github.com/oldratlee/translations/blob/master/git-workflows-and-tutorials/workflow-gitflow.md" target="_blank" rel="external">Gitflow工作流 - oldratlee</a><br><a href="http://oldratlee.com/post/2012-12-23/command-output-to-clip" target="_blank" rel="external">拷贝复制命令行 - oldratlee</a><br><a href="https://ruby-china.org/topics/11637" target="_blank" rel="external">git 回退到某版本后,再在此版本上更新,无法 push - ruby-china</a><br><a href="http://blog.csdn.net/zhaodezhong/article/details/7774869" target="_blank" rel="external">用git 保存空目录 - zhaodezhong</a><br><a href="https://stackoverflow.com/a/932982" target="_blank" rel="external">How can I add an empty directory to a Git repository? - so</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/GitLab/">GitLab</a><a href="/tags/Linux/">Linux</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html" data-title="向Git前进（二） | GitLab项目开发流程 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017-06/git-1-virtual-centos-create-gitlab.html"  title="向Git前进（一） | 虚拟机创建GitLab">
+ <strong>下一篇：</strong><br/> 
+ <span>向Git前进（一） | 虚拟机创建GitLab
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一篇"><span class="toc-number">11.</span> <span class="toc-text">下一篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>7</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/GitLab/" title="GitLab">GitLab<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
