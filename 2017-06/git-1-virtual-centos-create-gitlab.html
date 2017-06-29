@@ -12,24 +12,24 @@
 
     
     <meta name="description" content="通过在虚拟机中的CentOS7上尝试搭建GitLab，为实际操作打下基础。">
-<meta name="keywords" content="GitLab,Linux">
+<meta name="keywords" content="Linux,Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="向Git前进（一） | 虚拟机创建GitLab">
 <meta property="og:url" content="https://backwallkid.github.io/2017-06/git-1-virtual-centos-create-gitlab.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
 <meta property="og:description" content="通过在虚拟机中的CentOS7上尝试搭建GitLab，为实际操作打下基础。">
-<meta property="og:image" content="https://backwallkid.github.io/images/centos7-install-gitlab-complete_wm.jpg">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-user-add_wm.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-externalurl-not-config_wm.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-externalurl-config_wm.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-group-add_wm.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-project-add_wm.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/gitlab-repo-inuse_wm.png">
-<meta property="og:updated_time" content="2017-06-26T07:02:36.726Z">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/centos7-install-gitlab-complete_wm.jpg">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-user-add_wm.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-externalurl-not-config_wm.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-externalurl-config_wm.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-group-add_wm.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-project-add_wm.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-1/gitlab-repo-inuse_wm.png">
+<meta property="og:updated_time" content="2017-06-29T06:34:41.498Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="向Git前进（一） | 虚拟机创建GitLab">
 <meta name="twitter:description" content="通过在虚拟机中的CentOS7上尝试搭建GitLab，为实际操作打下基础。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/centos7-install-gitlab-complete_wm.jpg">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/git-1/centos7-install-gitlab-complete_wm.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -103,8 +103,8 @@
 	<div class="article-content">
     
 	<p>
-		<a href="/images/adam-kool-11868_70c.jpg" title="Unsplash" class="fancybox" rel="article0">
-			<img src="/images/adam-kool-11868_70c.jpg" alt="Unsplash">
+		<a href="/images/git-1/adam-kool-11868_70c.jpg" title="Unsplash" class="fancybox" rel="article0">
+			<img src="/images/git-1/adam-kool-11868_70c.jpg" alt="Unsplash">
 		</a><br>
 		<a href="http://unsplash.com/photos/ndN00KmbJ1c" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@adamkool" target="_blank" rel="external">Adam Kool</a>
 		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
@@ -121,17 +121,20 @@
 		
 		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>公司高层内部开会，决定将代码由SVN转移至Git，在公司服务器上搭建GitLab前，先在本地虚拟机的CentOS上实验一遍。</p>
 <h3 id="设备"><a href="#设备" class="headerlink" title="设备"></a>设备</h3><p>本地虚拟机为了学习linux所以之前安装过CentOS7.1的镜像，镜像里配置了PHP7和MySql环境。</p>
-<h3 id="安装GitLab"><a href="#安装GitLab" class="headerlink" title="安装GitLab"></a>安装GitLab</h3><p>按照GitLab的<a href="https://about.gitlab.com/installation/#centos" target="_blank" rel="external">安装文档</a>，能够成功的完成安装。<br>安装完成图<br><img src="/images/centos7-install-gitlab-complete_wm.jpg" alt=""><br>笔者在安装完之后找不到入口，仔细查看后发现，GitLab默认是监听80端口的，而之前安装的apache占了80，虽然安装和启动gitlab时没有报错，但是访问80端口会被接引到apache。<br>解决方法是去apache的配置文件httpd.conf中找到Listen 80改为监听其他，再重启服务。apache让出80端口后，访问本机网络地址就能打开GitLab首页了。</p>
+<h3 id="安装GitLab"><a href="#安装GitLab" class="headerlink" title="安装GitLab"></a>安装GitLab</h3><p>按照GitLab的<a href="https://about.gitlab.com/installation/#centos" target="_blank" rel="external">安装文档</a>，能够成功的完成安装。<br>安装完成图<br><img src="/images/git-1/centos7-install-gitlab-complete_wm.jpg" alt="CentOS安装GitLab"><br>笔者在安装完之后找不到入口，仔细查看后发现，GitLab默认是监听80端口的，而之前安装的apache占了80，虽然安装和启动gitlab时没有报错，但是访问80端口会被接引到apache。<br>解决方法是去apache的配置文件httpd.conf中找到Listen 80改为监听其他，再重启服务。apache让出80端口后，访问本机网络地址就能打开GitLab首页了。</p>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>GitLab的配置文件默认位于<code>/etc/gitlab/gitlab.rb</code>，每次改完配置文件，都需要运行<code>gitlab-ctl reconfigure</code>使配置生效。<br>配置文件中有2个参数一定要改：</p>
 <ol>
-<li>邮箱地址，因为每次创建新用户GitLab都会发邮件到新用户的邮箱，邮件中含有改密码链接。<br>成功创建用户后注意查看收件箱，创建所填写的邮箱会收到来自<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#103;&#x69;&#116;&#x6c;&#97;&#98;&#64;&#x69;&#112;&#x5f;&#x6c;&#x6f;&#99;&#97;&#x74;&#x69;&#x6f;&#110;">&#103;&#x69;&#116;&#x6c;&#97;&#98;&#64;&#x69;&#112;&#x5f;&#x6c;&#x6f;&#99;&#97;&#x74;&#x69;&#x6f;&#110;</a>的邮件，可能会出现在垃圾邮件中。<br><img src="/images/gitlab-user-add_wm.png" alt=""></li>
-<li>假如虚拟机中安装的GitLab想给主机同一局域网内其他用户或主机使用的话，配置文件中<code>external_url &#39;http://localhost&#39;</code>的localhost必须要改成虚拟机在局域网内ip，改完之后同一局域网内其他用户就能正常访问GitLab了。<br>路径配置前<br><img src="/images/gitlab-externalurl-not-config_wm.png" alt=""><br>路径配置后<br><img src="/images/gitlab-externalurl-config_wm.png" alt=""></li>
+<li><p>邮箱地址，因为每次创建新用户GitLab都会发邮件到新用户的邮箱，邮件中含有改密码链接。<br>成功创建用户后注意查看收件箱，创建所填写的邮箱会收到来自<a href="&#109;&#x61;&#x69;&#108;&#x74;&#x6f;&#58;&#103;&#x69;&#116;&#x6c;&#x61;&#98;&#64;&#105;&#112;&#x5f;&#x6c;&#111;&#99;&#x61;&#x74;&#105;&#111;&#110;">&#103;&#x69;&#116;&#x6c;&#x61;&#98;&#64;&#105;&#112;&#x5f;&#x6c;&#111;&#99;&#x61;&#x74;&#105;&#111;&#110;</a>的邮件，可能会出现在垃圾邮件中。<br><img src="/images/git-1/gitlab-user-add_wm.png" alt="GitLab添加用户"></p>
+</li>
+<li><p>假如虚拟机中安装的GitLab想给主机同一局域网内其他用户或主机使用的话，配置文件中<code>external_url &#39;http://localhost&#39;</code>的localhost必须要改成虚拟机在局域网内ip，改完之后同一局域网内其他用户就能正常访问GitLab了。<br>路径配置前<br><img src="/images/git-1/gitlab-externalurl-not-config_wm.png" alt="GitLab路径配置前"></p>
+</li>
 </ol>
+<p>路径配置后<br><img src="/images/git-1/gitlab-externalurl-config_wm.png" alt="GitLab路径配置后"></p>
 <p>注：每次reconfigure都会消耗30秒到2分不等的时间。</p>
 <h3 id="创建项目"><a href="#创建项目" class="headerlink" title="创建项目"></a>创建项目</h3><ol>
-<li>先创建组<br><img src="/images/gitlab-group-add_wm.png" alt=""></li>
-<li>再创建项目，没有组的话，所有项目都将出现在创建者的用户名下，不方便管理。<br><img src="/images/gitlab-project-add_wm.png" alt=""></li>
-<li>按照提示提交文件，其他用户就能pull了。<br><img src="/images/gitlab-repo-inuse_wm.png" alt=""></li>
+<li>先创建组<br><img src="/images/git-1/gitlab-group-add_wm.png" alt="GitLab添加组"></li>
+<li>再创建项目，没有组的话，所有项目都将出现在创建者的用户名下，不方便管理。<br><img src="/images/git-1/gitlab-project-add_wm.png" alt="GitLab添加项目"></li>
+<li>按照提示提交文件，其他用户就能pull了。<br><img src="/images/git-1/gitlab-repo-inuse_wm.png" alt="GitLab使用中的项目"></li>
 </ol>
 <h3 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h3><p>在虚拟机中一个流程走下来，没有碰到什么坎，GitLab现在产品已经非常成熟了。在找代码就上Github的大环境下，公司做出将项目从SVN陆续迁移至GitLab也是紧跟时代的潮流。</p>
 <h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p><a href="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html">向Git前进（二） | GitLab项目开发流程</a></p>
@@ -149,7 +152,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/GitLab/">GitLab</a><a href="/tags/Linux/">Linux</a>
+  <span></span> <a href="/tags/Linux/">Linux</a><a href="/tags/Git/">Git</a>
   </div>
 
 </div>
@@ -215,7 +218,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>7</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>8</sup></a></li>
 		  
 		
 		</ul>
@@ -232,19 +235,11 @@
 			
 		
 			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/GitLab/" title="GitLab">GitLab<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
 			
 		
 			
@@ -252,7 +247,17 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
 			
 		
 		</ul>

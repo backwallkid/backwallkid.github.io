@@ -12,27 +12,27 @@
 
     
     <meta name="description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
-<meta name="keywords" content="GitLab,Linux">
+<meta name="keywords" content="Git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="向Git前进（二） | GitLab项目开发流程">
 <meta property="og:url" content="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
 <meta property="og:description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-push-master-rejected.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-before.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-ing.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-revert-after.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-a.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-push-origin-icecream.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-push-origin-change-error.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-fetch-p.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-d-icecream.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/git-branch-clean.png">
-<meta property="og:updated_time" content="2017-06-26T07:08:03.941Z">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-push-master-rejected.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-revert-before.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-revert-ing.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-revert-after.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-branch-a.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-push-origin-icecream.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-push-origin-change-error.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-fetch-p.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-branch-d-icecream.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-branch-clean.png">
+<meta property="og:updated_time" content="2017-06-29T06:17:18.468Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="向Git前进（二） | GitLab项目开发流程">
 <meta name="twitter:description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/git-push-master-rejected.png">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/git-2/git-push-master-rejected.png">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -106,8 +106,8 @@
 	<div class="article-content">
     
 	<p>
-		<a href="/images/david-marcu-4652-25.jpg" title="Unsplash" class="fancybox" rel="article0">
-			<img src="/images/david-marcu-4652-25.jpg" alt="Unsplash">
+		<a href="/images/git-2/david-marcu-4652-25.jpg" title="Unsplash" class="fancybox" rel="article0">
+			<img src="/images/git-2/david-marcu-4652-25.jpg" alt="Unsplash">
 		</a><br>
 		<a href="http://unsplash.com/photos/T1-nZX0OPvI" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@davidmarcu" target="_blank" rel="external">David Marcu</a>
 		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
@@ -118,7 +118,7 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一篇"><span class="toc-number">11.</span> <span class="toc-text">下一篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">11.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
 		</div>
 		
@@ -139,7 +139,7 @@
 </ol>
 <h3 id="创建项目或拉取项目"><a href="#创建项目或拉取项目" class="headerlink" title="创建项目或拉取项目"></a>创建项目或拉取项目</h3><ol>
 <li>初始化路径<br><code>git init</code></li>
-<li>将SSH路径添加为origin<br><code>git remote add origin git@*.*.*.*:topjob/www.git</code></li>
+<li>将GitLab SSH路径添加为origin<br><code>git remote add origin git@*.*.*.*:GROUP/PROJECT.git</code><br>将Github路径添加为origin<br><code>git remote add origin git@github.com/USERNAME/REPOSITORY.git</code><br>2.1 假如路径添加有误可删除后重加<br><code>git remote remove origin</code><br>2.2 或修改路径<br><code>git remote set-url origin NEW_PATH</code><br>2.3 检查已经设定的路径<br><code>git remote -v</code></li>
 <li>添加文件提交并上传或拉取目录<br>3.1 【创建】<br><code>git add .</code><br><code>git commit -m &quot;Initial commit&quot;</code><br><code>git push origin master</code>第一次上传需要添加<code>-u</code>或<code>--set-upstream</code>参数<br>3.2 【拉取】<br><code>git pull</code></li>
 </ol>
 <h4 id="跟踪空目录"><a href="#跟踪空目录" class="headerlink" title="跟踪空目录"></a>跟踪空目录</h4><p>由于git只跟踪文件而不跟踪目录，所以假如要将一个空目录加入追踪，该目录下必须有至少一个文件。<br>假如空目录是为了保持项目的整洁性而存在的，比如<code>Runtime</code>或<code>Temp</code>。<br>该类目录下可放入一个<code>.gitignore</code>，里面写入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line">!.gitignore</div></pre></td></tr></table></figure></p>
@@ -152,7 +152,7 @@
 <li>[网页]发起Merge Request</li>
 <li>[网页]项目master通过MR请求<br>5.1 或删除分支<br><code>git branch --delete BRANCH</code></li>
 </ol>
-<p><strong>注</strong>：在GitLab默认权限管理中，只有Owner和Master才能对项目的master分支进行push，其他身份（比如developer）对master进行push操作会被驳回。<br><img src="/images/git-push-master-rejected.png" alt=""></p>
+<p><strong>注</strong>：在GitLab默认权限管理中，只有Owner和Master才能对项目的master分支进行push，其他身份（比如developer）对master进行push操作会被驳回。<br><img src="/images/git-2/git-push-master-rejected.png" alt=""></p>
 <h3 id="修改bug流程"><a href="#修改bug流程" class="headerlink" title="修改bug流程"></a>修改bug流程</h3><ol>
 <li>从master创建并切换分支<br><code>git checkout -b issue-NAME master</code></li>
 <li>在issue分支中修复bug</li>
@@ -166,17 +166,17 @@
 <li>记下commit id，切换到分支，摘樱桃<br><code>git checkout BRANCH</code><br><code>git cherry-pick COMMIT_ID</code></li>
 </ol>
 <h3 id="回滚"><a href="#回滚" class="headerlink" title="回滚"></a>回滚</h3><ol>
-<li>樱桃摘错了怎么办？<br>1.1 查看版本日志<br><code>git log --oneline</code><br><img src="/images/git-revert-before.png" alt=""><br>1.2 使用revert回退版本，并编辑回退消息<br><code>git revert COMMIT_ID</code><br><img src="/images/git-revert-ing.png" alt=""><br>1.3 回退完成查看日志<br><img src="/images/git-revert-after.png" alt=""></li>
+<li>樱桃摘错了怎么办？<br>1.1 查看版本日志<br><code>git log --oneline</code><br><img src="/images/git-2/git-revert-before.png" alt="git log --oneline"><br>1.2 使用revert回退版本，并编辑回退消息<br><code>git revert COMMIT_ID</code><br><img src="/images/git-2/git-revert-ing.png" alt="git rever COMMIT_ID"><br>1.3 回退完成查看日志<br><img src="/images/git-2/git-revert-after.png" alt="git log --oneline"></li>
 <li>一个否认历史的做法，<strong>不建议</strong>在多人合作开发中使用<br><code>git reset --hard COMMIT_ID</code>退回版本<br>===继续开发===<br><code>git push -f</code>force提交</li>
 </ol>
 <h3 id="分支管理"><a href="#分支管理" class="headerlink" title="分支管理"></a>分支管理</h3><ol>
-<li>查看所有分支<br><code>git branch -a</code><br>在Git Bash中，跟踪的远程分支显示为红色，当前分支显示为绿色，其他分支显示为白色。<br><img src="/images/git-branch-a.png" alt=""></li>
-<li>删除跟踪的远程分支<br><code>git push origin :REMOTE_BRANCH</code><br><img src="/images/git-push-origin-icecream.png" alt=""><br>2.1 可能会遇到跟踪的远程分支删除不了的情况，<br><img src="/images/git-push-origin-change-error.png" alt="git push origin error" title="git push origin error"><br>使用<code>git fetch -p</code>来清除，参照<a href="https://ruby-china.org/topics/24360" target="_blank" rel="external">此处</a><br><img src="/images/git-fetch-p.png" alt="git fetch -p" title="git fetch -p"><br><strong>注</strong>：按照git手册上<code>-p -prune</code>的<a href="https://git-scm.com/docs/fetch-options#fetch-options---prune" target="_blank" rel="external">说明</a><br>该命令可以去除所有本地在跟踪的且远程不存在的远程分支。</li>
-<li>删除本地分支<br><code>git branch -d LOCAL_BRANCH</code><br><img src="/images/git-branch-d-icecream.png" alt=""><br>3.1 假如出现<br><code>error: The branch &#39;store&#39; is not fully merged.</code><br><code>If you are sure you want to delete it, run &#39;git branch -D store&#39;.</code><br>则按照提示，运行<br><code>git branch -D LOCAL_BRANCH</code></li>
+<li>查看所有分支<br><code>git branch -a</code><br>在Git Bash中，跟踪的远程分支显示为红色，当前分支显示为绿色，其他分支显示为白色。<br><img src="/images/git-2/git-branch-a.png" alt="git branch -a"></li>
+<li>删除跟踪的远程分支<br><code>git push origin :REMOTE_BRANCH</code><br><img src="/images/git-2/git-push-origin-icecream.png" alt="git push origin icecream"><br>2.1 可能会遇到跟踪的远程分支删除不了的情况，<br><img src="/images/git-2/git-push-origin-change-error.png" alt="git push origin change"><br>使用<code>git fetch -p</code>来清除，参照<a href="https://ruby-china.org/topics/24360" target="_blank" rel="external">此处</a><br><img src="/images/git-2/git-fetch-p.png" alt="git fetch -p"><br><strong>注</strong>：按照git手册上<code>-p -prune</code>的<a href="https://git-scm.com/docs/fetch-options#fetch-options---prune" target="_blank" rel="external">说明</a><br>该命令可以去除所有本地在跟踪的且远程不存在的远程分支。</li>
+<li>删除本地分支<br><code>git branch -d LOCAL_BRANCH</code><br><img src="/images/git-2/git-branch-d-icecream.png" alt="git branch -d icecream"><br>3.1 假如出现<br><code>error: The branch &#39;store&#39; is not fully merged.</code><br><code>If you are sure you want to delete it, run &#39;git branch -D store&#39;.</code><br>则按照提示，运行<br><code>git branch -D LOCAL_BRANCH</code></li>
 </ol>
-<p>展示一下删干净的分支列表<br><img src="/images/git-branch-clean.png" alt=""></p>
+<p>展示一下删干净的分支列表<br><img src="/images/git-2/git-branch-clean.png" alt="git branch -a"></p>
 <h3 id="打包更新文件"><a href="#打包更新文件" class="headerlink" title="打包更新文件"></a>打包更新文件</h3><p><code>git archive -o update.zip NEW_ID $(git diff --name-only OLD_ID NEW_ID)</code><br><code>git archive -o update.zip HEAD $(git diff --name-only OLD_ID HEAD)</code></p>
-<h3 id="下一篇"><a href="#下一篇" class="headerlink" title="下一篇"></a>下一篇</h3><p>【预留】向Git前进 | 稀疏检出sparse checkout</p>
+<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p><a href="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html">向Git前进（三） | 稀疏检出sparse checkout</a></p>
 <h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://www.v2ex.com/t/162720" target="_blank" rel="external">关于 GIT 生成更新包的问题 - v2ex</a><br><a href="https://ruby-china.org/topics/5312" target="_blank" rel="external">Git 如何从某个Commit后导出所有修改过的文件? - ruby-china</a><br><a href="https://stackoverflow.com/a/348234" target="_blank" rel="external">How to undo ‘git add’ before commit? - so</a><br><a href="https://stackoverflow.com/a/18137512" target="_blank" rel="external">what is the difference between origin/master vs origin master? - so</a><br><a href="http://www.cnblogs.com/vitah/p/3612473.html" target="_blank" rel="external">Git for Windows安装和基本设置 - vitah</a><br><a href="https://github.com/oldratlee/translations/blob/master/git-workflows-and-tutorials/workflow-gitflow.md" target="_blank" rel="external">Gitflow工作流 - oldratlee</a><br><a href="http://oldratlee.com/post/2012-12-23/command-output-to-clip" target="_blank" rel="external">拷贝复制命令行 - oldratlee</a><br><a href="https://ruby-china.org/topics/11637" target="_blank" rel="external">git 回退到某版本后,再在此版本上更新,无法 push - ruby-china</a><br><a href="http://blog.csdn.net/zhaodezhong/article/details/7774869" target="_blank" rel="external">用git 保存空目录 - zhaodezhong</a><br><a href="https://stackoverflow.com/a/932982" target="_blank" rel="external">How can I add an empty directory to a Git repository? - so</a></p>
   
 	</div>
@@ -191,7 +191,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/GitLab/">GitLab</a><a href="/tags/Linux/">Linux</a>
+  <span></span> <a href="/tags/Git/">Git</a>
   </div>
 
 </div>
@@ -213,6 +213,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017-06/git-3-sparse-checkout-usage.html" title="向Git前进（三） | 稀疏检出sparse checkout">
+  <strong>上一篇：</strong><br/>
+  <span>
+  向Git前进（三） | 稀疏检出sparse checkout</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2017-06/git-1-virtual-centos-create-gitlab.html"  title="向Git前进（一） | 虚拟机创建GitLab">
@@ -232,7 +240,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一篇"><span class="toc-number">11.</span> <span class="toc-text">下一篇</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">11.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
@@ -249,7 +257,7 @@
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>7</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>8</sup></a></li>
 		  
 		
 		</ul>
@@ -266,19 +274,11 @@
 			
 		
 			
+				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/GitLab/" title="GitLab">GitLab<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Linux/" title="Linux">Linux<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
 			
 		
 			
@@ -286,7 +286,17 @@
 			
 		
 			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
 				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
 			
 		
 		</ul>
