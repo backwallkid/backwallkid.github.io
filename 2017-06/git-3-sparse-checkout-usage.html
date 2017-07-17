@@ -18,7 +18,7 @@
 <meta property="og:url" content="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
 <meta property="og:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
-<meta property="og:updated_time" content="2017-06-29T06:33:27.244Z">
+<meta property="og:updated_time" content="2017-07-17T10:44:07.809Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="向Git前进（三） | 稀疏检出sparse checkout">
 <meta name="twitter:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
@@ -49,7 +49,7 @@
 				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
 				<h2 class="blog-motto">I love $</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -65,7 +65,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:backwallkid.github.io">
 					</form>
 					
@@ -88,7 +88,7 @@
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T12:25:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    <time datetime="2017-06-28T12:25:00.000Z" itemprop="datePublished"> 發表於 2017-06-28</time>
     
   </p>
 </header>
@@ -105,7 +105,7 @@
 
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
 		
@@ -119,21 +119,48 @@
 <li>拉取<br><code>git pull origin master</code></li>
 </ol>
 <h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>根据<a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">此处</a>的注解，和实际测试。</p>
-<ol>
-<li>先从Github上拉了一个笔者<a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">自创的项目</a>进行稀疏检出测试。<br>设置<code>sparse-checkout</code>文件，限定了需要检出的文件和文件夹。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">apiHead.php</div><div class="line">db/</div></pre></td></tr></table></figure>
+<ul>
+<li>先从Github上拉了一个笔者<a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">自创的项目</a>进行稀疏检出测试。</li>
+<li><ul>
+<li>设置<code>sparse-checkout</code>文件，限定了需要检出的文件和文件夹。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">apiHead.php</div><div class="line">db/</div></pre></td></tr></table></figure>
 </li>
-</ol>
-<p>拉取项目<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 39, done.</div><div class="line">remote: Total 39 (delta 0), reused 0 (delta 0), pack-reused 39</div><div class="line">Unpacking objects: 100% (39/39), done.</div><div class="line">From github.com:***/***</div><div class="line"> * branch            master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]      master     -&gt; origin/master</div></pre></td></tr></table></figure></p>
-<p>查看项目，验证了稀疏检出的效果。项目目录中只检出了事先设定的文件夹和文件，但是用来测试的项目体积太小了，无法检验是否下载了所有的文件。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">apiHead.php                         db/</div></pre></td></tr></table></figure></p>
-<ol>
-<li>接着直接上手进行公司内网GitLab的稀疏检出测试。<br>设置<code>sparse-checkout</code>文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">index.php</div><div class="line">Application/</div></pre></td></tr></table></figure>
+</ul>
 </li>
-</ol>
-<p>拉取项目，0%<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">Receiving objects:   0% (194/35326), 23.19 MiB | 1.17 MiB/s</div></pre></td></tr></table></figure></p>
-<p>拉取项目，100%<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">remote: Total 35326 (delta 734), reused 35326 (delta 734)</div><div class="line">Receiving objects: 100% (35326/35326), 1.45 GiB | 1.23 MiB/s, done.</div><div class="line">Resolving deltas: 100% (734/734), done.</div><div class="line">From *.*.*.*:GROUP/PROJECT</div><div class="line"> * branch              master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]        master     -&gt; origin/master</div></pre></td></tr></table></figure></p>
-<p>根据测试结果，虽然设置了稀疏检出，也只检出了<code>sparse-checkout</code>中设置的文件夹和文件，但是依然完整下载了整个项目。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">index.php                          Application/</div></pre></td></tr></table></figure></p>
+<li><ul>
+<li>拉取项目<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 39, done.</div><div class="line">remote: Total 39 (delta 0), reused 0 (delta 0), pack-reused 39</div><div class="line">Unpacking objects: 100% (39/39), done.</div><div class="line">From github.com:***/***</div><div class="line"> * branch            master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]      master     -&gt; origin/master</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>查看项目，验证了稀疏检出的效果。项目目录中只检出了事先设定的文件夹和文件，但是用来测试的项目体积太小了，无法检验是否下载了所有的文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">apiHead.php                         db/</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><p>接着直接上手进行公司内网GitLab的稀疏检出测试。</p>
+</li>
+<li><ul>
+<li>设置<code>sparse-checkout</code>文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">index.php</div><div class="line">Application/</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>拉取项目，0%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">Receiving objects:   0% (194/35326), 23.19 MiB | 1.17 MiB/s</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>拉取项目，100%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">remote: Total 35326 (delta 734), reused 35326 (delta 734)</div><div class="line">Receiving objects: 100% (35326/35326), 1.45 GiB | 1.23 MiB/s, done.</div><div class="line">Resolving deltas: 100% (734/734), done.</div><div class="line">From *.*.*.*:GROUP/PROJECT</div><div class="line"> * branch              master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]        master     -&gt; origin/master</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+<li><ul>
+<li>根据测试结果，虽然设置了稀疏检出，也只检出了<code>sparse-checkout</code>中设置的文件夹和文件，但是依然完整下载了整个项目。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">index.php                          Application/</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>根据测试结果得出，sparse-checkout（稀疏检出）功能，会下载所有的文件，但是只检出符合sparse-checkout文件内筛选条件的文件或文件夹。该功能能省下硬盘空间，但是省不了带宽。</p>
-<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p>（预留） 向Git前进 | 暂存区</p>
+<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p><a href="https://backwallkid.github.io/2017-07/git-4-work-dir-stage-gitignore.html">向Git前进（四） | 暂存区和gitignore相关</a></p>
 <h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a href="https://zhgcao.github.io/2016/05/11/git-sparse-checkout/" target="_blank" rel="external">Git只获取部分目录的内容（稀疏检出） - zhgcao</a><br><a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">git能否只拷贝某几个文件或者文件夹？ - 知乎</a></p>
   
 	</div>
@@ -170,6 +197,14 @@
 	
 <nav class="article-nav clearfix">
  
+ <div class="prev" >
+ <a href="/2017-07/git-4-work-dir-stage-gitignore.html" title="向Git前进（四） | 暂存区和gitignore相关">
+  <strong>上一篇：</strong><br/>
+  <span>
+  向Git前进（四） | 暂存区和gitignore相关</span>
+</a>
+</div>
+
 
 <div class="next">
 <a href="/2017-06/git-2-project-develop-flow.html"  title="向Git前进（二） | GitLab项目开发流程">
@@ -184,17 +219,17 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -202,11 +237,11 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>8</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>9</sup></a></li>
 		  
 		
 		</ul>
@@ -215,15 +250,15 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
 			
 		
 			
@@ -246,14 +281,12 @@
 				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
 			
 		
-			
-		
 		</ul>
 </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -269,11 +302,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
 </div>
 
@@ -500,7 +533,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

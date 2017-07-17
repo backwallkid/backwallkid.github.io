@@ -1,0 +1,538 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>向Git前进（四） | 暂存区和gitignore相关 | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="向Git前进（四） | 暂存区和gitignore相关">
+<meta property="og:url" content="https://backwallkid.github.io/2017-07/git-4-work-dir-stage-gitignore.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/git-status-s-red-m.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case1-git-diff.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case1-git-diff-HEAD.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case1-git-diff-cached.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/git-status-s-green-m.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case2-git-diff.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case2-git-diff-HEAD.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/case2-git-diff-cached.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/git-reset-HEAD.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/git-4/git-reset-HEAD-hard.png">
+<meta property="og:updated_time" content="2017-07-17T10:46:22.572Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="向Git前进（四） | 暂存区和gitignore相关">
+<meta name="twitter:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/git-4/git-status-s-red-m.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017-07/git-4-work-dir-stage-gitignore.html" title="向Git前进（四） | 暂存区和gitignore相关" itemprop="url">向Git前进（四） | 暂存区和gitignore相关</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-07-17T10:26:26.000Z" itemprop="datePublished"> 發表於 2017-07-17</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+	<p>
+		<a href="/images/git-4/arnold-exconde-289207-50c.jpg" title="Unsplash" class="fancybox" rel="article0">
+			<img src="/images/git-4/arnold-exconde-289207-50c.jpg" alt="Unsplash">
+		</a><br>
+		<a href="https://unsplash.com/photos/0RWzJ17SKE" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@lifeofpatot_" target="_blank" rel="external">Arnold Exconde</a>
+		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
+	</p>
+	
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目錄</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作区、暂存区（stage）和版本库（Repository）"><span class="toc-number">2.</span> <span class="toc-text">工作区、暂存区（stage）和版本库（Repository）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#查看可以加入暂存区的文件"><span class="toc-number">2.1.</span> <span class="toc-text">查看可以加入暂存区的文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将工作区文件加入暂存区"><span class="toc-number">2.2.</span> <span class="toc-text">将工作区文件加入暂存区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将暂存区修改提交到分支"><span class="toc-number">2.3.</span> <span class="toc-text">将暂存区修改提交到分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看暂存区文件"><span class="toc-number">2.4.</span> <span class="toc-text">查看暂存区文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改暂存区文件（不影响工作区）"><span class="toc-number">2.5.</span> <span class="toc-text">修改暂存区文件（不影响工作区）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改暂存区文件（并重置工作区）"><span class="toc-number">2.6.</span> <span class="toc-text">修改暂存区文件（并重置工作区）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#验证"><span class="toc-number">2.7.</span> <span class="toc-text">验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于gitignore"><span class="toc-number">3.</span> <span class="toc-text">关于gitignore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>通过前几周对git的研究和探索，工作步入正轨。在实际<a href="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html">使用</a>过程中，发现对于工作区、暂存区和HEAD之间的关系有些迷茫。使用一些零散时间将Gooogle到的信息以及自己的测试结果整合一下。</p>
+<h3 id="工作区、暂存区（stage）和版本库（Repository）"><a href="#工作区、暂存区（stage）和版本库（Repository）" class="headerlink" title="工作区、暂存区（stage）和版本库（Repository）"></a>工作区、暂存区（stage）和版本库（Repository）</h3><ol>
+<li>工作区就是本地电脑中能看到的目录</li>
+<li>版本库包含暂存区和分支，<code>master</code>也是一个分支，<code>HEAD</code>是指向master分支的<strong>游标</strong>。</li>
+</ol>
+<h4 id="查看可以加入暂存区的文件"><a href="#查看可以加入暂存区的文件" class="headerlink" title="查看可以加入暂存区的文件"></a>查看可以加入暂存区的文件</h4><p><code>git status</code><br>-s 表示精简模式以前标<code>M/D/A</code>来区分修改/删除/新增的文件<br>-b 同时显示分区名称</p>
+<h4 id="将工作区文件加入暂存区"><a href="#将工作区文件加入暂存区" class="headerlink" title="将工作区文件加入暂存区"></a>将工作区文件加入暂存区</h4><p><code>git add .</code>将工作区所有修改添加到暂存区<br><code>git add FILE_NAME</code>将工作区单个修改的文件添加到暂存区</p>
+<h4 id="将暂存区修改提交到分支"><a href="#将暂存区修改提交到分支" class="headerlink" title="将暂存区修改提交到分支"></a>将暂存区修改提交到分支</h4><p><code>git commit -m &quot;MSG&quot;</code>一次性把暂存区的所有修改提交到当前分支<br>假如提交成功，命令行应显示如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git commit -m <span class="string">"SOME_MSG"</span></div><div class="line">[BRANCH_NAME 53c0744] </div><div class="line"> 3 files changed, 13 insertions(+), 4 deletions(-)</div></pre></td></tr></table></figure></p>
+<p>提交完成后，暂存区就干净了，可运行<code>git status</code>查看，在提交成功的状态下，status应显示如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ git status</div><div class="line">On branch BRANCH_NAME</div><div class="line">nothing to commit, working tree clean</div></pre></td></tr></table></figure></p>
+<h4 id="查看暂存区文件"><a href="#查看暂存区文件" class="headerlink" title="查看暂存区文件"></a>查看暂存区文件</h4><p><code>git diff --cached --name-only</code>对比暂存区和HEAD（当前分支最新提交）之间的文件差异（<code>git add</code>添加的文件）<br><code>git diff HEAD</code>对比工作区和HEAD（当前分支最新提交）之间的文件差异<br><code>git diff</code>对比工作区与暂存区之间的文件差异<br>–name-only表示只显示文件名</p>
+<h4 id="修改暂存区文件（不影响工作区）"><a href="#修改暂存区文件（不影响工作区）" class="headerlink" title="修改暂存区文件（不影响工作区）"></a>修改暂存区文件（不影响工作区）</h4><p><code>git reset HEAD</code>清空暂存区目录树<br><code>git rm --cached FILE_NAME</code>删除暂存区单个文件</p>
+<h4 id="修改暂存区文件（并重置工作区）"><a href="#修改暂存区文件（并重置工作区）" class="headerlink" title="修改暂存区文件（并重置工作区）"></a>修改暂存区文件（并重置工作区）</h4><p><code>git reset --hard HEAD</code>此操作在情况暂存区目录树的同时，会将工作区还原到HEAD状态</p>
+<h4 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h4><ol>
+<li>先建一个分支test</li>
+<li>修改分支内任意一个文件<br><img src="/images/git-4/git-status-s-red-m.png" alt="git status -s red M"></li>
+<li>case1：记录未将工作区修改的文件添加至暂存区的状态<br>3.1 使用<code>git diff</code>查看工作区与暂存区之间的文件差异<br><img src="/images/git-4/case1-git-diff.png" alt=""><br>3.2 使用<code>git diff HEAD</code>查看工作区与HEAD之间的文件差异<br><img src="/images/git-4/case1-git-diff-HEAD.png" alt=""><br>3.3 使用<code>git diff --cached</code>查看暂存区与HEAD之间的文件差异<br><img src="/images/git-4/case1-git-diff-cached.png" alt=""></li>
+<li>执行<code>git add .</code>后进行<code>git status -s</code>查看<br><img src="/images/git-4/git-status-s-green-m.png" alt="git status -s green M"></li>
+<li>case2：记录将工作区修改的文件添加至暂存区后的状态<br>5.1 使用<code>git diff</code>查看工作区与暂存区之间的文件差异<br><img src="/images/git-4/case2-git-diff.png" alt=""><br>5.2 使用<code>git diff HEAD</code>查看工作区与HEAD之间的文件差异<br><img src="/images/git-4/case2-git-diff-HEAD.png" alt=""><br>5.3  使用<code>git diff --cached</code>查看暂存区与HEAD之间的文件差异<br><img src="/images/git-4/case2-git-diff-cached.png" alt=""></li>
+<li>使用<code>git reset HEAD</code>来重置暂存区目录树<br><img src="/images/git-4/git-reset-HEAD.png" alt=""><br>6.1 接着运行status和三条命令，会发现和case1一样</li>
+<li>执行add将工作区修改重新提交到暂存区后，使用<code>git reset HEAD --hard</code>来重置工作区修改和暂存区目录树<br><img src="/images/git-4/git-reset-HEAD-hard.png" alt=""><br>7.1 再运行status和三条命令，会发现所有的命令运行结果都是空，因为<code>--hard</code>参数将HEAD覆盖到了工作区，所有的修改都没了，而且无法挽回，所以<strong>慎用</strong>。</li>
+</ol>
+<h3 id="关于gitignore"><a href="#关于gitignore" class="headerlink" title="关于gitignore"></a>关于gitignore</h3><p><a href="https://git-scm.com/docs/gitignore" target="_blank" rel="external"><strong>gitignore不能忽略已经track的文件</strong></a></p>
+<blockquote>
+<p><strong>NAME</strong><br>gitignore - Specifies intentionally untracked files to ignore<br><strong>DESCRIPTION</strong><br>A gitignore file specifies intentionally untracked files that Git should ignore. Files already tracked by Git are not affected; see the NOTES below for details.</p>
+</blockquote>
+<p>有时项目中会把node_modules或temp或runtime之类的目录加入版本管理，都是陈年历史，创项目时就加进去了，一般也不会专门提交个commit把他们去除。<br>此处有<a href="http://sabrinaluo.com/tech/2016/02/01/git-how-to-ignore-tracked-files/" target="_blank" rel="external">两种做法</a>，经测（git2.12.1）有效：</p>
+<ol>
+<li><code>git ls-files -z UNTRACK_DIR | xargs -0 git update-index --assume-unchanged</code>更新目录树，将文件夹内所有文件假设为未改变<br>1.1 <code>git update-index --assume-unchanged FILE_NAME</code>更新目录树，将单个文件假设为未改变</li>
+<li><code>git rm --cached -r UNTRACK_DIR</code>下定决心将文件夹移出目录树（需要提交）<br>假如用了第一种做法，之后需要将文件或文件夹取消假设，只需：<br><code>git update-index --no-assume-unchanged FILE_NAME</code>移除假设标签</li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>利用碎片时间的研究，并花了一整天进行知识梳理和实际试验，对Git的工作区、暂存区之间的关系有了进一步的了解。</p>
+<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p>（预留）向Git前进 | rebase</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="http://blog.csdn.net/agul_/article/details/7835786" target="_blank" rel="external">Git学习笔记（三） Git暂存区 - agul</a><br><a href="http://sabrinaluo.com/tech/2016/02/01/git-how-to-ignore-tracked-files/" target="_blank" rel="external">git如何ignore已经track的文件 - sabrinaluo</a><br><a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000/0013745374151782eb658c5a5ca454eaa451661275886c6000" target="_blank" rel="external">工作区和暂存区 - liaoxuefeng</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Git/">Git</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2017-07/git-4-work-dir-stage-gitignore.html" data-title="向Git前进（四） | 暂存区和gitignore相关 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017-06/git-3-sparse-checkout-usage.html"  title="向Git前进（三） | 稀疏检出sparse checkout">
+ <strong>下一篇：</strong><br/> 
+ <span>向Git前进（三） | 稀疏检出sparse checkout
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目錄</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#工作区、暂存区（stage）和版本库（Repository）"><span class="toc-number">2.</span> <span class="toc-text">工作区、暂存区（stage）和版本库（Repository）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#查看可以加入暂存区的文件"><span class="toc-number">2.1.</span> <span class="toc-text">查看可以加入暂存区的文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将工作区文件加入暂存区"><span class="toc-number">2.2.</span> <span class="toc-text">将工作区文件加入暂存区</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#将暂存区修改提交到分支"><span class="toc-number">2.3.</span> <span class="toc-text">将暂存区修改提交到分支</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查看暂存区文件"><span class="toc-number">2.4.</span> <span class="toc-text">查看暂存区文件</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改暂存区文件（不影响工作区）"><span class="toc-number">2.5.</span> <span class="toc-text">修改暂存区文件（不影响工作区）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改暂存区文件（并重置工作区）"><span class="toc-number">2.6.</span> <span class="toc-text">修改暂存区文件（并重置工作区）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#验证"><span class="toc-number">2.7.</span> <span class="toc-text">验证</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#关于gitignore"><span class="toc-number">3.</span> <span class="toc-text">关于gitignore</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分類</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>9</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">標簽</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情鏈接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

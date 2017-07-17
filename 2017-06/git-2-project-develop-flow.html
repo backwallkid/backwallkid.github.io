@@ -28,7 +28,7 @@
 <meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-fetch-p.png">
 <meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-branch-d-icecream.png">
 <meta property="og:image" content="https://backwallkid.github.io/images/git-2/git-branch-clean.png">
-<meta property="og:updated_time" content="2017-06-29T06:17:18.468Z">
+<meta property="og:updated_time" content="2017-06-30T03:55:27.936Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="向Git前进（二） | GitLab项目开发流程">
 <meta name="twitter:description" content="配置了GitLab后，进行项目开发流程整理。作为公司的Git前锋，编写Git操作文档，为快速上手项目提供便利。">
@@ -60,7 +60,7 @@
 				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
 				<h2 class="blog-motto">I love $</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -76,7 +76,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:backwallkid.github.io">
 					</form>
 					
@@ -99,7 +99,7 @@
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-25T12:25:00.000Z" itemprop="datePublished"> Published 2017-06-25</time>
+    <time datetime="2017-06-25T12:25:00.000Z" itemprop="datePublished"> 發表於 2017-06-25</time>
     
   </p>
 </header>
@@ -116,7 +116,7 @@
 
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">11.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
@@ -143,7 +143,7 @@
 <li>添加文件提交并上传或拉取目录<br>3.1 【创建】<br><code>git add .</code><br><code>git commit -m &quot;Initial commit&quot;</code><br><code>git push origin master</code>第一次上传需要添加<code>-u</code>或<code>--set-upstream</code>参数<br>3.2 【拉取】<br><code>git pull</code></li>
 </ol>
 <h4 id="跟踪空目录"><a href="#跟踪空目录" class="headerlink" title="跟踪空目录"></a>跟踪空目录</h4><p>由于git只跟踪文件而不跟踪目录，所以假如要将一个空目录加入追踪，该目录下必须有至少一个文件。<br>假如空目录是为了保持项目的整洁性而存在的，比如<code>Runtime</code>或<code>Temp</code>。<br>该类目录下可放入一个<code>.gitignore</code>，里面写入<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">*</div><div class="line">!.gitignore</div></pre></td></tr></table></figure></p>
-<p>假如空目录是为了留出给即将创建的文件，则可放入一个空的<code>.gitignore</code>。</p>
+<p>假如空目录是为了留出给即将创建的文件，则可放入一个空的<code>.gitkeep</code>，这是为了<a href="https://stackoverflow.com/a/7229996" target="_blank" rel="external">与gitignore区分</a>。</p>
 <p>在目录下搜索空的并且没有gitignore占位文件的目录并创建一个空的<code>.gitignore</code>：<br><code>find . \( -type d -empty \) -and \( -not -regex ./\.git.* \) -exec touch {}/.gitignore \;</code><br>或只搜索空的并且没有gitignore占位文件目录：<br><code>find . \( -type d -empty \) -and \( -not -regex ./\.git.* \);</code></p>
 <h3 id="项目开发流程"><a href="#项目开发流程" class="headerlink" title="项目开发流程"></a>项目开发流程</h3><ol>
 <li>配置git并拉取master，每次push前都pull一下防止失败<br><code>git pull</code></li>
@@ -235,17 +235,17 @@
 	
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装Git-for-Windows"><span class="toc-number">2.</span> <span class="toc-text">安装Git for Windows</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置SSH"><span class="toc-number">3.</span> <span class="toc-text">配置SSH</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目或拉取项目"><span class="toc-number">4.</span> <span class="toc-text">创建项目或拉取项目</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#跟踪空目录"><span class="toc-number">4.1.</span> <span class="toc-text">跟踪空目录</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目开发流程"><span class="toc-number">5.</span> <span class="toc-text">项目开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#修改bug流程"><span class="toc-number">6.</span> <span class="toc-text">修改bug流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支开发过程中，主线有紧急修改需要合并"><span class="toc-number">7.</span> <span class="toc-text">分支开发过程中，主线有紧急修改需要合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#回滚"><span class="toc-number">8.</span> <span class="toc-text">回滚</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分支管理"><span class="toc-number">9.</span> <span class="toc-text">分支管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打包更新文件"><span class="toc-number">10.</span> <span class="toc-text">打包更新文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">11.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">12.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -253,11 +253,11 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>8</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>9</sup></a></li>
 		  
 		
 		</ul>
@@ -266,15 +266,15 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/Git/" title="Git">Git<sup>3</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
 			
 		
 			
@@ -297,14 +297,12 @@
 				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
 			
 		
-			
-		
 		</ul>
 </div>
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -320,11 +318,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
 </div>
 
@@ -551,7 +549,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
