@@ -1,0 +1,505 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Python 深浅拷贝 (Shallow copy and Deep copy in Python) | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="偶然间看到一篇描述Py优雅语法的文章，文中作者对列表拷贝的范例代码引起了笔者的好奇。在测试之后，补充一下Py深浅拷贝的学习。">
+<meta name="keywords" content="Python">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 深浅拷贝 (Shallow copy and Deep copy in Python)">
+<meta property="og:url" content="https://backwallkid.github.io/2017-08/python-shallow-copy-and-deep-copy.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="偶然间看到一篇描述Py优雅语法的文章，文中作者对列表拷贝的范例代码引起了笔者的好奇。在测试之后，补充一下Py深浅拷贝的学习。">
+<meta property="og:updated_time" content="2017-08-03T07:18:26.672Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 深浅拷贝 (Shallow copy and Deep copy in Python)">
+<meta name="twitter:description" content="偶然间看到一篇描述Py优雅语法的文章，文中作者对列表拷贝的范例代码引起了笔者的好奇。在测试之后，补充一下Py深浅拷贝的学习。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017-08/python-shallow-copy-and-deep-copy.html" title="Python 深浅拷贝 (Shallow copy and Deep copy in Python)" itemprop="url">Python 深浅拷贝 (Shallow copy and Deep copy in Python)</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-08-03T12:32:00.000Z" itemprop="datePublished"> Published 2017-08-03</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#尝试"><span class="toc-number">2.</span> <span class="toc-text">尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#探索"><span class="toc-number">3.</span> <span class="toc-text">探索</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#浅拷贝"><span class="toc-number">3.1.</span> <span class="toc-text">浅拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#深拷贝"><span class="toc-number">3.2.</span> <span class="toc-text">深拷贝</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>昨天刷公众号看到一篇描述<a href="https://mp.weixin.qq.com/s?__biz=MzA5ODUzOTA0OQ==&amp;mid=2651688615&amp;idx=1&amp;sn=0d6eefc5a6f0361a8d8899b052cbc3c4&amp;chksm=8b692de1bc1ea4f7782bcea450841ec244e858c03963a136abe3ef903545eb2f8a47765d89db&amp;mpshare=1&amp;scene=1&amp;srcid=0803uWv61wpNWnolkY4nzPlt&amp;pass_ticket=m0WhzD8rqZgJwFW%2BSJxaBbUK4pCYqAzvMJzKnOhhqr21LbWj%2FT5An6y3KwvWiRrO#rd" target="_blank" rel="external">py优雅语法的文章</a>，心痒之下到家就开始尝试，学习了for else statement，yield和py版三目写法。在列表切片这部分中，对作者的列表拷贝写法，有些不太理解。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 拷贝</span></div><div class="line">copy_items = items[::] 或者 items[:]</div></pre></td></tr></table></figure></p>
+<h3 id="尝试"><a href="#尝试" class="headerlink" title="尝试"></a>尝试</h3><p>首先开一个python，随便建一个列表<br><code>l=[1,2,3]</code><br>将其进行两种方法的拷贝：</p>
+<ol>
+<li>我的写法<br><code>c=l</code></li>
+<li>作者的写法<br><code>d=l[:]</code></li>
+</ol>
+<p>分别打印了<code>c</code>和<code>d</code>，并没有什么差别，仔细斟酌了一下作者的用意，觉得应该有一些深层次的考虑。<br>于是使用<code>id()</code>分别查看两边的内存地址，这一打印出现了不同的结果。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(l)</div><div class="line"><span class="number">39179656L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(c)</div><div class="line"><span class="number">39179656L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(d)</div><div class="line"><span class="number">39179272L</span></div></pre></td></tr></table></figure></p>
+<p>使用直接赋值的<code>c</code>的内存地址和原列表<code>l</code>的内存地址是一样的，而用切片方法拷贝的<code>d</code>的内存地址不一样。<br>我尝试改动<code>l</code>的值看一下结果。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>l.append(<span class="string">'z'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>c</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>d</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]</div></pre></td></tr></table></figure></p>
+<p>此时区别就显示出来了，使用直接赋值的<code>c</code>因为和原列表<code>l</code>指向同一个内存地址，所以当修改<code>l</code>的值的时候，打印<code>c</code>也发现同样的改变。</p>
+<h3 id="探索"><a href="#探索" class="headerlink" title="探索"></a>探索</h3><p>稍微搜一下<a href="https://stackoverflow.com/a/17873397" target="_blank" rel="external">怎么拷贝一个列表</a>，发现这个是有专有名词的，叫做 <strong>“深浅拷贝”</strong> （copy，deepcopy）。我原来直接赋值的写法只是将内存地址的引用传递到一个新的对象里，连浅拷贝都算不上。<br>Python的拷贝有一个专门的模块，叫做<code>copy</code>。</p>
+<h4 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> copy;</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,[<span class="number">4</span>,<span class="number">5</span>],<span class="number">6</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>c=copy.copy(l)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(l)</div><div class="line"><span class="number">39195912L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(c)</div><div class="line"><span class="number">39238600L</span></div></pre></td></tr></table></figure>
+<p>从内存引用里清晰的显示，至少内存地址不一样了，对<code>l</code>进行内容变更应该不会影响到<code>c</code>。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>l.append(<span class="string">'z'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>], <span class="number">6</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>c</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>], <span class="number">6</span>]</div></pre></td></tr></table></figure></p>
+<p>但是毕竟是浅拷贝，只是拷贝了最外层对象，没有拷贝子对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(l[<span class="number">3</span>])</div><div class="line"><span class="number">39195784L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(c[<span class="number">3</span>])</div><div class="line"><span class="number">39195784L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l[<span class="number">3</span>].append(<span class="string">'az'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>, <span class="string">'az'</span>], <span class="number">6</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>c</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>, <span class="string">'az'</span>], <span class="number">6</span>]</div></pre></td></tr></table></figure></p>
+<p>果然原列表<code>l</code>的子对象的内存地址和浅拷贝<code>c</code>的对应子对象的内存地址一样，所以当原列表的子对象内容发生改变时，也会影响到<code>c</code>。</p>
+<h4 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h4><p>有了浅拷贝的经验，直接造一个深拷贝对象<code>d</code>，先查看一下外层对象和子对象的内存地址。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>l=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,[<span class="number">4</span>,<span class="number">5</span>],<span class="number">6</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>d=copy.deepcopy(l)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(l)</div><div class="line"><span class="number">39236296L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(d)</div><div class="line"><span class="number">39195912L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(l[<span class="number">3</span>])</div><div class="line"><span class="number">39179656L</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>id(d[<span class="number">3</span>])</div><div class="line"><span class="number">39236040L</span></div></pre></td></tr></table></figure></p>
+<p>结果清晰的显示，原列表<code>l</code>和深拷贝对象<code>d</code>对应外层对象和子对象的内存地址均不同。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;&gt; </span>l.append(<span class="string">'z'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>], <span class="number">6</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>d</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>], <span class="number">6</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l[<span class="number">3</span>].append(<span class="string">'az'</span>)</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>l</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>, <span class="string">'az'</span>], <span class="number">6</span>, <span class="string">'z'</span>]</div><div class="line"><span class="meta">&gt;&gt;&gt; </span>d</div><div class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, [<span class="number">4</span>, <span class="number">5</span>], <span class="number">6</span>]</div></pre></td></tr></table></figure></p>
+<p>再查看一下结果，验证了我的猜想。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Python是一门脚本语言，声明一个对象实际在内存中创建了一个地址存放对象，将对象名指向那个内存地址。用PHP的赋值方法进行赋值时，只是创建了一个新的对象名同时指向同一个内存地址。<br><a href="https://mp.weixin.qq.com/s?__biz=MzA5ODUzOTA0OQ==&amp;mid=2651688615&amp;idx=1&amp;sn=0d6eefc5a6f0361a8d8899b052cbc3c4&amp;chksm=8b692de1bc1ea4f7782bcea450841ec244e858c03963a136abe3ef903545eb2f8a47765d89db&amp;mpshare=1&amp;scene=1&amp;srcid=0803uWv61wpNWnolkY4nzPlt&amp;pass_ticket=m0WhzD8rqZgJwFW%2BSJxaBbUK4pCYqAzvMJzKnOhhqr21LbWj%2FT5An6y3KwvWiRrO#rd" target="_blank" rel="external">py优雅语法</a>的作者所用的列表拷贝方法<code>c=l[:]</code>用的就是浅拷贝，只是写法相对于<code>copy.copy()</code>更简洁。<br>通过Copy模块的代码可以发现deepcopy是在copy的基础上执行了递归。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># C:\Python27\Lib\copy.py</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">deepcopy</span><span class="params">(x, memo=None, _nil=[])</span>:</span></div><div class="line">...</div><div class="line">                y = _reconstruct(x, rv, <span class="number">1</span>, memo);</div><div class="line">...</div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">_reconstruct</span><span class="params">(x, info, deep, memo=None)</span>:</span></div><div class="line">...</div><div class="line">	<span class="keyword">if</span> deep:</div><div class="line">			args = deepcopy(args, memo);</div><div class="line">...</div></pre></td></tr></table></figure></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2017-08/python-shallow-copy-and-deep-copy.html" data-title="Python 深浅拷贝 (Shallow copy and Deep copy in Python) | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017-07/git-4-work-dir-stage-gitignore.html"  title="向Git前进（四） | 暂存区和gitignore相关">
+ <strong>下一篇：</strong><br/> 
+ <span>向Git前进（四） | 暂存区和gitignore相关
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#尝试"><span class="toc-number">2.</span> <span class="toc-text">尝试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#探索"><span class="toc-number">3.</span> <span class="toc-text">探索</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#浅拷贝"><span class="toc-number">3.1.</span> <span class="toc-text">浅拷贝</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#深拷贝"><span class="toc-number">3.2.</span> <span class="toc-text">深拷贝</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>10</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
