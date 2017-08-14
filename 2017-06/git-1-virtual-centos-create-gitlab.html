@@ -57,7 +57,7 @@
 				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
 				<h2 class="blog-motto">I love $</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -73,7 +73,7 @@
  					
 					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
 						<label>Search</label>
-						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="搜索" />
 						<input type="hidden" name="q" value="site:backwallkid.github.io">
 					</form>
 					
@@ -96,7 +96,7 @@
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-22T12:25:00.000Z" itemprop="datePublished"> Published 2017-06-22</time>
+    <time datetime="2017-06-22T12:25:00.000Z" itemprop="datePublished"> 发表于 2017-06-22</time>
     
   </p>
 </header>
@@ -113,7 +113,7 @@
 
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">Contents</strong>
+			<strong class="toc-title">文章目录</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设备"><span class="toc-number">2.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装GitLab"><span class="toc-number">3.</span> <span class="toc-text">安装GitLab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">4.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目"><span class="toc-number">5.</span> <span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结语"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">7.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
@@ -124,7 +124,7 @@
 <h3 id="安装GitLab"><a href="#安装GitLab" class="headerlink" title="安装GitLab"></a>安装GitLab</h3><p>按照GitLab的<a href="https://about.gitlab.com/installation/#centos" target="_blank" rel="external">安装文档</a>，能够成功的完成安装。<br>安装完成图<br><img src="/images/git-1/centos7-install-gitlab-complete_wm.jpg" alt="CentOS安装GitLab"><br>笔者在安装完之后找不到入口，仔细查看后发现，GitLab默认是监听80端口的，而之前安装的apache占了80，虽然安装和启动gitlab时没有报错，但是访问80端口会被接引到apache。<br>解决方法是去apache的配置文件httpd.conf中找到Listen 80改为监听其他，再重启服务。apache让出80端口后，访问本机网络地址就能打开GitLab首页了。</p>
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><p>GitLab的配置文件默认位于<code>/etc/gitlab/gitlab.rb</code>，每次改完配置文件，都需要运行<code>gitlab-ctl reconfigure</code>使配置生效。<br>配置文件中有2个参数一定要改：</p>
 <ol>
-<li><p>邮箱地址，因为每次创建新用户GitLab都会发邮件到新用户的邮箱，邮件中含有改密码链接。<br>成功创建用户后注意查看收件箱，创建所填写的邮箱会收到来自<a href="&#x6d;&#97;&#x69;&#108;&#116;&#111;&#58;&#103;&#x69;&#116;&#108;&#x61;&#x62;&#64;&#x69;&#x70;&#95;&#x6c;&#x6f;&#99;&#x61;&#x74;&#105;&#111;&#x6e;">&#103;&#x69;&#116;&#108;&#x61;&#x62;&#64;&#x69;&#x70;&#95;&#x6c;&#x6f;&#99;&#x61;&#x74;&#105;&#111;&#x6e;</a>的邮件，可能会出现在垃圾邮件中。<br><img src="/images/git-1/gitlab-user-add_wm.png" alt="GitLab添加用户"></p>
+<li><p>邮箱地址，因为每次创建新用户GitLab都会发邮件到新用户的邮箱，邮件中含有改密码链接。<br>成功创建用户后注意查看收件箱，创建所填写的邮箱会收到来自<a href="&#x6d;&#97;&#x69;&#x6c;&#x74;&#111;&#58;&#103;&#x69;&#x74;&#x6c;&#97;&#98;&#x40;&#x69;&#x70;&#95;&#108;&#x6f;&#99;&#97;&#x74;&#x69;&#x6f;&#x6e;">&#103;&#x69;&#x74;&#x6c;&#97;&#98;&#x40;&#x69;&#x70;&#95;&#108;&#x6f;&#99;&#97;&#x74;&#x69;&#x6f;&#x6e;</a>的邮件，可能会出现在垃圾邮件中。<br><img src="/images/git-1/gitlab-user-add_wm.png" alt="GitLab添加用户"></p>
 </li>
 <li><p>假如虚拟机中安装的GitLab想给主机同一局域网内其他用户或主机使用的话，配置文件中<code>external_url &#39;http://localhost&#39;</code>的localhost必须要改成虚拟机在局域网内ip，改完之后同一局域网内其他用户就能正常访问GitLab了。<br>路径配置前<br><img src="/images/git-1/gitlab-externalurl-not-config_wm.png" alt="GitLab路径配置前"></p>
 </li>
@@ -197,17 +197,17 @@
 
 </div>  
 
-      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">Contents</strong>
+  <strong class="toc-title">文章目录</strong>
  
  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设备"><span class="toc-number">2.</span> <span class="toc-text">设备</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装GitLab"><span class="toc-number">3.</span> <span class="toc-text">安装GitLab</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">4.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建项目"><span class="toc-number">5.</span> <span class="toc-text">创建项目</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结语"><span class="toc-number">6.</span> <span class="toc-text">结语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">7.</span> <span class="toc-text">下一步</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
 <aside class="clearfix">
 
   
@@ -215,11 +215,11 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">Categories</p>
+	<p class="asidetitle">分类</p>
 		<ul>
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>10</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>11</sup></a></li>
 		  
 		
 		</ul>
@@ -228,23 +228,23 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">Tags</p>
+	<p class="asidetitle">标签</p>
 		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>4</sup></a></li>
+			
 		
 			
 				<li><a href="/tags/Git/" title="Git">Git<sup>4</sup></a></li>
 			
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>3</sup></a></li>
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
 			
 		
 			
 				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
-			
-		
-			
-				<li><a href="/tags/Python/" title="Python">Python<sup>2</sup></a></li>
 			
 		
 			
@@ -264,7 +264,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">Links</p>
+  <p class="asidetitle">友情链接</p>
     <ul>
         
           <li>
@@ -280,11 +280,11 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
 </div>
 
   <div class="weiboshow">
-  <p class="asidetitle">Weibo</p>
+  <p class="asidetitle">新浪微博</p>
     <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
 </div>
 
@@ -511,7 +511,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 
