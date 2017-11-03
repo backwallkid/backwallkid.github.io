@@ -4,26 +4,27 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>记一次小型生产事故 | BeyondComper跨编码方式复制文件内容 | Walter&#39;s Garden</title>
+    <title>2017年11月02日|记一次数据库类升级兼微信公众号服务器配置 | Walter&#39;s Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Walter Huang">
     
 
     
-    <meta name="description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta name="keywords" content="Html+js+css,Tools">
+    <meta name="description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
+<meta name="keywords" content="PHP,MySQL">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
-<meta property="og:url" content="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html">
+<meta property="og:title" content="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置">
+<meta property="og:url" content="https://backwallkid.github.io/2017-11/a-db-base-class-upgrade.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta property="og:image" content="https://backwallkid.github.io/images/bc_chinese_copy_wm.jpg">
-<meta property="og:updated_time" content="2017-05-25T06:53:33.571Z">
+<meta property="og:description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
+<meta property="og:image" content="https://backwallkid.github.io/images/wx-api-c1.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/wx-api-c2.png">
+<meta property="og:updated_time" content="2017-11-03T03:57:46.973Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
-<meta name="twitter:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/bc_chinese_copy_wm.jpg">
+<meta name="twitter:title" content="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置">
+<meta name="twitter:description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/wx-api-c1.png">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -83,14 +84,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017-05/bc-copy-chinese-not-encoding.html" title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容" itemprop="url">记一次小型生产事故 | BeyondComper跨编码方式复制文件内容</a>
+      <a href="/2017-11/a-db-base-class-upgrade.html" title="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置" itemprop="url">2017年11月02日|记一次数据库类升级兼微信公众号服务器配置</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-25T12:25:00.000Z" itemprop="datePublished"> Published 2017-05-25</time>
+    <time datetime="2017-11-02T12:30:00.000Z" itemprop="datePublished"> Published 2017-11-02</time>
     
   </p>
 </header>
@@ -101,22 +102,44 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选定目标"><span class="toc-number">3.</span> <span class="toc-text">选定目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始改造"><span class="toc-number">4.</span> <span class="toc-text">开始改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后语"><span class="toc-number">6.</span> <span class="toc-text">后语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信公众号服务器迁移流程"><span class="toc-number">7.</span> <span class="toc-text">微信公众号服务器迁移流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>今天组长在做站内巡检的时候，发现header内有一条meta标签的content显示为乱码。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"description"</span> <span class="attr">content</span>=<span class="string">"�����򰮶����������򰮶������������������ϰ������أ�����������Դ���Ƚ����ա���ѧ�䷽���ϸ��ʿأ���������й����Ƚ�ˮƽ�����ʺ��й������Ĳ�Ʒ��ʼ�������Ա���������������ġ�"</span> /&gt;</span></div></pre></td></tr></table></figure></p>
-<p>我们版本是由svn控制的，组长使用<em>blame</em>看见是我提交的文件，就丢给我。<br>虽然已经是2个月前的提交，但是我还是稍微有点印象。<br>那是一次从测试站到正式站的代码合并，使用了<strong>BeyondCompare</strong>(下文简称为<strong>BC</strong>)的文件夹对比功能，逐个文件进行对比合并。</p>
-<h3 id="发现"><a href="#发现" class="headerlink" title="发现"></a>发现</h3><p>首先确认了测试站和正式站文件的内容是一样的，而测试站中头部文件的编码方式是<em>UTF-8</em>，而正式站中头部文件的编码方式是<em>GB2312</em>。这让我感到非常奇怪，因为不论是用<em>BC</em>文件拷贝还是<em>IDE</em>的文件创建，都不会出现<em>非UTF-8</em>编码的文件。</p>
-<p>追溯查询了上一次提交所有文件的编码方式后发现，<em>非UTF-8</em>编码的文件还有很多。</p>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>于是我打算造个环境测试一下，建了两个空文件夹test1、test2，test1中放入一个随意汉字内容的UTF-8编码test.html。</p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>公司内有好几个托管微信公众号的遗留项目，在制作时由于项目需求简单，都没有用到框架。制作项目的前辈自己写了个MySQL的封装类，里面附带了几个常用的增删改查方法。而自从PHP5.5开始，mysql扩展就提示被弃用，在PHP7中，此扩展被移除，取而代之的是mysqli或pdo。</p>
+<blockquote>
+<p><em><del>mysql_connect</del></em><br><em><del>mysql_select_db</del></em><br><a href="http://php.net/manual/en/function.mysql-connect.php" target="_blank" rel="external">Warning</a>:<br>This extension was deprecated in PHP 5.5.0, and it was removed in PHP 7.0.0. Instead, the MySQLi or PDO_MySQL extension should be used.</p>
+</blockquote>
+<p>在后面的几个项目中，为了减少开发成本，在多个微信公众维护项目中沿用此封装类。而PHP7是一个趋势，为了跟上时代的脚步，组长指派我来改造此封装类，至于用mysqli还是pdo由我决定。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>好在所有的历史项目中都使用了<strong>继承封装类的模型</strong>来进行数据操作，而不是在控制器中直接使用封装类，这为此次升级带来很大便利。<br>先选一个项目进行试水，组长借来了公司的测试公众号供我随意测试。</p>
+<h3 id="选定目标"><a href="#选定目标" class="headerlink" title="选定目标"></a>选定目标</h3><p>我曾经自己造过mysql，mysqli和pdo的轮子，但是只有pdo类曾经被应用到<a href="https://backwallkid.github.io/2017-06/a-php-vote-project.html">实际项目</a>里，而pdo类编写得也比较完善，故选用pdo作为升级方向。<br>附上我自己造的pdo轮子的地址：<br><a href="https://github.com/backwallkid/common-functions/blob/master/db/DbPdo.php" target="_blank" rel="external">https://github.com/backwallkid/common-functions/blob/master/db/DbPdo.php</a></p>
+<h3 id="开始改造"><a href="#开始改造" class="headerlink" title="开始改造"></a>开始改造</h3><p>根据之前分析的结果</p>
 <ol>
-<li>先使用BC的<em>目录复制到右边</em>功能，从test1复制到test2，经查test2/test.html的编码方式还是UTF-8。</li>
-<li>清空test2/test.html的内容，并将编码方式改为ansi。</li>
-<li>再使用BC的<em>打开文件复制到右边</em>功能，从test1/test.html复制到test2/test.html，汉字复制过去了。<br><img src="/images/bc_chinese_copy_wm.jpg" alt="image"><br>如红框显示，只是文字内容复制过去，编码方式却没有。</li>
+<li>只需将mysql类文件替换成pdo类文件。</li>
+<li>再将模型继承的类名修改一下。</li>
+<li>最后检查所有模型中调用封装类的函数，使输出结果保持相同。</li>
 </ol>
-<h3 id="推测"><a href="#推测" class="headerlink" title="推测"></a>推测</h3><p>于是我推测出2个月前的经过是这样的：<br>在进行文件夹内容合并的时候，我发现正式站文件夹内已经有了一个空的头部文件html。<br>于是我在使用BC进行内容合并的时候不是直接拷贝文件，而是点进文件内复制了内容，却没有看到BC右上角提示的不同的文件编码方式。导致一个GB2312的汉字头部文件进了UTF-8编码的网站。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>去追究谁造的GB2312空头部文件已经没有意义了，组长真正的责难点在于我在复制文字的过程中没有检查编码方式不同，还把这个文件投产了。<br>通过这个生产事故，再次敲响警钟，始终要记得<strong>检查文件编码方式</strong>。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>找公司的管理员讨了一组新的FTP+mysql，原来有的测试站使用的是和线上一样的环境，新的环境是使用最近其他项目常用的PHP7+MySQL5.6。<br>先将改造后的代码放在测试站中测试。<br>在存储微信昵称时碰到一点格楞，假如微信昵称中含有emoji字符，则数据插入失败，Pdo类记录到如下错误。<br><code>Incorrect string value: &#39;\xF0\x9F\x92\x94&#39; for colum n &#39;wx_nickname&#39; at row 1</code><br>根据搜索，有两种解决办法：</p>
+<ol>
+<li>使用正则过滤掉所有的emoji字符，只存储正常字符串。</li>
+<li>将数据表的charset改成utf8mb4</li>
+</ol>
+<p>经过一系列的扫码关注、修改分组、自动应答、模板消息等功能测试通过。测试进入下一阶段。</p>
+<p>管理员将测试站的域名指向新环境的地址后，过了十二小时。</p>
+<p>在测试微信的<a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140839" target="_blank" rel="external">获取用户信息接口</a>时，微信接口会不定时返回<br><code>{&quot;errcode&quot;:40001,&quot;errmsg&quot;:&quot;invalid credential, access_token is invalid or not latest&quot;}</code>。<br>这个错误一般是由于没有及时更新access_token导致的，而缓存access_token的数据表显示，表里记录的新获取的access_token不足10分钟。<br>此时突然灵机一动，去查看了原来测试站的数据库，发现旧环境中记录access_token的数据表的获取时间在新环境的缓存access_token的数据表的获取时间之后。<br>由此得出从微信接口发出的数据一部分会进入到旧的测试地址之内，即使域名已经切换了十二小时。<br>于是赶紧找网络管理员新造了一个域名，并且将此域名指向新环境。</p>
+<p>在新域名生效后，没有再出现access_token过期的情况，新环境的测试也通过了。</p>
+<h3 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h3><p>将测试结果上报给组长过目，但由于测试过程中呈现出来的不可预料的情况，域名修改指向后过了十二小时，依然有可能会访问到原来的地址。所以和组长讨论后找了个取巧的方法，使用两套数据库配置文件，旧FTP中保留程序，新FTP中仅access_token存取都读老数据库，其他数据存新库。将近一周后老库里其他表的数据不再新增了，说明新域名已完全生效。至此这次数据库类升级圆满完成。</p>
+<h3 id="微信公众号服务器迁移流程"><a href="#微信公众号服务器迁移流程" class="headerlink" title="微信公众号服务器迁移流程"></a>微信公众号服务器迁移流程</h3><ol>
+<li>布代码，数据库</li>
+<li>打开valid接口，等api验证通过后再关闭</li>
+<li><p>登录“公众平台”，左侧开发-基本配置，服务器配置-修改配置<br><img src="/images/wx-api-c1.png" alt="服务器配置"></p>
+</li>
+<li><p>左侧设置-公众号设置-功能设置，修改网页授权域名、JS接口安全域名<br><img src="/images/wx-api-c2.png" alt="网页授权域名"></p>
+</li>
+<li><p>测试api</p>
+</li>
+</ol>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="http://php.net/manual/en/function.mysql-connect.php" target="_blank" rel="external">mysql扩展弃用警告 - php.net</a><br><a href="https://backwallkid.github.io/2017-06/a-php-vote-project.html">一个使用自造PDO类的项目 - backwallkid</a><br><a href="https://github.com/backwallkid/common-functions/commit/ae9a58b8d956eefa12d29f57e002898eb40310e2" target="_blank" rel="external">经过项目洗礼的PDO类 - backwallkid</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -130,7 +153,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a><a href="/tags/Tools/">Tools</a>
+  <span></span> <a href="/tags/PHP/">PHP</a><a href="/tags/MySQL/">MySQL</a>
   </div>
 
 </div>
@@ -139,7 +162,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html" data-title="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  <div data-url="https://backwallkid.github.io/2017-11/a-db-base-class-upgrade.html" data-title="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -170,19 +193,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017-06/a-php-vote-project.html" title="记一次投票项目">
-  <strong>上一篇：</strong><br/>
-  <span>
-  记一次投票项目</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017-05/leka-shanghai-map-program.html"  title="乐卡上海网点地图制作心得 | 百度地图API使用心得">
+<a href="/2017-09/mysql-timestamp-on-update.html"  title="数据日志的重要性 | MySQL timestamp on update">
  <strong>下一篇：</strong><br/> 
- <span>乐卡上海网点地图制作心得 | 百度地图API使用心得
+ <span>数据日志的重要性 | MySQL timestamp on update
 </span>
 </a>
 </div>
@@ -198,7 +213,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选定目标"><span class="toc-number">3.</span> <span class="toc-text">选定目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始改造"><span class="toc-number">4.</span> <span class="toc-text">开始改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后语"><span class="toc-number">6.</span> <span class="toc-text">后语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信公众号服务器迁移流程"><span class="toc-number">7.</span> <span class="toc-text">微信公众号服务器迁移流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
