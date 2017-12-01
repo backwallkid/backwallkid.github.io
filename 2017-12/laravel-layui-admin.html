@@ -1,0 +1,599 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>Laravel 5.1 + Layui 2.1.7 定制管理端 | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="使用Laravel与最近很火的Layui制作管理端，虽然最后没有用到项目里，但是学会了Laravel和Layui的基础用法。">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Laravel 5.1 + Layui 2.1.7 定制管理端">
+<meta property="og:url" content="https://backwallkid.github.io/2017-12/laravel-layui-admin.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="使用Laravel与最近很火的Layui制作管理端，虽然最后没有用到项目里，但是学会了Laravel和Layui的基础用法。">
+<meta property="og:updated_time" content="2017-12-01T04:23:01.243Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Laravel 5.1 + Layui 2.1.7 定制管理端">
+<meta name="twitter:description" content="使用Laravel与最近很火的Layui制作管理端，虽然最后没有用到项目里，但是学会了Laravel和Layui的基础用法。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2017-12/laravel-layui-admin.html" title="Laravel 5.1 + Layui 2.1.7 定制管理端" itemprop="url">Laravel 5.1 + Layui 2.1.7 定制管理端</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2017-12-01T04:00:00.000Z" itemprop="datePublished"> Published 2017-12-01</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Laravel"><span class="toc-number">2.</span> <span class="toc-text">Laravel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#规范目录"><span class="toc-number">2.2.</span> <span class="toc-text">规范目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#全局变量"><span class="toc-number">2.3.</span> <span class="toc-text">全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置路由"><span class="toc-number">2.4.</span> <span class="toc-text">配置路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置Auth关联的模型"><span class="toc-number">2.5.</span> <span class="toc-text">配置Auth关联的模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关闭指定url的csrf验证"><span class="toc-number">2.6.</span> <span class="toc-text">关闭指定url的csrf验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#验证码插件mews"><span class="toc-number">2.7.</span> <span class="toc-text">验证码插件mews</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型"><span class="toc-number">2.8.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型作用域"><span class="toc-number">2.9.</span> <span class="toc-text">模型作用域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关联模型"><span class="toc-number">2.10.</span> <span class="toc-text">关联模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layui"><span class="toc-number">3.</span> <span class="toc-text">layui</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#槛"><span class="toc-number">3.1.</span> <span class="toc-text">槛</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">5.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>公司的AC接到一个项目，需要为一个现有的视频页面添加评论系统。由于甲方想把用户的评论控制在自己手里，所以不能使用第三方评论系统。<br>一个评论系统必须配备一个评论审核管理后台，而这次的甲方和其他的甲方有些说不清道不明的关系，所以还不能使用以前用过的管理后台。正好前几天看到一个推文提到过layui，去官网看了下，demo和文档都挺全，于是准备使用laravel+layui开发一个管理端。</p>
+<h3 id="Laravel"><a href="#Laravel" class="headerlink" title="Laravel"></a>Laravel</h3><p>由于生产环境的PHP版本是5.5，所以选择了Laravel 5.1作为开发框架。</p>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>PHP版本</th>
+<th>PHP扩展要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5.0</td>
+<td>[5.4, 7.0.0)</td>
+<td>Mcrypt, OpenSSL, Mbstring, Tokenizer</td>
+</tr>
+<tr>
+<td>5.1</td>
+<td>[5.5.9,)</td>
+<td>PDO, OpenSSL, Mbstring, Tokenizer</td>
+</tr>
+<tr>
+<td>5.2</td>
+<td>[5.5.9,)</td>
+<td>PDO, OpenSSL, Mbstring, Tokenizer</td>
+</tr>
+<tr>
+<td>5.3</td>
+<td>[5.6.4,)</td>
+<td>PDO, OpenSSL, Mbstring, Tokenizer, XML</td>
+</tr>
+<tr>
+<td>5.4</td>
+<td>[5.6.4,)</td>
+<td>PDO, OpenSSL, Mbstring, Tokenizer, XML</td>
+</tr>
+<tr>
+<td>5.5</td>
+<td>[7.0.0, )</td>
+<td>PDO, OpenSSL, Mbstring, Tokenizer, XML</td>
+</tr>
+</tbody>
+</table>
+<p>数据来源： <a href="https://laravel.com/docs/5.5#server-requirements" target="_blank" rel="external">Laravel官方文档</a></p>
+<h4 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h4><p>从github上拉下压缩包后，需要先<code>composer install</code>一下，因为框架基础文件和依赖的其他包都在vendor里。</p>
+<h4 id="规范目录"><a href="#规范目录" class="headerlink" title="规范目录"></a>规范目录</h4><p>参照<a href="https://baijunyao.com/article/117" target="_blank" rel="external">baijunyao的博文</a>，先将app目录规范为和文中一样的结构。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">laravel-layui 项目根目录</div><div class="line">├┬ app</div><div class="line">│├┬ Http</div><div class="line">││├─ Controllers   控制器</div><div class="line">││├─ Middleware	   中间件</div><div class="line">││├─ Requests</div><div class="line">││├─ Kernel.php</div><div class="line">││└─ routes.php    路由</div><div class="line">│├┬ Library        [+]公共库</div><div class="line">││├─ Function      [+]公共方法</div><div class="line">││└─ Org           [+]公共类</div><div class="line">│├┬	Models         [+]模型</div><div class="line">││├─ Admin.php</div><div class="line">││└─ User.php</div><div class="line">│└─ Providers</div><div class="line">├─ bootstrap</div><div class="line">├─ config          配置文件夹</div><div class="line">├┬ public          网站根目录</div><div class="line">│├┬ public         [+]网站资源文件夹</div><div class="line">││└─ layui         [+]layui目录</div><div class="line">│└─ index.php      网站入口</div><div class="line">├─ vendor          第三方插件文件夹</div><div class="line">├─ artisan</div><div class="line">└─ composer.json</div></pre></td></tr></table></figure></p>
+<p>由于Library是新建的目录，所以需要添加到autoload里。<br>在根目录的<code>composer.json</code>的<code>file</code>里加入需要载入的路径<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">...</div><div class="line">"autoload": &#123;</div><div class="line">        "classmap": [</div><div class="line">            "database",</div><div class="line">            "app/Libraries/Org"</div><div class="line">        ],</div><div class="line">        "files": [</div><div class="line">            "app/Library/Org/Dictionary.php",</div><div class="line">            "app/Library/Function/Helper.php"</div><div class="line">        ]</div><div class="line">		...</div><div class="line">	&#125;</div><div class="line">&#125;,</div><div class="line">...</div></pre></td></tr></table></figure></p>
+<p>再运行<code>composer dump-autoload</code>就加载好了。<br><a href="https://www.phpxy.com/article/37.html" target="_blank" rel="external">laravel中的自定义函数的放置规范</a></p>
+<h4 id="全局变量"><a href="#全局变量" class="headerlink" title="全局变量"></a>全局变量</h4><p>laravel的全局变量位于根目录下的<code>.env</code>文件，任何自定义的全局变量名都可以写在这个文件内。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">DB_HOST=localhost</div><div class="line">DB_DATABASE=数据库名</div><div class="line">DB_USERNAME=DB账号</div><div class="line">DB_PASSWORD=DB密码</div><div class="line">DB_PREFIX=表前缀</div><div class="line"></div><div class="line">ROUTE_BASE=路径名</div></pre></td></tr></table></figure></p>
+<p>当程序中需要调用此变量值时，可以使用<code>env(&#39;ROUTE_BASE&#39;)</code>来获取该值。</p>
+<h4 id="配置路由"><a href="#配置路由" class="headerlink" title="配置路由"></a>配置路由</h4><p>可自由配置的路由是laravel的一大亮点，而且经过指定GET变量的方式，在使用url传值的时候可以不用带上键名，大大缩短了url长度。<br>路由配置文件<code>app/Http/routes.php</code><br>常用的三个静态方法是<code>get</code>、<code>post</code>和<code>group</code>，其中：</p>
+<ol>
+<li><code>get</code>主要用于url可直接访问的路径<br>eg. <code>Route::get(env(&#39;ROUTE_BASE&#39;).&#39;/admin/login&#39;, &#39;AdminController@login&#39;);</code></li>
+<li><code>post</code>用于表单post提交或ajax的post提交访问的路径<br>eg. <code>Route::post(env(&#39;ROUTE_BASE&#39;).&#39;/admin/user_save&#39;, &#39;AdminController@user_save&#39;);</code></li>
+<li><code>group</code>属于一个组，可统一配置中间件<br>eg. <figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//表示dashboard、unauthorized、user_management三个函数都在auth和access两个中间件运行通过之后执行</span></div><div class="line"><span class="comment">//中间件的运行顺序是先auth后access</span></div><div class="line">Route::group([<span class="string">'middleware'</span> =&gt; [<span class="string">'auth'</span>,<span class="string">'access'</span>]], <span class="function"><span class="keyword">function</span><span class="params">()</span> </span>&#123;</div><div class="line">    Route::get(env(<span class="string">'ROUTE_BASE'</span>) . <span class="string">'/admin/dashboard'</span>, <span class="string">'AdminController@dashboard'</span>);</div><div class="line">	<span class="comment">//采用unauthorized这样的写法可以不用创建控制器及对应的函数，路由控制直接返回视图</span></div><div class="line">    Route::get(env(<span class="string">'ROUTE_BASE'</span>) . <span class="string">'/admin/unauthorized'</span>, <span class="function"><span class="keyword">function</span><span class="params">()</span></span>&#123;</div><div class="line">        <span class="keyword">return</span> view(<span class="string">'admin.unauthorized'</span>);</div><div class="line">    &#125;);</div><div class="line">    Route::get(env(<span class="string">'ROUTE_BASE'</span>) . <span class="string">'/admin/user_management'</span>, <span class="string">'AdminController@user_management'</span>);</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>路由配置文件中用到的<code>Route</code>的方法在<code>\Illuminate\Routing\Router</code>中，可以查看其他可用的方法。</p>
+<h4 id="配置Auth关联的模型"><a href="#配置Auth关联的模型" class="headerlink" title="配置Auth关联的模型"></a>配置Auth关联的模型</h4><p>Laravel中默认的管理员表模型是User，而在这个项目中user表有其他用处，管理员表需要改为Admin。<br>修改Auth配置文件<code>config/auth.php</code><br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> [</div><div class="line">	...</div><div class="line">	<span class="string">'model'</span> =&gt; App\Models\Admin::class,</div><div class="line">    <span class="string">'table'</span> =&gt; <span class="string">'admin'</span>,</div><div class="line">	...</div><div class="line">];</div></pre></td></tr></table></figure></p>
+<p>之后便能通过读写Admin模型正常使用<code>Auth::check()</code>，<code>Auth::attempt()</code>等函数了。</p>
+<h4 id="关闭指定url的csrf验证"><a href="#关闭指定url的csrf验证" class="headerlink" title="关闭指定url的csrf验证"></a>关闭指定url的csrf验证</h4><p>laravel中默认是全局开启csrf验证的，但是使用ajax通信时会造成失败，导致程序无法继续。<br>在<code>app/Http/Middleware/VerifyCsrfToken.php</code>中将需要排除的routes名称加入<code>$except</code>内，<br>这样解决了一部分问题，但是所有的表单均是采用通过ajax来提交，这样总是会报出<br><code>TokenMismatchException in VerifyCsrfToken.php line 53:</code>这样总是添加<code>$except</code>会很麻烦，索性把csrf改为cookie模式。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">VerifyCsrfToken</span> <span class="keyword">extends</span> <span class="title">BaseVerifier</span></span></div><div class="line">&#123;</div><div class="line">	...</div><div class="line">	<span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">handle</span><span class="params">($request, Closure $next)</span></span></div><div class="line">	&#123;</div><div class="line">		<span class="keyword">return</span> <span class="keyword">parent</span>::addCookieToResponse($request, $next($request));</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h4 id="验证码插件mews"><a href="#验证码插件mews" class="headerlink" title="验证码插件mews"></a>验证码插件mews</h4><p>在制作登录界面的时候，由于要使用验证码，搜索到一个配置起来很方便的<a href="https://github.com/mewebstudio/captcha" target="_blank" rel="external">图形验证码插件mews</a>。<br>这个插件的文档很全，按照文档里一步步走下来没有遇到什么问题。</p>
+<h4 id="模型"><a href="#模型" class="headerlink" title="模型"></a>模型</h4><p>Eloquent[ˈeləkwənt] ORM是学习Laravel的一大难点，解说Eloquent的文章网上一大堆，这里不赘述。<br>除了可以使用Eloquent外，还可以使用query<code>DB::table(&#39;&#39;)</code>的形式直接进行查询。<br>Eloquent模型的可用函数在<br><code>/vendor/laravel/framework/src/Illuminate/Database/Connection.php</code><br>和<br><code>/vendor/laravel/framework/src/Illuminate/Database/Query/JoinClause.php</code><br>内进行选择。</p>
+<h4 id="模型作用域"><a href="#模型作用域" class="headerlink" title="模型作用域"></a>模型作用域</h4><p>设置<a href="http://laravelacademy.org/post/138.html#ipt_kb_toc_138_19" target="_blank" rel="external">作用域</a>可以为模型快速附加一些通用的条件。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Comment</span> <span class="keyword">extends</span> <span class="title">Model</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">//只查询未被删除(软删除)的留言</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">scopeValid</span><span class="params">($query)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> $query-&gt;where(<span class="string">'status'</span>, <span class="string">'&lt;&gt;'</span>, <span class="number">9</span>);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//只查询已发布的留言</span></div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">scopePublished</span><span class="params">($query)</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> $query-&gt;where(<span class="string">'status'</span>, <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//===============</span></div><div class="line">Comment::valid()-&gt;get();</div><div class="line">Comment::published()-&gt;get();</div></pre></td></tr></table></figure></p>
+<h4 id="关联模型"><a href="#关联模型" class="headerlink" title="关联模型"></a>关联模型</h4><p>分享个项目中用到例子，参照了<a href="https://stackoverflow.com/a/21886342" target="_blank" rel="external">stackoverflow里的解法</a>。<br>项目有一个管理员表Admin和一个用户组（角色）表Group，他们之间有一个关系表AdminGroup，关系是一对多，一个管理员可以有多个用户组。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//表关系</span></div><div class="line">admin</div><div class="line">	id</div><div class="line">	...</div><div class="line">admin_group</div><div class="line">	admin_id</div><div class="line">	group_id</div><div class="line">	...</div><div class="line">group</div><div class="line">	id</div><div class="line">	...</div><div class="line"><span class="comment">//===============</span></div><div class="line"><span class="comment">//模型写法</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Admin</span> <span class="keyword">extends</span> <span class="title">Model</span></span></div><div class="line">&#123;</div><div class="line">	...</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">groups</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'App\Models\Group'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Group</span> <span class="keyword">extends</span> <span class="title">Model</span></span></div><div class="line">&#123;</div><div class="line">	...</div><div class="line">    <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">groups</span><span class="params">()</span></span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">$this</span>-&gt;belongsToMany(<span class="string">'App\Models\Admin'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//==============</span></div><div class="line"><span class="comment">//可以非常方便的取出id为2的管理员所对应的状态(status)为启用(1)的用户组</span></div><div class="line">$groups=Admin::find(<span class="number">2</span>)-&gt;groups()-&gt;whereStatus(<span class="number">1</span>)-&gt;get();</div><div class="line">$group_data=[];</div><div class="line"><span class="keyword">foreach</span>($groups <span class="keyword">as</span> $group)&#123;</div><div class="line">	$group_data[$group-&gt;id]=$group-&gt;group_name;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="layui"><a href="#layui" class="headerlink" title="layui"></a>layui</h3><p>layui是从github上直接拿下来的当时最新版2.1.7。<br><a href="http://www.layui.com/doc" target="_blank" rel="external">layui官方文档</a><br><a href="http://www.layui.com/demo" target="_blank" rel="external">layui官方demo</a></p>
+<h4 id="槛"><a href="#槛" class="headerlink" title="槛"></a>槛</h4><ol>
+<li>demo的示例代码会出现layui-btn-xs的class，但是样式显示怎么都不对。去2.1.7的layui.css里查发现没有，只有layui-btn-mini，文档里有标注关于升级改名的注释<sup>[1]</sup>。</li>
+<li>table的tool工具条设置了监听事件，但是怎么点都没反应。在网上找到了<a href="http://fly.layui.com/jie/13643/" target="_blank" rel="external">解决办法</a>，<code>table.on(tool(NAME))</code>中的NAME对应的是table的lay-filter值而不是id。</li>
+</ol>
+<p>绊了这么多槛，总结经验，demo和doc之间还是要以doc为主。<br>比如tool监听的问题，代码是从demo里直接拉下来的，但是怎么调都不对。之后仔细看了<a href="http://www.layui.com/doc/modules/table.html#ontool" target="_blank" rel="external">doc#ontool</a>才发现的确有提到要设置<code>lay-filter</code>。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>Laravel里还有很多优雅的功能，比如Provider等。在做这个项目里，只用到了最基本的。而在管理端开发完成后，由于种种原因，项目搁置了。但是手里不仅有了一个随时可用的不一样的管理器，还学会了Laravel和Layui的基本用法。</p>
+<h3 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h3><p>1. 关于按钮组css的class名称修改</p>
+<blockquote>
+<p>注意：从 layui 2.2.0 开始，为了统一规范，定义按钮尺寸的 CSS 类做出如下调整，升级版本时务必注意：</p>
+<ul>
+<li>layui-btn-mini 改为 layui-btn-xs</li>
+<li>layui-btn-small 改为 layui-btn-sm</li>
+<li>layui-btn-big 改为 layui-btn-lg</li>
+</ul>
+</blockquote>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://laravel.com/docs/5.5#server-requirements" target="_blank" rel="external">Laravel官方文档</a><br><a href="https://baijunyao.com/article/117" target="_blank" rel="external">Laravel目录介绍 - baijunyao</a><br><a href="https://github.com/mewebstudio/captcha" target="_blank" rel="external">Laravel的验证码插件mews</a><br><a href="http://laravelacademy.org/post/138.html#ipt_kb_toc_138_19" target="_blank" rel="external">Laravel查询作用域 - laravelacademy</a><br><a href="https://www.chenyudong.com/archives/laravel-session-use.html" target="_blank" rel="external">Laravel中Session的使用 - chenyudong</a><br><a href="http://www.layui.com/doc" target="_blank" rel="external">Layui官方文档</a><br><a href="http://www.layui.com/doc/modules/table.html#init" target="_blank" rel="external">Layui数据表格渲染模式</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/PHP/">PHP</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2017-12/laravel-layui-admin.html" data-title="Laravel 5.1 + Layui 2.1.7 定制管理端 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	<!-- 来必力City版安装代码 -->
+	<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTI4NC83ODMz">
+		<script type="text/javascript">
+	   (function(d, s) {
+	       var j, e = d.getElementsByTagName(s)[0];
+
+	       if (typeof LivereTower === 'function') { return; }
+
+	       j = d.createElement(s);
+	       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+	       j.async = true;
+
+	       e.parentNode.insertBefore(j, e);
+	   })(document, 'script');
+		</script>
+	<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+	</div>
+	<!-- City版安装代码已完成 -->
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2017-11/a-db-base-class-upgrade.html"  title="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置">
+ <strong>下一篇：</strong><br/> 
+ <span>2017年11月02日|记一次数据库类升级兼微信公众号服务器配置
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Laravel"><span class="toc-number">2.</span> <span class="toc-text">Laravel</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#安装"><span class="toc-number">2.1.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#规范目录"><span class="toc-number">2.2.</span> <span class="toc-text">规范目录</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#全局变量"><span class="toc-number">2.3.</span> <span class="toc-text">全局变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置路由"><span class="toc-number">2.4.</span> <span class="toc-text">配置路由</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#配置Auth关联的模型"><span class="toc-number">2.5.</span> <span class="toc-text">配置Auth关联的模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关闭指定url的csrf验证"><span class="toc-number">2.6.</span> <span class="toc-text">关闭指定url的csrf验证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#验证码插件mews"><span class="toc-number">2.7.</span> <span class="toc-text">验证码插件mews</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型"><span class="toc-number">2.8.</span> <span class="toc-text">模型</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#模型作用域"><span class="toc-number">2.9.</span> <span class="toc-text">模型作用域</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#关联模型"><span class="toc-number">2.10.</span> <span class="toc-text">关联模型</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#layui"><span class="toc-number">3.</span> <span class="toc-text">layui</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#槛"><span class="toc-number">3.1.</span> <span class="toc-text">槛</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#注释"><span class="toc-number">5.</span> <span class="toc-text">注释</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Life/" title="Life">Life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>15</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>6</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL/" title="MySQL">MySQL<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Car/" title="Car">Car<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
