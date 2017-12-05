@@ -4,27 +4,24 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>2017年11月02日|记一次数据库类升级兼微信公众号服务器配置 | Walter&#39;s Garden</title>
+    <title>第一次制作移动端展示页 | Walter&#39;s Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Walter Huang">
     
 
     
-    <meta name="description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
-<meta name="keywords" content="PHP,MySQL">
+    <meta name="description" content="通过学习制作移动端页面，了解移动端css的设置。">
+<meta name="keywords" content="Html+js+css">
 <meta property="og:type" content="article">
-<meta property="og:title" content="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置">
-<meta property="og:url" content="https://backwallkid.github.io/2017-11/a-db-base-class-upgrade.html">
+<meta property="og:title" content="第一次制作移动端展示页">
+<meta property="og:url" content="https://backwallkid.github.io/2017-12/first-mobile-page.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
-<meta property="og:image" content="https://backwallkid.github.io/images/wx-api-c1.png">
-<meta property="og:image" content="https://backwallkid.github.io/images/wx-api-c2.png">
-<meta property="og:updated_time" content="2017-11-03T03:57:46.973Z">
+<meta property="og:description" content="通过学习制作移动端页面，了解移动端css的设置。">
+<meta property="og:updated_time" content="2017-12-05T09:34:37.731Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置">
-<meta name="twitter:description" content="借一个重构的历史项目，自己造了个PDO的轮子，以加深对PDO的理解。顺便了解微信公众号迁移的流程。">
-<meta name="twitter:image" content="https://backwallkid.github.io/images/wx-api-c1.png">
+<meta name="twitter:title" content="第一次制作移动端展示页">
+<meta name="twitter:description" content="通过学习制作移动端页面，了解移动端css的设置。">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -84,14 +81,14 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017-11/a-db-base-class-upgrade.html" title="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置" itemprop="url">2017年11月02日|记一次数据库类升级兼微信公众号服务器配置</a>
+      <a href="/2017-12/first-mobile-page.html" title="第一次制作移动端展示页" itemprop="url">第一次制作移动端展示页</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-11-02T12:30:00.000Z" itemprop="datePublished"> 发表于 2017-11-02</time>
+    <time datetime="2017-12-04T12:30:00.000Z" itemprop="datePublished"> 发表于 2017-12-04</time>
     
   </p>
 </header>
@@ -102,44 +99,37 @@
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选定目标"><span class="toc-number">3.</span> <span class="toc-text">选定目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始改造"><span class="toc-number">4.</span> <span class="toc-text">开始改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后语"><span class="toc-number">6.</span> <span class="toc-text">后语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信公众号服务器迁移流程"><span class="toc-number">7.</span> <span class="toc-text">微信公众号服务器迁移流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目分析"><span class="toc-number">2.</span> <span class="toc-text">项目分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#项目一（下简称“长条页”）"><span class="toc-number">2.1.</span> <span class="toc-text">项目一（下简称“长条页”）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#项目二（下简称“视频页”）"><span class="toc-number">2.2.</span> <span class="toc-text">项目二（下简称“视频页”）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始制作"><span class="toc-number">3.</span> <span class="toc-text">开始制作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">4.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>公司内有好几个托管微信公众号的遗留项目，在制作时由于项目需求简单，都没有用到框架。制作项目的前辈自己写了个MySQL的封装类，里面附带了几个常用的增删改查方法。而自从PHP5.5开始，mysql扩展就提示被弃用，在PHP7中，此扩展被移除，取而代之的是mysqli或pdo。</p>
-<blockquote>
-<p><em><del>mysql_connect</del></em><br><em><del>mysql_select_db</del></em><br><a href="http://php.net/manual/en/function.mysql-connect.php" target="_blank" rel="external">Warning</a>:<br>This extension was deprecated in PHP 5.5.0, and it was removed in PHP 7.0.0. Instead, the MySQLi or PDO_MySQL extension should be used.</p>
-</blockquote>
-<p>在后面的几个项目中，为了减少开发成本，在多个微信公众维护项目中沿用此封装类。而PHP7是一个趋势，为了跟上时代的脚步，组长指派我来改造此封装类，至于用mysqli还是pdo由我决定。</p>
-<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>好在所有的历史项目中都使用了<strong>继承封装类的模型</strong>来进行数据操作，而不是在控制器中直接使用封装类，这为此次升级带来很大便利。<br>先选一个项目进行试水，组长借来了公司的测试公众号供我随意测试。</p>
-<h3 id="选定目标"><a href="#选定目标" class="headerlink" title="选定目标"></a>选定目标</h3><p>我曾经自己造过mysql，mysqli和pdo的轮子，但是只有pdo类曾经被应用到<a href="https://backwallkid.github.io/2017-06/a-php-vote-project.html">实际项目</a>里，而pdo类编写得也比较完善，故选用pdo作为升级方向。<br>附上我自己造的pdo轮子的地址：<br><a href="https://github.com/backwallkid/common-functions/blob/master/db/DbPdo.php" target="_blank" rel="external">https://github.com/backwallkid/common-functions/blob/master/db/DbPdo.php</a></p>
-<h3 id="开始改造"><a href="#开始改造" class="headerlink" title="开始改造"></a>开始改造</h3><p>根据之前分析的结果</p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>组长开了个小会，发现现在后端开发项目不多，前端任务繁重，正巧碰上之前离职的一个前端现在还没招到。于是组长很客气的要求我帮前端同事分担一下工作，分给我两个静态移动端页面。</p>
+<h3 id="项目分析"><a href="#项目分析" class="headerlink" title="项目分析"></a>项目分析</h3><h4 id="项目一（下简称“长条页”）"><a href="#项目一（下简称“长条页”）" class="headerlink" title="项目一（下简称“长条页”）"></a>项目一（下简称“长条页”）</h4><ol>
+<li>psd里是一个一长条的页面，里面有十几个按钮分为可点击和不可点击状态，这表示这些地方需要单独切出来。</li>
+<li>另外页面的图形标题属于设计可能会频繁修改的地方，也单独切。</li>
+<li>还把一长条的背景划分成了三等分，以减少载入时可能出现的空白。</li>
+</ol>
+<h4 id="项目二（下简称“视频页”）"><a href="#项目二（下简称“视频页”）" class="headerlink" title="项目二（下简称“视频页”）"></a>项目二（下简称“视频页”）</h4><ol>
+<li>图形标题和背景参照项目一</li>
+<li>这个项目需要嵌入4个视频，视频的头图和播放按钮与视频框需要分开。</li>
+<li>嵌入视频使用<a href="https://github.com/videojs/video.js" target="_blank" rel="external">video.js</a></li>
+</ol>
+<h3 id="开始制作"><a href="#开始制作" class="headerlink" title="开始制作"></a>开始制作</h3><p>先使用Photoshop分别从psd里把每个项目里所有独立的元素单独存出来。<br>由于psd的宽度是750所以在meta标记里把宽度设定好。<br><code>&lt;meta name=viewport content=&quot;width=750,target-densitydpi=device-dpi,user-scalable=no&quot;&gt;</code><br>向前端同事请教了下，决定使用绝对定位的方式来布局。</p>
+<p>长条页和视频页的背景图为了减少加载时间都分成了三等分，使用img标签的话，每张图之间会有一道细细的白线。经过前端同事的指点，将背景图由img标签换成为body设css的加载方式，分开计算每张图top的距离，消除了白线。<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">body&#123;</div><div class="line">	...</div><div class="line">	background: url("../images/bg-1.jpg") top left no-repeat,</div><div class="line">    	url("../images/bg-2.jpg") left 599px no-repeat,</div><div class="line">    	url("../images/bg-3.jpg") left 1198px no-repeat;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>视频页用PM压的视频通过videojs+半透明遮罩层做出来了，但是PM遇到了问题，其中有2个视频的时长都是二十分钟左右，而且客户还要求保证清晰度。而在保证码率250的情况下，近二十分钟的视频压出来都有五十多M，服务器肯定扛不住。<br>于是转用腾讯视频iframe嵌入的方式，在放视频的地方放入iframe标签。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">class</span>=<span class="string">"video_iframe"</span> <span class="attr">id</span>=<span class="string">"vf"</span> <span class="attr">style</span>=<span class="string">"z-index:1; display: none"</span></span></div><div class="line">	<span class="attr">src</span>=<span class="string">"http://v.qq.com/iframe/player.html?vid=VID&amp;amp;width=400&amp;amp;height=253&amp;amp;auto=0"</span> </div><div class="line">	<span class="attr">allowfullscreen</span>=<span class="string">""</span> <span class="attr">frameborder</span>=<span class="string">"0"</span> <span class="attr">height</span>=<span class="string">"253"</span> <span class="attr">width</span>=<span class="string">"400"</span>&gt;<span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>客户的视频也上传到腾讯视频里<code>https://v.qq.com/x/page/VID.html</code>，从链接中取出VID后放入src内。这样既保证视频的清晰度又不占用我们服务器的资源。</p>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><ol>
+<li>在测试长条页的时候，发现iphone在点击图片链接时，图片链接会出现一层膜一样的层，经过查找后发现设置一个css可以解决。<br><code>-webkit-tap-highlight-color:rgba(0,0,0,0);</code></li>
+<li>把页面交给AC测了以后，AC提出制作出来的页面和设计不符，立刻惊出一身冷汗。原来psd里面的bg层是整图，切图的时候要把微信浏览器的上部带title的高度去掉。本来想重切然后分别调每个的定位，前端同事看了下让我把body的css中top的高度改为负数，顺便把margin-top也改为相同的负数，这样可以避免调整其他的样式。<br><code>background: url(&quot;../images/bg-1.jpg&quot;) top -130px left no-repeat,</code><br><code>margin-top:-130px</code></li>
+</ol>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>通过制作完这两个页面，学习到了一些前端的基本知识。</p>
 <ol>
-<li>只需将mysql类文件替换成pdo类文件。</li>
-<li>再将模型继承的类名修改一下。</li>
-<li>最后检查所有模型中调用封装类的函数，使输出结果保持相同。</li>
+<li>通过meta标签来设置width，适用于按照固定大小的psd来制作页面。</li>
+<li>css中background的url值可以填写多个，由逗号隔开。</li>
+<li>通过设置css<a href="http://www.cnblogs.com/dongcanliang/p/6552805.html" target="_blank" rel="external">去除iphone图片按钮的半透明浮层</a>。</li>
+<li>腾讯视频iframe播放器的用法。</li>
 </ol>
-<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><p>找公司的管理员讨了一组新的FTP+mysql，原来有的测试站使用的是和线上一样的环境，新的环境是使用最近其他项目常用的PHP7+MySQL5.6。<br>先将改造后的代码放在测试站中测试。<br>在存储微信昵称时碰到一点格楞，假如微信昵称中含有emoji字符，则数据插入失败，Pdo类记录到如下错误。<br><code>Incorrect string value: &#39;\xF0\x9F\x92\x94&#39; for colum n &#39;wx_nickname&#39; at row 1</code><br>根据搜索，有两种解决办法：</p>
-<ol>
-<li>使用正则过滤掉所有的emoji字符，只存储正常字符串。</li>
-<li>将数据表的charset改成utf8mb4</li>
-</ol>
-<p>经过一系列的扫码关注、修改分组、自动应答、模板消息等功能测试通过。测试进入下一阶段。</p>
-<p>管理员将测试站的域名指向新环境的地址后，过了十二小时。</p>
-<p>在测试微信的<a href="https://mp.weixin.qq.com/wiki?t=resource/res_main&amp;id=mp1421140839" target="_blank" rel="external">获取用户信息接口</a>时，微信接口会不定时返回<br><code>{&quot;errcode&quot;:40001,&quot;errmsg&quot;:&quot;invalid credential, access_token is invalid or not latest&quot;}</code>。<br>这个错误一般是由于没有及时更新access_token导致的，而缓存access_token的数据表显示，表里记录的新获取的access_token不足10分钟。<br>此时突然灵机一动，去查看了原来测试站的数据库，发现旧环境中记录access_token的数据表的获取时间在新环境的缓存access_token的数据表的获取时间之后。<br>由此得出从微信接口发出的数据一部分会进入到旧的测试地址之内，即使域名已经切换了十二小时。<br>于是赶紧找网络管理员新造了一个域名，并且将此域名指向新环境。</p>
-<p>在新域名生效后，没有再出现access_token过期的情况，新环境的测试也通过了。</p>
-<h3 id="后语"><a href="#后语" class="headerlink" title="后语"></a>后语</h3><p>将测试结果上报给组长过目，但由于测试过程中呈现出来的不可预料的情况，域名修改指向后过了十二小时，依然有可能会访问到原来的地址。所以和组长讨论后找了个取巧的方法，使用两套数据库配置文件，旧FTP中保留程序，新FTP中仅access_token存取都读老数据库，其他数据存新库。将近一周后老库里其他表的数据不再新增了，说明新域名已完全生效。至此这次数据库类升级圆满完成。</p>
-<h3 id="微信公众号服务器迁移流程"><a href="#微信公众号服务器迁移流程" class="headerlink" title="微信公众号服务器迁移流程"></a>微信公众号服务器迁移流程</h3><ol>
-<li>布代码，数据库</li>
-<li>打开valid接口，等api验证通过后再关闭</li>
-<li><p>登录“公众平台”，左侧开发-基本配置，服务器配置-修改配置<br><img src="/images/wx-api-c1.png" alt="服务器配置"></p>
-</li>
-<li><p>左侧设置-公众号设置-功能设置，修改网页授权域名、JS接口安全域名<br><img src="/images/wx-api-c2.png" alt="网页授权域名"></p>
-</li>
-<li><p>测试api</p>
-</li>
-</ol>
-<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="http://php.net/manual/en/function.mysql-connect.php" target="_blank" rel="external">mysql扩展弃用警告 - php.net</a><br><a href="https://backwallkid.github.io/2017-06/a-php-vote-project.html">一个使用自造PDO类的项目 - backwallkid</a><br><a href="https://github.com/backwallkid/common-functions/commit/ae9a58b8d956eefa12d29f57e002898eb40310e2" target="_blank" rel="external">经过项目洗礼的PDO类 - backwallkid</a></p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://github.com/videojs/video.js" target="_blank" rel="external">VideoJs - Github</a><br><a href="http://www.cnblogs.com/dongcanliang/p/6552805.html" target="_blank" rel="external">适应移动端 iPhone &amp; Android 微信页面的一些css属性</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -153,7 +143,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/PHP/">PHP</a><a href="/tags/MySQL/">MySQL</a>
+  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a>
   </div>
 
 </div>
@@ -162,7 +152,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://backwallkid.github.io/2017-11/a-db-base-class-upgrade.html" data-title="2017年11月02日|记一次数据库类升级兼微信公众号服务器配置 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  <div data-url="https://backwallkid.github.io/2017-12/first-mobile-page.html" data-title="第一次制作移动端展示页 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -193,19 +183,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017-12/laravel-layui-admin.html" title="Laravel 5.1 + Layui 2.1.7 定制管理端">
-  <strong>上一篇：</strong><br/>
-  <span>
-  Laravel 5.1 + Layui 2.1.7 定制管理端</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017-09/mysql-timestamp-on-update.html"  title="数据日志的重要性 | MySQL timestamp on update">
+<a href="/2017-12/laravel-layui-admin.html"  title="Laravel 5.1 + Layui 2.1.7 定制管理端">
  <strong>下一篇：</strong><br/> 
- <span>数据日志的重要性 | MySQL timestamp on update
+ <span>Laravel 5.1 + Layui 2.1.7 定制管理端
 </span>
 </a>
 </div>
@@ -221,7 +203,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#选定目标"><span class="toc-number">3.</span> <span class="toc-text">选定目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始改造"><span class="toc-number">4.</span> <span class="toc-text">开始改造</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">5.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#后语"><span class="toc-number">6.</span> <span class="toc-text">后语</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#微信公众号服务器迁移流程"><span class="toc-number">7.</span> <span class="toc-text">微信公众号服务器迁移流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">8.</span> <span class="toc-text">Reference</span></a></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#项目分析"><span class="toc-number">2.</span> <span class="toc-text">项目分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#项目一（下简称“长条页”）"><span class="toc-number">2.1.</span> <span class="toc-text">项目一（下简称“长条页”）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#项目二（下简称“视频页”）"><span class="toc-number">2.2.</span> <span class="toc-text">项目二（下简称“视频页”）</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始制作"><span class="toc-number">3.</span> <span class="toc-text">开始制作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">4.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 
