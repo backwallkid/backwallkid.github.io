@@ -12,14 +12,14 @@
 
     
     <meta name="description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
-<meta name="keywords" content="Html+js+css,Tools">
+<meta name="keywords" content="Html+js+css,Tools,Character encoding">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
 <meta property="og:url" content="https://backwallkid.github.io/2017-05/bc-copy-chinese-not-encoding.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
 <meta property="og:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
 <meta property="og:image" content="https://backwallkid.github.io/images/bc_chinese_copy_wm.jpg">
-<meta property="og:updated_time" content="2017-05-25T06:53:33.571Z">
+<meta property="og:updated_time" content="2018-02-11T08:43:06.326Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次小型生产事故 | BeyondComper跨编码方式复制文件内容">
 <meta name="twitter:description" content="通过一次小型的生产事故，再次敲响检查文件编码方式的警钟。">
@@ -51,7 +51,7 @@
 				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
 				<h2 class="blog-motto">I love $</h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -90,7 +90,7 @@
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-05-25T12:25:00.000Z" itemprop="datePublished"> 发表于 2017-05-25</time>
+    <time datetime="2017-05-25T12:25:00.000Z" itemprop="datePublished"> 發表於 2017-05-25</time>
     
   </p>
 </header>
@@ -99,7 +99,7 @@
 
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		
 			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
 		
@@ -130,7 +130,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a><a href="/tags/Tools/">Tools</a>
+  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a><a href="/tags/Tools/">Tools</a><a href="/tags/Character-encoding/">Character encoding</a>
   </div>
 
 </div>
@@ -193,17 +193,17 @@
 
 </div>  
 
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
  
  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#发现"><span class="toc-number">2.</span> <span class="toc-text">发现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#测试"><span class="toc-number">3.</span> <span class="toc-text">测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#推测"><span class="toc-number">4.</span> <span class="toc-text">推测</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
@@ -211,7 +211,7 @@
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
 		  
@@ -219,7 +219,7 @@
 		  
 		
 		  
-			<li><a href="/categories/Tech/" title="Tech">Tech<sup>16</sup></a></li>
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>17</sup></a></li>
 		  
 		
 		</ul>
@@ -228,11 +228,11 @@
 
   
 <div class="tagslist">
-	<p class="asidetitle">标签</p>
+	<p class="asidetitle">標簽</p>
 		<ul class="clearfix">
 		
 			
-				<li><a href="/tags/PHP/" title="PHP">PHP<sup>6</sup></a></li>
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>7</sup></a></li>
 			
 		
 			
@@ -249,6 +249,10 @@
 		
 			
 				<li><a href="/tags/MySQL/" title="MySQL">MySQL<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Character-encoding/" title="Character encoding">Character encoding<sup>2</sup></a></li>
 			
 		
 			
@@ -272,7 +276,7 @@
 
 
   <div class="linkslist">
-  <p class="asidetitle">友情链接</p>
+  <p class="asidetitle">友情鏈接</p>
     <ul>
         
           <li>
@@ -288,7 +292,7 @@
 
 
   <div class="rsspart">
-	<a href="/atom.xml" target="_blank" title="rss">RSS 订阅</a>
+	<a href="/atom.xml" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
   <div class="weiboshow">
@@ -331,7 +335,7 @@
 		
 
 		<p class="copyright">
-		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2017 
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
 		
 		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
 		
@@ -519,7 +523,7 @@ var _hmt = _hmt || [];
 <!-- Totop Begin -->
 
 	<div id="totop">
-	<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+	<a title="返回頂部"><img src="/img/scrollup.png"/></a>
 	</div>
 	<script src="/js/totop.js"></script>
 

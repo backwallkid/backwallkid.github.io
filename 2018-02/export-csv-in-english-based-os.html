@@ -4,24 +4,27 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>向Git前进（三） | 稀疏检出sparse checkout | Walter&#39;s Garden</title>
+    <title>解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题 | Walter&#39;s Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Walter Huang">
     
 
     
-    <meta name="description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
-<meta name="keywords" content="Git">
+    <meta name="description" content="在优化数据导出功能时，遇到不能改变excel语言环境的使用者。为了使他们能享受高速数据导出功能，在进行环境模拟和尝试后，解决了问题。">
+<meta name="keywords" content="PHP,Character encoding">
 <meta property="og:type" content="article">
-<meta property="og:title" content="向Git前进（三） | 稀疏检出sparse checkout">
-<meta property="og:url" content="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html">
+<meta property="og:title" content="解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题">
+<meta property="og:url" content="https://backwallkid.github.io/2018-02/export-csv-in-english-based-os.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
-<meta property="og:updated_time" content="2017-07-17T10:44:07.809Z">
+<meta property="og:description" content="在优化数据导出功能时，遇到不能改变excel语言环境的使用者。为了使他们能享受高速数据导出功能，在进行环境模拟和尝试后，解决了问题。">
+<meta property="og:image" content="https://backwallkid.github.io/images/export_csv_utf8.png">
+<meta property="og:image" content="https://backwallkid.github.io/images/export_csv_utf8bom.png">
+<meta property="og:updated_time" content="2018-02-11T08:41:56.414Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="向Git前进（三） | 稀疏检出sparse checkout">
-<meta name="twitter:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
+<meta name="twitter:title" content="解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题">
+<meta name="twitter:description" content="在优化数据导出功能时，遇到不能改变excel语言环境的使用者。为了使他们能享受高速数据导出功能，在进行环境模拟和尝试后，解决了问题。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/export_csv_utf8.png">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -81,87 +84,34 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017-06/git-3-sparse-checkout-usage.html" title="向Git前进（三） | 稀疏检出sparse checkout" itemprop="url">向Git前进（三） | 稀疏检出sparse checkout</a>
+      <a href="/2018-02/export-csv-in-english-based-os.html" title="解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题" itemprop="url">解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T12:25:00.000Z" itemprop="datePublished"> 發表於 2017-06-28</time>
+    <time datetime="2018-02-11T12:25:00.000Z" itemprop="datePublished"> 發表於 2018-02-11</time>
     
   </p>
 </header>
 	<div class="article-content">
     
-	<p id="unsplash-head">
-		<a href="/images/git-3/jake-lorefice-296557_50c.jpg" title="Unsplash" class="fancybox" rel="article0">
-			<img src="/images/git-3/jake-lorefice-296557_50c.jpg" alt="Unsplash" id="unsplash-img">
-		</a><br>
-		<a href="https://unsplash.com/photos/VcTuZZca3jI" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@jakelorefice" target="_blank" rel="external">Jake Lorefice</a>
-		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
-	</p>
-	
 
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化数据库查询"><span class="toc-number">2.</span> <span class="toc-text">优化数据库查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化导出excel为csv"><span class="toc-number">3.</span> <span class="toc-text">优化导出excel为csv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编码格式问题"><span class="toc-number">4.</span> <span class="toc-text">编码格式问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过添加文件头解决"><span class="toc-number">5.</span> <span class="toc-text">通过添加文件头解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html">Git开发流程整理</a>并实践完之后，先找了个小项目试水。用来试水的项目体积有1.5G，里面充斥着各种图片和视频。<br>但是公司内部带宽有限，拉取速度非常慢，所有的组员只能挨个拉取。由于公司内前后端分工明确，前端同事只负责视图修改，不碰控制器，而后端也只修改控制器，不碰样式。所有的人都不会碰视频。于是笔者利用等待间隙研究git的部份拉取功能。</p>
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><ol>
-<li><a href="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html#创建项目或拉取项目">新开</a>了一个目录，添加origin路径，先不进行拉取。</li>
-<li>开启“稀疏检出”设置<br><code>git config core.sparsecheckout true</code></li>
-<li>设置需要检出的文件或文件夹路径<br><code>echo &quot;path1/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为path1<br><code>echo &quot;path2/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为path2<br>4.1 或设置不需要检出的文件或文件夹路径<br><code>echo &quot;/*&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为所有<br><code>echo &quot;!PATH/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示不需要检出的文件夹为PATH<br><strong>注</strong>： 假如设置的是不需要检出的路径，则<code>sparse-checkout</code>第一行必须是<code>/*</code>，后面以<code>!unwant_path/</code>来设置不想检出的路径。</li>
-<li>拉取<br><code>git pull origin master</code></li>
-</ol>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>根据<a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">此处</a>的注解，和实际测试。</p>
-<ul>
-<li>先从Github上拉了一个笔者<a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">自创的项目</a>进行稀疏检出测试。</li>
-<li><ul>
-<li>设置<code>sparse-checkout</code>文件，限定了需要检出的文件和文件夹。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">apiHead.php</div><div class="line">db/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 39, done.</div><div class="line">remote: Total 39 (delta 0), reused 0 (delta 0), pack-reused 39</div><div class="line">Unpacking objects: 100% (39/39), done.</div><div class="line">From github.com:***/***</div><div class="line"> * branch            master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]      master     -&gt; origin/master</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>查看项目，验证了稀疏检出的效果。项目目录中只检出了事先设定的文件夹和文件，但是用来测试的项目体积太小了，无法检验是否下载了所有的文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">apiHead.php                         db/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>接着直接上手进行公司内网GitLab的稀疏检出测试。</p>
-</li>
-<li><ul>
-<li>设置<code>sparse-checkout</code>文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">index.php</div><div class="line">Application/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目，0%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">Receiving objects:   0% (194/35326), 23.19 MiB | 1.17 MiB/s</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目，100%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">remote: Total 35326 (delta 734), reused 35326 (delta 734)</div><div class="line">Receiving objects: 100% (35326/35326), 1.45 GiB | 1.23 MiB/s, done.</div><div class="line">Resolving deltas: 100% (734/734), done.</div><div class="line">From *.*.*.*:GROUP/PROJECT</div><div class="line"> * branch              master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]        master     -&gt; origin/master</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>根据测试结果，虽然设置了稀疏检出，也只检出了<code>sparse-checkout</code>中设置的文件夹和文件，但是依然完整下载了整个项目。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">index.php                          Application/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>根据测试结果得出，sparse-checkout（稀疏检出）功能，会下载所有的文件，但是只检出符合sparse-checkout文件内筛选条件的文件或文件夹。该功能能省下硬盘空间，但是省不了带宽。</p>
-<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p><a href="https://backwallkid.github.io/2017-07/git-4-work-dir-stage-gitignore.html">向Git前进（四） | 暂存区和gitignore相关</a></p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a href="https://zhgcao.github.io/2016/05/11/git-sparse-checkout/" target="_blank" rel="external">Git只获取部分目录的内容（稀疏检出） - zhgcao</a><br><a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">git能否只拷贝某几个文件或者文件夹？ - 知乎</a></p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>公司承接的一个二次开发伪cms项目（下简称：管理器）中有一个客户需要的导出数据功能。项目在长时间的运营后，数据越来越多，导出一万条数据需要近5分钟，现使用空余时间尝试缩短数据导出时间。</p>
+<h3 id="优化数据库查询"><a href="#优化数据库查询" class="headerlink" title="优化数据库查询"></a>优化数据库查询</h3><p>管理器中的数据导出功能是先从数据库中获取数据，再使用PHPExcel库生成xls文件。<br>进行数据库查询优化后（添加索引，使用连表查询，简化sql），数据库查询时间缩短到0.3秒内。再次进行数据导出，发现导出时间依然将近5分钟。</p>
+<h3 id="优化导出excel为csv"><a href="#优化导出excel为csv" class="headerlink" title="优化导出excel为csv"></a>优化导出excel为csv</h3><p>在分段输出程序运行时间后，确定了是PHPExcel库生成xls文件占用了大量时间。<br>通过网上搜索后发现php使用PHPExcel库生成xls文件慢是通病，很多人建议直接拼接字符串导出csv以代替使用PHPExcel库。<br>将导出格式改为csv后速度的确是大大提高，不到1秒数据导出就完成了。</p>
+<h3 id="编码格式问题"><a href="#编码格式问题" class="headerlink" title="编码格式问题"></a>编码格式问题</h3><p>本地测试通过后，提交升级的第一天，客户就发现问题了，在我们公司内打开没问题的csv。到他们电脑上打开，所有汉字均变成问号<code>?</code>，和客户沟通后发现，原来是他们的office的默认语言是英文。但是由于客户公司内部规定，不能随意更改。</p>
+<h3 id="通过添加文件头解决"><a href="#通过添加文件头解决" class="headerlink" title="通过添加文件头解决"></a>通过添加文件头解决</h3><p>在把本地电脑里excel的语言也设置为默认英语后，问题能够重现了。<br>不使用<code>iconv</code>对汉字内容转码的情况下，导出数据csv默认的编码方式是<code>UTF-8</code>，在经过多方测试后，发现只要把csv文件的编码方式设置为<code>UTF-8-BOM</code>，也就是为<code>UTF-8</code>多加了一个文件头，两个文件在十六进制编码下进行对比差异如下。<br><img src="/images/export_csv_utf8.png" alt="文件编码方式UTF-8"><br><img src="/images/export_csv_utf8bom.png" alt="文件编码方式UTF-8-BOM"><br>两下对比，多出的文件头是<code>ef bb bf</code>，这是Unicode签名BOM(Byte Order Mark)，网上有很多关于BOM的介绍，这里不细究。<br>于是在程序输出csv时，在文件的开头处加上这个BOM，英文版excel就能正确读取带有汉字的csv了。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$fp = fopen(<span class="string">'php://output'</span>, <span class="string">'a'</span>);</div><div class="line"><span class="comment">//设置文件头 ef bb bf</span></div><div class="line">fputs($fp,chr(<span class="number">239</span>).chr(<span class="number">187</span>).chr(<span class="number">191</span>));</div><div class="line">fputs($fp,$content);</div></pre></td></tr></table></figure></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>一些外企内部有规定必须使用英文版操作系统甚至office的默认语言也必须是英文，这就导致了没有内置编码方式设置的csv在非汉语环境下打开产生汉字变问号的问题。<br>在制作导出数据功能时，假如需要导出带汉字的csv文件，最好加上文件头，这样无论excel的默认语言是什么，只要系统内置了汉语文字编码，就能够正常显示汉字。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -175,7 +125,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Git/">Git</a>
+  <span></span> <a href="/tags/PHP/">PHP</a><a href="/tags/Character-encoding/">Character encoding</a>
   </div>
 
 </div>
@@ -184,7 +134,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html" data-title="向Git前进（三） | 稀疏检出sparse checkout | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  <div data-url="https://backwallkid.github.io/2018-02/export-csv-in-english-based-os.html" data-title="解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -215,19 +165,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017-07/git-4-work-dir-stage-gitignore.html" title="向Git前进（四） | 暂存区和gitignore相关">
-  <strong>上一篇：</strong><br/>
-  <span>
-  向Git前进（四） | 暂存区和gitignore相关</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017-06/git-2-project-develop-flow.html"  title="向Git前进（二） | GitLab项目开发流程">
+<a href="/2017-12/first-mobile-page.html"  title="第一次制作移动端展示页">
  <strong>下一篇：</strong><br/> 
- <span>向Git前进（二） | GitLab项目开发流程
+ <span>第一次制作移动端展示页
 </span>
 </a>
 </div>
@@ -243,7 +185,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化数据库查询"><span class="toc-number">2.</span> <span class="toc-text">优化数据库查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#优化导出excel为csv"><span class="toc-number">3.</span> <span class="toc-text">优化导出excel为csv</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#编码格式问题"><span class="toc-number">4.</span> <span class="toc-text">编码格式问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#通过添加文件头解决"><span class="toc-number">5.</span> <span class="toc-text">通过添加文件头解决</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a></li></ol>
  
   </div>
 
