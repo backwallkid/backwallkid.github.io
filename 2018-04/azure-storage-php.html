@@ -1,0 +1,566 @@
+
+ <!DOCTYPE HTML>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+  
+    <title>PHP使用Azure Storage Blob上传文件 | Walter&#39;s Garden</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
+    
+    <meta name="author" content="Walter Huang">
+    
+
+    
+    <meta name="description" content="通过一次项目开发，学习Azure Storage Blob，并编写自用的辅助类以便之后的项目使用。附带升级了一下本地WAMP方便后续开发。">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP使用Azure Storage Blob上传文件">
+<meta property="og:url" content="https://backwallkid.github.io/2018-04/azure-storage-php.html">
+<meta property="og:site_name" content="Walter&#39;s Garden">
+<meta property="og:description" content="通过一次项目开发，学习Azure Storage Blob，并编写自用的辅助类以便之后的项目使用。附带升级了一下本地WAMP方便后续开发。">
+<meta property="og:updated_time" content="2018-07-05T02:52:07.016Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP使用Azure Storage Blob上传文件">
+<meta name="twitter:description" content="通过一次项目开发，学习Azure Storage Blob，并编写自用的辅助类以便之后的项目使用。附带升级了一下本地WAMP方便后续开发。">
+
+    
+    <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
+    
+    
+    <link rel="icon" href="/img/satellite.ico">
+    
+    
+    <link rel="apple-touch-icon" href="/img/rball.png">
+    <link rel="apple-touch-icon-precomposed" href="/img/rball.png">
+    
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+  <body>
+    <header>
+      
+<div>
+		
+			<div id="imglogo">
+				<a href="/"><img src="/img/rball.png" alt="Walter&#39;s Garden" title="Walter&#39;s Garden"/></a>
+			</div>
+			
+			<div id="textlogo">
+				<h1 class="site-name"><a href="/" title="Walter&#39;s Garden">Walter&#39;s Garden</a></h1>
+				<h2 class="blog-motto">I love $</h2>
+			</div>
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="Menu">
+			</a></div>
+			<nav class="animated">
+				<ul>
+					<ul>
+					 
+						<li><a href="/">Home</a></li>
+					
+						<li><a href="/archives">Archives</a></li>
+					
+						<li><a href="/sitemap.xml">Sitemap</a></li>
+					
+					<li>
+ 					
+					<form class="search" action="//google.com/search" method="get" accept-charset="utf-8">
+						<label>Search</label>
+						<input type="search" id="search" name="q" autocomplete="off" maxlength="20" placeholder="Search" />
+						<input type="hidden" name="q" value="site:backwallkid.github.io">
+					</form>
+					
+					</li>
+				</ul>
+			</nav>			
+</div>
+    </header>
+    <div id="container">
+      <div id="main" class="post" itemscope itemprop="blogPost">
+  
+	<article itemprop="articleBody"> 
+		<header class="article-info clearfix">
+  <h1 itemprop="name">
+    
+      <a href="/2018-04/azure-storage-php.html" title="PHP使用Azure Storage Blob上传文件" itemprop="url">PHP使用Azure Storage Blob上传文件</a>
+  </h1>
+  <p class="article-author">By
+       
+		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
+		
+  <p class="article-time">
+    <time datetime="2018-04-04T12:25:00.000Z" itemprop="datePublished"> Published 2018-04-04</time>
+    
+  </p>
+</header>
+	<div class="article-content">
+    
+
+		
+		<div id="toc" class="toc-article">
+			<strong class="toc-title">Contents</strong>
+		
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP版本限制"><span class="toc-number">2.</span> <span class="toc-text">PHP版本限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#升级WAMP-2-5-3-1"><span class="toc-number">3.</span> <span class="toc-text">升级WAMP 2.5-3.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装存储模拟器"><span class="toc-number">4.</span> <span class="toc-text">安装存储模拟器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始开发"><span class="toc-number">5.</span> <span class="toc-text">开始开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#中止进程的三个方法"><span class="toc-number">6.1.</span> <span class="toc-text">中止进程的三个方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#地址"><span class="toc-number">6.2.</span> <span class="toc-text">地址</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+		
+		</div>
+		
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>分配到一个项目，一个需要内容管理的小站，前端页面展示与特效由前端同事完成。我负责搭建内容管理后台以及提供数据接口。这个项目里需要管理端能够上传视频，但是甲方提供的服务器带宽非常迷你，而且同一个服务器上还有其他项目并行。<br>为了防止突发升级带来的后续影响，组长建议我学习使用Azure Storage Blob，并随时做好升级准备。</p>
+<h3 id="PHP版本限制"><a href="#PHP版本限制" class="headerlink" title="PHP版本限制"></a>PHP版本限制</h3><p>在Github里找到了<a href="https://github.com/Azure/azure-storage-php" target="_blank" rel="external">官方提供的sdk</a>。</p>
+<blockquote>
+<p>Minimum Requirements</p>
+<blockquote>
+<p>PHP 5.6 or above</p>
+</blockquote>
+</blockquote>
+<p>由于本地配置的PHP环境是5.5.12，而sdk需要的最低php版本为5.6，composer阻止了更新<br>于是使用<code>composer update --ignore-platform-reqs</code>绕过需求监测强升。<br>然而类<code>BlobResources.php</code>中将const设为数组，在5.5中会报错<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Fatal error: Arrays are not allowed <span class="keyword">in</span> class constants <span class="keyword">in</span> E:\webroot\tp5cms\vendor\microsoft\azure-storage-blob\src\Blob\Internal\BlobResources.php on line 103</div></pre></td></tr></table></figure></p>
+<p>没办法只能升级PHP。</p>
+<h3 id="升级WAMP-2-5-3-1"><a href="#升级WAMP-2-5-3-1" class="headerlink" title="升级WAMP 2.5-3.1"></a>升级WAMP 2.5-3.1</h3><p>为了开发需要，决定将wampserver提升至最新版本。<br>升级wamp有个技巧：不能直接覆盖安装，要先去掉老版本再安装新版本。<br>仔细阅读<a href="http://forum.wampserver.com/read.php?2.123606" target="_blank" rel="external">升级提示</a>。<br>总结一下需要做的大概是如下两件事：</p>
+<ul>
+<li><p>移除服务</p>
+<blockquote>
+<p>Start WampServer<br>【重要】登录MySQL备份所有数据库数据<br>wampmanager -&gt; Stop all Services<br>wampmanager -&gt; MySQL -&gt; Service -&gt; Remove service 移除MySQL服务<br>wampmanager -&gt; Apache -&gt; Service -&gt; Remove service 移除Apache服务<br>stop wampmanager<br>右击 wampmanager -&gt; Exit</p>
+</blockquote>
+</li>
+<li><p>重命名文件夹</p>
+<blockquote>
+<p>将wamp命名为其他名字以作备份</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="安装存储模拟器"><a href="#安装存储模拟器" class="headerlink" title="安装存储模拟器"></a>安装存储模拟器</h3><p>由于公司内没有用于测试的azure账号，幸好azure有用于测试开发的存储模拟器。Windows系统可以直接下载安装，Linux系统可以使用开源存储模拟器<a href="https://github.com/azure/azurite" target="_blank" rel="external">Azurite</a>。</p>
+<ol>
+<li>下载模拟器，<a href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-use-emulator" target="_blank" rel="external">此处</a>有下载链接。</li>
+<li>安装完成后运行<code>StartStorageEmulator.cmd</code>发现提示需要安装<code>SQL Server Express Local DB</code>，在<a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank" rel="external">此处</a>有下载链接。选择Express Edition，进入后选择LocalDB下载并安装。</li>
+<li>再次运行cmd发现错误<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator&gt;AzureStorageEmulato</div><div class="line">r.exe start</div><div class="line">Windows Azure Storage Emulator 5.3.0.0 <span class="built_in">command</span> line tool</div><div class="line"></div><div class="line">未经处理的异常:  System.TimeoutException: Unable to open <span class="built_in">wait</span> handle.</div><div class="line">   在 Microsoft.WindowsAzure.Storage.Emulator.Controller.EmulatorProcessControll</div><div class="line">er.InternalWaitForStorageEmulator(Int32 timeoutInMilliseconds)</div><div class="line">   在 Microsoft.WindowsAzure.Storage.Emulator.Controller.EmulatorProcessControll</div><div class="line">er.EnsureRunning(Int32 timeoutInMilliseconds)</div><div class="line">   在 Microsoft.WindowsAzure.Storage.Emulator.Commands.StartCommand.RunCommand()</div><div class="line"></div><div class="line">   在 Microsoft.WindowsAzure.Storage.Emulator.Program.Main(String[] args)</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>经过查询后发现这是因为<a href="https://stackoverflow.com/a/25020040" target="_blank" rel="external">有进程占用了10000号端口</a>。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#运行：</span></div><div class="line">&gt;C:\Users\Walter&gt;netstat -p tcp -ano | findstr :10000</div><div class="line">&gt;  TCP    127.0.0.1:10000        0.0.0.0:0              LISTENING       2664</div><div class="line"></div><div class="line"><span class="comment">#根据PID 2664查询对应的进程</span></div><div class="line">&gt;C:\Users\Walter&gt;tasklist | findstr <span class="string">"2664"</span></div><div class="line">&gt;YunDetectService.exe          2664 Console                    1      9,944 K</div><div class="line"></div><div class="line"><span class="comment">#只是一个不重要的进程，去掉后继续开发</span></div><div class="line">&gt;C:\Users\Walter&gt;taskkill /pid 2664 /f</div><div class="line">&gt;成功: 已终止 PID 为 2664 的进程。</div><div class="line"></div><div class="line"><span class="comment">#以下是模拟器成功运行的范例</span></div><div class="line">&gt;C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator&gt;AzureStorageEmulator.exe start</div><div class="line">Windows Azure Storage Emulator 5.3.0.0 <span class="built_in">command</span> line tool</div><div class="line">The storage emulator was successfully started.</div><div class="line"></div><div class="line">&gt;C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator&gt;AzureStorageEmulator.exe status</div><div class="line">Windows Azure Storage Emulator 5.3.0.0 <span class="built_in">command</span> line tool</div><div class="line">IsRunning: True</div><div class="line">BlobEndpoint: http://127.0.0.1:10000/</div><div class="line">QueueEndpoint: http://127.0.0.1:10001/</div><div class="line">TableEndpoint: http://127.0.0.1:10002/</div></pre></td></tr></table></figure></p>
+<h3 id="开始开发"><a href="#开始开发" class="headerlink" title="开始开发"></a>开始开发</h3><p>通过官方的<a href="https://azure.microsoft.com/en-us/blog/azure-storage-sdks-for-python-ruby-and-php-now-generally-available/" target="_blank" rel="external">例子</a>可以尝试新增container，blob及删除功能。<br>成功上传blob后，却无法<a href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-use-emulator#addressing-resources-in-the-storage-emulator" target="_blank" rel="external">对存储模拟器中的资源进行寻址</a>。<br>eg.使用的帐户名<code>devstoreaccount1</code>，创建的容器名<code>mycontainerudfpbk</code>，blob名<code>5ac1a5c82021d.png</code>。<br>根据文档中的规则，资源地址应为<br><code>http://127.0.0.1:10000/devstoreaccount1/mycontainerudfpbk/5ac1a5c82021d.png</code><br>但是返回数据一直是<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">Error</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">Code</span>&gt;</span>ResourceNotFound<span class="tag">&lt;/<span class="name">Code</span>&gt;</span></div><div class="line">	<span class="tag">&lt;<span class="name">Message</span>&gt;</span></div><div class="line">		The specified resource does not exist. RequestId:9d2d1b08-12b1-4feb-8636-4325eb71b838 Time:2018-04-08T09:14:14.3007800Z</div><div class="line">	<span class="tag">&lt;/<span class="name">Message</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">Error</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>根据阅读<a href="http://www.cnblogs.com/powertoolsteam/p/Azure_Blob_Storage.html" target="_blank" rel="external">相关文章</a>后发现原来在创建容器时，若没有设置过访问权限(container-level access policies)，则默认为禁止外部访问。<br>ACL(PublicAccessType)权限分为三等<code>CONTAINER_AND_BLOBS</code>、<code>BLOBS_ONLY</code>、<code>NONE</code>，默认是<code>NONE</code>。<br>若资源需要外部能够访问则设置为<code>BLOBS_ONLY</code>即可。<br>附上自己封装的<a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">azure辅助类</a></p>
+<p>这中间还遇到一个小问题，在设权限时，ACLBase报了个错<br><code>Static function MicrosoftAzure\Storage\Common\Internal\ACLBase::createAccessPolicy() should not be abstract</code><br>经过查询后发现，在PHP5.2以后不允许abstract和static同时使用在方法上。<br><figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#只要将ACLBase中的</span></div><div class="line"><span class="keyword">abstract</span> <span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">createAccessPolicy</span><span class="params">()</span></span>;</div><div class="line"><span class="keyword">abstract</span> <span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">validateResourceType</span><span class="params">($resourceType)</span></span>;</div><div class="line"><span class="comment">#改为</span></div><div class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">createAccessPolicy</span><span class="params">()</span></span>&#123;&#125;</div><div class="line"><span class="keyword">protected</span> <span class="keyword">static</span> <span class="function"><span class="keyword">function</span> <span class="title">validateResourceType</span><span class="params">($resourceType)</span></span>&#123;&#125;</div><div class="line"><span class="comment">#即可</span></div></pre></td></tr></table></figure></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><h4 id="中止进程的三个方法"><a href="#中止进程的三个方法" class="headerlink" title="中止进程的三个方法"></a>中止进程的三个方法</h4><ol>
+<li>利用pid结束进程<br><code>taskkill /pid PID /f</code></li>
+<li>利用pid结束进程<br><code>ntsd -c q -p PID</code></li>
+<li>利用进程名结束进程<br><code>ntsd -c q -pn NAME.exe</code></li>
+</ol>
+<h4 id="地址"><a href="#地址" class="headerlink" title="地址"></a>地址</h4><ol>
+<li><a href="https://github.com/Azure/azure-storage-php" target="_blank" rel="external">官方提供的sdk地址</a></li>
+<li><a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">自用辅助类地址</a></li>
+</ol>
+<p>注：强制结束前先明确这个进程的作用</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://github.com/Azure/azure-storage-php" target="_blank" rel="external">Azure/azure-storage-php - Github</a><br><a href="https://azure.microsoft.com/en-us/blog/azure-storage-sdks-for-python-ruby-and-php-now-generally-available/" target="_blank" rel="external">Hello World sample with the Storage SDK for PHP</a><br><a href="https://docs.microsoft.com/zh-cn/azure/storage/common/storage-use-emulator" target="_blank" rel="external">使用 Azure 存储模拟器进行开发和测试</a><br><a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank" rel="external">SQL Server Express Downloads</a><br><a href="http://forum.wampserver.com/read.php?2.123606" target="_blank" rel="external">Installing a new release of WAMPServer</a><br><a href="http://www.cnblogs.com/powertoolsteam/p/Azure_Blob_Storage.html" target="_blank" rel="external">Azure Blob Storage 基本用法 – Azure Storage 之 Blob</a></p>
+  
+	</div>
+		<footer class="article-footer clearfix">
+<div class="article-catetags">
+
+<div class="article-categories">
+  <span></span>
+  <a class="article-category-link" href="/categories/Tech/">Tech</a>
+</div>
+
+
+  <div class="article-tags">
+  
+  <span></span> <a href="/tags/PHP/">PHP</a>
+  </div>
+
+</div>
+
+
+
+	<div class="article-share" id="share">
+	
+	  <div data-url="https://backwallkid.github.io/2018-04/azure-storage-php.html" data-title="PHP使用Azure Storage Blob上传文件 | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  </div>
+	
+	</div>
+
+
+</footer>
+
+   	       
+	</article>
+	<!-- 来必力City版安装代码 -->
+	<div id="lv-container" data-id="city" data-uid="MTAyMC8zMTI4NC83ODMz">
+		<script type="text/javascript">
+	   (function(d, s) {
+	       var j, e = d.getElementsByTagName(s)[0];
+
+	       if (typeof LivereTower === 'function') { return; }
+
+	       j = d.createElement(s);
+	       j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+	       j.async = true;
+
+	       e.parentNode.insertBefore(j, e);
+	   })(document, 'script');
+		</script>
+	<noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+	</div>
+	<!-- City版安装代码已完成 -->
+	
+<nav class="article-nav clearfix">
+ 
+
+<div class="next">
+<a href="/2018-02/export-csv-in-english-based-os.html"  title="解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题">
+ <strong>下一篇：</strong><br/> 
+ <span>解决导出带有汉字的csv格式文件在英文操作系统下，汉字显示为问号的问题
+</span>
+</a>
+</div>
+
+</nav>
+
+	
+
+</div>  
+
+      <div class="openaside"><a class="navbutton" href="#" title="Show Sidebar"></a></div>
+
+  <div id="toc" class="toc-aside">
+  <strong class="toc-title">Contents</strong>
+ 
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PHP版本限制"><span class="toc-number">2.</span> <span class="toc-text">PHP版本限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#升级WAMP-2-5-3-1"><span class="toc-number">3.</span> <span class="toc-text">升级WAMP 2.5-3.1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装存储模拟器"><span class="toc-number">4.</span> <span class="toc-text">安装存储模拟器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始开发"><span class="toc-number">5.</span> <span class="toc-text">开始开发</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">6.</span> <span class="toc-text">总结</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#中止进程的三个方法"><span class="toc-number">6.1.</span> <span class="toc-text">中止进程的三个方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#地址"><span class="toc-number">6.2.</span> <span class="toc-text">地址</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">7.</span> <span class="toc-text">Reference</span></a></li></ol>
+ 
+  </div>
+
+<div id="asidepart">
+<div class="closeaside"><a class="closebutton" href="#" title="Hide Sidebar"></a></div>
+<aside class="clearfix">
+
+  
+
+
+  
+<div class="categorieslist">
+	<p class="asidetitle">Categories</p>
+		<ul>
+		
+		  
+			<li><a href="/categories/Life/" title="Life">Life<sup>1</sup></a></li>
+		  
+		
+		  
+			<li><a href="/categories/Tech/" title="Tech">Tech<sup>18</sup></a></li>
+		  
+		
+		</ul>
+</div>
+
+
+  
+<div class="tagslist">
+	<p class="asidetitle">Tags</p>
+		<ul class="clearfix">
+		
+			
+				<li><a href="/tags/PHP/" title="PHP">PHP<sup>8</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Git/" title="Git">Git<sup>5</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Html-js-css/" title="Html+js+css">Html+js+css<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Python/" title="Python">Python<sup>3</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Character-encoding/" title="Character encoding">Character encoding<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/MySQL/" title="MySQL">MySQL<sup>2</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Tools/" title="Tools">Tools<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Apache/" title="Apache">Apache<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Linux/" title="Linux">Linux<sup>1</sup></a></li>
+			
+		
+			
+				<li><a href="/tags/Car/" title="Car">Car<sup>1</sup></a></li>
+			
+		
+		</ul>
+</div>
+
+
+  <div class="linkslist">
+  <p class="asidetitle">Links</p>
+    <ul>
+        
+          <li>
+            
+            	<a href="http://www.cnblogs.com/waltersgarden/" target="_blank" title="辅站">辅站</a>
+            
+          </li>
+        
+    </ul>
+</div>
+
+  
+
+
+  <div class="rsspart">
+	<a href="/atom.xml" target="_blank" title="rss">RSS</a>
+</div>
+
+  <div class="weiboshow">
+  <p class="asidetitle">Weibo</p>
+    <iframe width="100%" height="119" class="share_self"  frameborder="0" scrolling="no" src="http://widget.weibo.com/weiboshow/index.php?language=&width=0&height=119&fansRow=2&ptype=1&speed=0&skin=9&isTitle=1&noborder=1&isWeibo=0&isFans=0&uid=1832584894&verifier=&dpc=1"></iframe>
+</div>
+
+
+</aside>
+</div>
+    </div>
+    <footer><div id="footer" >
+	
+	<div class="line">
+		<span></span>
+		<div class="author"></div>
+	</div>
+	
+	
+	<section class="info">
+		<p> Hello ,I&#39;m Walter Huang. <br/>
+			This is my blog.</p>
+	</section>
+	 
+	<div class="social-font" class="clearfix">
+		
+		<a href="http://weibo.com/1832584894" target="_blank" class="icon-weibo" title="微博"></a>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+	</div>
+			
+		
+
+		<p class="copyright">
+		Powered by <a href="http://hexo.io" target="_blank" title="hexo">hexo</a> and Theme by <a href="https://github.com/wuchong/jacman" target="_blank" title="Jacman">Jacman</a> © 2018 
+		
+		<a href="/about" target="_blank" title="Walter Huang">Walter Huang</a>
+		
+		
+		</p>
+</div>
+</footer>
+    <script src="/js/jquery-2.0.3.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/jquery.qrcode-0.12.0.min.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.navbar').click(function(){
+    $('header nav').toggleClass('shownav');
+  });
+  var myWidth = 0;
+  function getSize(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+  };
+  var m = $('#main'),
+      a = $('#asidepart'),
+      c = $('.closeaside'),
+      o = $('.openaside');
+  c.click(function(){
+    a.addClass('fadeOut').css('display', 'none');
+    o.css('display', 'block').addClass('fadeIn');
+    m.addClass('moveMain');
+  });
+  o.click(function(){
+    o.css('display', 'none').removeClass('beforeFadeIn');
+    a.css('display', 'block').removeClass('fadeOut').addClass('fadeIn');      
+    m.removeClass('moveMain');
+  });
+  $(window).scroll(function(){
+    o.css("top",Math.max(80,260-$(this).scrollTop()));
+  });
+  
+  $(window).resize(function(){
+    getSize(); 
+    if (myWidth >= 1024) {
+      $('header nav').removeClass('shownav');
+    }else{
+      m.removeClass('moveMain');
+      a.css('display', 'block').removeClass('fadeOut');
+      o.css('display', 'none');
+      
+      $('#toc.toc-aside').css('display', 'none');
+        
+    }
+  });
+});
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var ai = $('.article-content>iframe'),
+      ae = $('.article-content>embed'),
+      t  = $('#toc'),
+      ta = $('#toc.toc-aside'),
+      o  = $('.openaside'),
+      c  = $('.closeaside');
+  if(ai.length>0){
+    ai.wrap('<div class="video-container" />');
+  };
+  if(ae.length>0){
+   ae.wrap('<div class="video-container" />');
+  };
+  c.click(function(){
+    ta.css('display', 'block').addClass('fadeIn');
+  });
+  o.click(function(){
+    ta.css('display', 'none');
+  });
+  $(window).scroll(function(){
+    ta.css("top",Math.max(140,320-$(this).scrollTop()));
+  });
+});
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  var $this = $('.share'),
+      url = $this.attr('data-url'),
+      encodedUrl = encodeURIComponent(url),
+      title = $this.attr('data-title'),
+      tsina = $this.attr('data-tsina'),
+      description = $this.attr('description');
+  var html = [
+  '<div class="hoverqrcode clearfix"></div>',
+  '<a class="overlay" id="qrcode"></a>',
+  '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+  '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+  '<a href="#qrcode" class="article-share-qrcode" title="微信"></a>',
+  '<a href="http://widget.renren.com/dialog/share?resourceUrl=' + encodedUrl + '&srcUrl=' + encodedUrl + '&title=' + title +'" class="article-share-renren" target="_blank" title="人人"></a>',
+  '<a href="http://service.weibo.com/share/share.php?title='+title+'&url='+encodedUrl +'&ralateUid='+ tsina +'&searchPic=true&style=number' +'" class="article-share-weibo" target="_blank" title="微博"></a>',
+  '<span title="Share to"></span>'
+  ].join('');
+  $this.append(html);
+
+  $('.hoverqrcode').hide();
+
+  var myWidth = 0;
+  function updatehoverqrcode(){
+    if( typeof( window.innerWidth ) == 'number' ) {
+      myWidth = window.innerWidth;
+    } else if( document.documentElement && document.documentElement.clientWidth) {
+      myWidth = document.documentElement.clientWidth;
+    };
+    var qrsize = myWidth > 1024 ? 200:100;
+    var options = {render: 'image', size: qrsize, fill: '#2ca6cb', text: url, radius: 0.5, quiet: 1};
+    var p = $('.article-share-qrcode').position();
+    $('.hoverqrcode').empty().css('width', qrsize).css('height', qrsize)
+                          .css('left', p.left-qrsize/2+20).css('top', p.top-qrsize-10)
+                          .qrcode(options);
+  };
+  $(window).resize(function(){
+    $('.hoverqrcode').hide();
+  });
+  $('.article-share-qrcode').click(function(){
+    updatehoverqrcode();
+    $('.hoverqrcode').toggle();
+  });
+  $('.article-share-qrcode').hover(function(){}, function(){
+      $('.hoverqrcode').hide();
+  });
+});   
+</script>
+
+
+
+
+
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+  $('.article-content').each(function(i){
+    $(this).find('img').each(function(){
+      if ($(this).parent().hasClass('fancybox')) return;
+      var alt = this.alt;
+      if (alt) $(this).after('<span class="caption">' + alt + '</span>');
+      $(this).wrap('<a href="' + this.src + '" title="' + alt + '" class="fancybox"></a>');
+    });
+    $(this).find('.fancybox').each(function(){
+      $(this).attr('rel', 'article' + i);
+    });
+  });
+  if($.fancybox){
+    $('.fancybox').fancybox();
+  }
+}); 
+</script>
+
+
+
+<!-- Analytics Begin -->
+
+
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?8c349ebad6e132c9cbd08509cd6b0929";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+
+<!-- Analytics End -->
+
+<!-- Totop Begin -->
+
+	<div id="totop">
+	<a title="Back to Top"><img src="/img/scrollup.png"/></a>
+	</div>
+	<script src="/js/totop.js"></script>
+
+<!-- Totop End -->
+
+<!-- MathJax Begin -->
+<!-- mathjax config similar to math.stackexchange -->
+
+
+<!-- MathJax End -->
+
+<!-- Tiny_search Begin -->
+
+<!-- Tiny_search End -->
+
+  </body>
+</html>
