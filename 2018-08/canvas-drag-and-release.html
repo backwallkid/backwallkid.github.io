@@ -4,24 +4,29 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>向Git前进（三） | 稀疏检出sparse checkout | Walter&#39;s Garden</title>
+    <title>Canvas拨动指针Demo | Walter&#39;s Garden</title>
     <meta name="viewport" content="width=device-width, initial-scale=1,user-scalable=no">
     
     <meta name="author" content="Walter Huang">
     
 
     
-    <meta name="description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
-<meta name="keywords" content="Git">
+    <meta name="description" content="一次实际问题的解决，回忆三角函数知识，建立起应用题解决体系。">
+<meta name="keywords" content="Html+js+css">
 <meta property="og:type" content="article">
-<meta property="og:title" content="向Git前进（三） | 稀疏检出sparse checkout">
-<meta property="og:url" content="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html">
+<meta property="og:title" content="Canvas拨动指针Demo">
+<meta property="og:url" content="https://backwallkid.github.io/2018-08/canvas-drag-and-release.html">
 <meta property="og:site_name" content="Walter&#39;s Garden">
-<meta property="og:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
-<meta property="og:updated_time" content="2017-07-17T10:44:07.810Z">
+<meta property="og:description" content="一次实际问题的解决，回忆三角函数知识，建立起应用题解决体系。">
+<meta property="og:image" content="https://backwallkid.github.io/images/canvas_quadrant_wm.jpg">
+<meta property="og:image" content="https://backwallkid.github.io/images/canvas_quadrant_trigonometric_q1_wm.jpg">
+<meta property="og:image" content="https://backwallkid.github.io/images/canvas_quadrant_move_left_wm.jpg">
+<meta property="og:image" content="https://backwallkid.github.io/images/canvas_quadrant_rotate_wm.jpg">
+<meta property="og:updated_time" content="2018-08-15T03:21:38.166Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="向Git前进（三） | 稀疏检出sparse checkout">
-<meta name="twitter:description" content="在自建的GitLab里整理完开发流程后，实际项目使用前，拉取项目就碰到了问题。网上发现似乎可用的功能，进行实际测试。功能好不好用，用过的人才有资格评论。">
+<meta name="twitter:title" content="Canvas拨动指针Demo">
+<meta name="twitter:description" content="一次实际问题的解决，回忆三角函数知识，建立起应用题解决体系。">
+<meta name="twitter:image" content="https://backwallkid.github.io/images/canvas_quadrant_wm.jpg">
 
     
     <link rel="alternative" href="/atom.xml" title="Walter&#39;s Garden" type="application/atom+xml">
@@ -81,87 +86,38 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017-06/git-3-sparse-checkout-usage.html" title="向Git前进（三） | 稀疏检出sparse checkout" itemprop="url">向Git前进（三） | 稀疏检出sparse checkout</a>
+      <a href="/2018-08/canvas-drag-and-release.html" title="Canvas拨动指针Demo" itemprop="url">Canvas拨动指针Demo</a>
   </h1>
   <p class="article-author">By
        
 		<a href="/about" title="Walter Huang" target="_blank" itemprop="author">Walter Huang</a>
 		
   <p class="article-time">
-    <time datetime="2017-06-28T12:25:00.000Z" itemprop="datePublished"> Published 2017-06-28</time>
+    <time datetime="2018-08-15T12:25:00.000Z" itemprop="datePublished"> Published 2018-08-15</time>
     
   </p>
 </header>
 	<div class="article-content">
     
-	<p id="unsplash-head">
-		<a href="/images/git-3/jake-lorefice-296557_50c.jpg" title="Unsplash" class="fancybox" rel="article0">
-			<img src="/images/git-3/jake-lorefice-296557_50c.jpg" alt="Unsplash" id="unsplash-img">
-		</a><br>
-		<a href="https://unsplash.com/photos/VcTuZZca3jI" target="_blank" rel="external">Photo</a> by <a href="https://unsplash.com/@jakelorefice" target="_blank" rel="external">Jake Lorefice</a>
-		 on <a href="https://unsplash.com/" target="_blank" rel="external">Unsplash</a>
-	</p>
-	
 
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">Contents</strong>
 		
-			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+			<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算"><span class="toc-number">3.</span> <span class="toc-text">计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成"><span class="toc-number">4.</span> <span class="toc-text">完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
 		
 		</div>
 		
-		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p><a href="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html">Git开发流程整理</a>并实践完之后，先找了个小项目试水。用来试水的项目体积有1.5G，里面充斥着各种图片和视频。<br>但是公司内部带宽有限，拉取速度非常慢，所有的组员只能挨个拉取。由于公司内前后端分工明确，前端同事只负责视图修改，不碰控制器，而后端也只修改控制器，不碰样式。所有的人都不会碰视频。于是笔者利用等待间隙研究git的部份拉取功能。</p>
-<h3 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h3><ol>
-<li><a href="https://backwallkid.github.io/2017-06/git-2-project-develop-flow.html#创建项目或拉取项目">新开</a>了一个目录，添加origin路径，先不进行拉取。</li>
-<li>开启“稀疏检出”设置<br><code>git config core.sparsecheckout true</code></li>
-<li>设置需要检出的文件或文件夹路径<br><code>echo &quot;path1/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为path1<br><code>echo &quot;path2/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为path2<br>4.1 或设置不需要检出的文件或文件夹路径<br><code>echo &quot;/*&quot; &gt;&gt; .git/info/sparse-checkout</code>表示需要检出的文件夹为所有<br><code>echo &quot;!PATH/&quot; &gt;&gt; .git/info/sparse-checkout</code>表示不需要检出的文件夹为PATH<br><strong>注</strong>： 假如设置的是不需要检出的路径，则<code>sparse-checkout</code>第一行必须是<code>/*</code>，后面以<code>!unwant_path/</code>来设置不想检出的路径。</li>
-<li>拉取<br><code>git pull origin master</code></li>
-</ol>
-<h3 id="结果"><a href="#结果" class="headerlink" title="结果"></a>结果</h3><p>根据<a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">此处</a>的注解，和实际测试。</p>
-<ul>
-<li>先从Github上拉了一个笔者<a href="https://github.com/backwallkid/common-functions" target="_blank" rel="external">自创的项目</a>进行稀疏检出测试。</li>
-<li><ul>
-<li>设置<code>sparse-checkout</code>文件，限定了需要检出的文件和文件夹。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">apiHead.php</div><div class="line">db/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 39, done.</div><div class="line">remote: Total 39 (delta 0), reused 0 (delta 0), pack-reused 39</div><div class="line">Unpacking objects: 100% (39/39), done.</div><div class="line">From github.com:***/***</div><div class="line"> * branch            master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]      master     -&gt; origin/master</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>查看项目，验证了稀疏检出的效果。项目目录中只检出了事先设定的文件夹和文件，但是用来测试的项目体积太小了，无法检验是否下载了所有的文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">apiHead.php                         db/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>接着直接上手进行公司内网GitLab的稀疏检出测试。</p>
-</li>
-<li><ul>
-<li>设置<code>sparse-checkout</code>文件。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ cat .git/info/sparse-checkout</div><div class="line">index.php</div><div class="line">Application/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目，0%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">Receiving objects:   0% (194/35326), 23.19 MiB | 1.17 MiB/s</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>拉取项目，100%<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$ git pull origin master</div><div class="line">remote: Counting objects: 35326, done.</div><div class="line">remote: Compressing objects: 100% (34490/34490), done.</div><div class="line">remote: Total 35326 (delta 734), reused 35326 (delta 734)</div><div class="line">Receiving objects: 100% (35326/35326), 1.45 GiB | 1.23 MiB/s, done.</div><div class="line">Resolving deltas: 100% (734/734), done.</div><div class="line">From *.*.*.*:GROUP/PROJECT</div><div class="line"> * branch              master     -&gt; FETCH_HEAD</div><div class="line"> * [new branch]        master     -&gt; origin/master</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><ul>
-<li>根据测试结果，虽然设置了稀疏检出，也只检出了<code>sparse-checkout</code>中设置的文件夹和文件，但是依然完整下载了整个项目。<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ls</div><div class="line">index.php                          Application/</div></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>根据测试结果得出，sparse-checkout（稀疏检出）功能，会下载所有的文件，但是只检出符合sparse-checkout文件内筛选条件的文件或文件夹。该功能能省下硬盘空间，但是省不了带宽。</p>
-<h3 id="下一步"><a href="#下一步" class="headerlink" title="下一步"></a>下一步</h3><p><a href="https://backwallkid.github.io/2017-07/git-4-work-dir-stage-gitignore.html">向Git前进（四） | 暂存区和gitignore相关</a></p>
-<h4 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h4><p><a href="https://zhgcao.github.io/2016/05/11/git-sparse-checkout/" target="_blank" rel="external">Git只获取部分目录的内容（稀疏检出） - zhgcao</a><br><a href="https://www.zhihu.com/question/21114773" target="_blank" rel="external">git能否只拷贝某几个文件或者文件夹？ - 知乎</a></p>
+		<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>接到个项目，前端负责制作页面效果，后端负责编写数据接口。项目中一个效果是拨动指针选择时间，前端同事在开发过程中碰到一个问题，当手指按住指针往上下垂直移动或左右水平移动时，指针会胡乱旋转。由于后端开发压力较轻松，我尝试解决问题。</p>
+<h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>由于手指需要拨动的是指针，自然而然的想到了使用坐标和三角函数来解决。<br>在canvas中，坐标与通常意义上的不同，顶部是x轴，左侧为y轴，页面的左上角是原点(0,0)。<br>为了方便后续开发，先自定义第一到第四象限，如下图：<br><img src="/images/canvas_quadrant_wm.jpg" alt="canvas自定义象限"></p>
+<p>获取canvas的高宽作为虚拟坐标x，y轴的中心点（简称cp：center point）。<br>这样只需要实时监测手指触点的坐标(x,y)，并与cp的的坐标进行比对，就能知道手指触点所在的象限，并计算指针指向。</p>
+<h3 id="计算"><a href="#计算" class="headerlink" title="计算"></a>计算</h3><p>以第一象限为例，若手指触点（简称tp：touch point）、箭头指向（简称ap：arrow point）与cp的关系如下图所示：<br><img src="/images/canvas_quadrant_trigonometric_q1_wm.jpg" alt="第一象限，手指触点、箭头指向与cp的关系"></p>
+<p>使用<code>HTMLElement.prototype.getBoundingClientRect</code>获取tp的坐标，<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">BA、CD垂直于oy。</div><div class="line">AB = cp.x - tp.x;</div><div class="line">AO = cp.y - tp.y;</div><div class="line">根据三角函数，正切tan = 对边比邻边。</div><div class="line">tan(∠ABO) = AO/AB;</div><div class="line">可求出∠ABO，同时∠DCO = ∠ABO。</div><div class="line"></div><div class="line">CO的长度即为箭头图片的高度。</div><div class="line">根据正弦sin = 对边比斜边。</div><div class="line">sin(∠DCO) = DO/CO;</div><div class="line">可求出DO，再根据勾股定理推出DC。</div><div class="line"></div><div class="line">ap.x = cp.x - DO;</div><div class="line">ap.y = cp.y - DC;</div><div class="line"></div><div class="line">即可得箭头AP的坐标。</div></pre></td></tr></table></figure></p>
+<p>之后发现问题，AP的坐标是箭头图片左上角的坐标，在插入箭头图片时，需要将AP的坐标以垂直于BO向左移动1/2图片宽度的距离。<br><img src="/images/canvas_quadrant_move_left_wm.jpg" alt=""><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">EC垂直于CO，EC为1/2图片宽度，延长线相交于oy，取点H。</div><div class="line">CD垂直于oy，EF垂直于CD，∠DCO为已知。</div><div class="line">∠DCH = PI/2 - ∠DCO;</div><div class="line">∠DHC = PI/2 - ∠DCH;</div><div class="line"></div><div class="line">根据三角函数，正弦sin = 对边比斜边。</div><div class="line">sin(∠DHC) = CD/CH;</div><div class="line">CD = cp.y - ap.y;</div><div class="line">可得CH。</div><div class="line">EH = CH - CE;</div><div class="line"></div><div class="line">根据平行线同位角定理，∠FEC = ∠DHC。</div><div class="line">sin(∠FEC) = CF/CE;</div><div class="line">可得CF。</div><div class="line">E.x = cp.x - (EF + ap.x);</div><div class="line">E.y = cp.y - (CD - CF);</div></pre></td></tr></table></figure></p>
+<p>这样箭头图片的左上角就能正确的在应有的位置上。<br>接下来是计算canvas旋转的角度。需要先按角度旋转canvas画布，插入图片，再把角度转回去。<br>由于上述计算得出的∠DOC的角度是基于CP的虚拟x轴，而<code>CanvasRenderingContext2D.prototype.rotate</code>所用到的角度是从虚拟x轴右侧向下开始计算的。<br>所以需要将算得的第一象限的∠DOC + PI得到Canvas旋转所用角度，再 - 1.5 * PI，其他象限相同处理。<br><img src="/images/canvas_quadrant_rotate_wm.jpg" alt="Canvas旋转所用角度"></p>
+<h3 id="完成"><a href="#完成" class="headerlink" title="完成"></a>完成</h3><p>角度坐标都有了，接下来的事情就简单了，为了方便测试，使用鼠标代替手指。<br>将计算坐标的方法绑定在<code>onmousemove</code>上，给<code>onmouseup</code>和<code>onmousedown</code>分别加上开关，功能就完成了。<br>最终可以鼠标点住指针拖动选择任意角度放开。<br>点<a href="http://backwallkid.github.io/demo/drag/index.html">这里</a>看效果，手机和pc都可以。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>有目标的解决实际问题，快速学习canvas动画，理解canvas中角度的计算等基础知识。<br>虽然demo做到这里算是完成了，总用时也就一个下午，但是由于项目的进度问题，并没有来得及用上。<br>使用初中的三角函数知识能够解决现在工作中的问题算是一个意外之喜，遇到卡壳的时候回头看看，说不定以前学过的知识能够帮助解决。</p>
+<h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><p><a href="https://www.cnblogs.com/pengchengzhong/p/6051487.html" target="_blank" rel="external">js获取移动端触摸坐标 - pengchengzhong</a><br><a href="http://www.zhongkao.com/e/20120129/4f24fabb9142a.shtml" target="_blank" rel="external">直角三角函数公式大全</a><br><a href="http://backwallkid.github.io/demo/drag/index.html">效果展示 - backwallkid</a></p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -175,7 +131,7 @@
 
   <div class="article-tags">
   
-  <span></span> <a href="/tags/Git/">Git</a>
+  <span></span> <a href="/tags/Html-js-css/">Html+js+css</a>
   </div>
 
 </div>
@@ -184,7 +140,7 @@
 
 	<div class="article-share" id="share">
 	
-	  <div data-url="https://backwallkid.github.io/2017-06/git-3-sparse-checkout-usage.html" data-title="向Git前进（三） | 稀疏检出sparse checkout | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
+	  <div data-url="https://backwallkid.github.io/2018-08/canvas-drag-and-release.html" data-title="Canvas拨动指针Demo | Walter&#39;s Garden" data-tsina="1832584894" class="share clearfix">
 	  </div>
 	
 	</div>
@@ -215,19 +171,11 @@
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017-07/git-4-work-dir-stage-gitignore.html" title="向Git前进（四） | 暂存区和gitignore相关">
-  <strong>上一篇：</strong><br/>
-  <span>
-  向Git前进（四） | 暂存区和gitignore相关</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017-06/git-2-project-develop-flow.html"  title="向Git前进（二） | GitLab项目开发流程">
+<a href="/2018-04/azure-storage-php.html"  title="PHP使用Azure Storage Blob上传文件">
  <strong>下一篇：</strong><br/> 
- <span>向Git前进（二） | GitLab项目开发流程
+ <span>PHP使用Azure Storage Blob上传文件
 </span>
 </a>
 </div>
@@ -243,7 +191,7 @@
   <div id="toc" class="toc-aside">
   <strong class="toc-title">Contents</strong>
  
- <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#过程"><span class="toc-number">2.</span> <span class="toc-text">过程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结果"><span class="toc-number">3.</span> <span class="toc-text">结果</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">4.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#下一步"><span class="toc-number">5.</span> <span class="toc-text">下一步</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Reference"><span class="toc-number">5.1.</span> <span class="toc-text">Reference</span></a></li></ol></li></ol>
+ <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">2.</span> <span class="toc-text">分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#计算"><span class="toc-number">3.</span> <span class="toc-text">计算</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#完成"><span class="toc-number">4.</span> <span class="toc-text">完成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结"><span class="toc-number">5.</span> <span class="toc-text">总结</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Reference"><span class="toc-number">6.</span> <span class="toc-text">Reference</span></a></li></ol>
  
   </div>
 

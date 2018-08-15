@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>drag and release</title>
+    <style>
+        #message {
+            position: absolute;
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+    </style>
+</head>
+<body>
+<p id="message"></p>
+<canvas id="coordinate" style="border: 1px solid black"></canvas>
+</body>
+</html>
+<script>
+    var pi = Math.PI;
+    var cord = document.getElementById("coordinate");
+    var wWidth = window.top.innerWidth, wHeight = window.top.innerHeight;
+    cord.style.width = wWidth + 'px';
+    cord.width = wWidth;
+    cord.style.height = wHeight + 'px';
+    cord.height = wHeight;
+    var cxt = cord.getContext("2d");
+    var cp = {x: wWidth / 2, y: wHeight / 2, r: 5};
+    var loc = {x: cp.x, y: 0, q: 1};
+    //console.log(pointer.height);
+    var clock = new Image();
+    clock.src = 'clock.png';
+    clock.onload = function () {
+        loadClock();
+    };
+    var pointer = new Image();
+    pointer.src = "pointer.png";
+    pointer.onload = function () {
+        loadPointer();
+    };
+    //drawCircle(cxt,cp);
+    outputPos();
+
+    var move_switch = 0;
+
+    //touchstart事件
+    function touchSatrtFunc(evt)
+    {
+        try {
+            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            move_switch = 1;
+        } catch (e) {
+            alert('touchSatrtFunc：' + e.message);
+        }
+    }
+
+    //touchmove事件，这个事件无法获取坐标
+    function touchMoveFunc(evt)
+    {
+        try {
+            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            if (move_switch == 1) {
+                var touch = evt.touches[0]; //获取第一个触点
+                loc.x = Number(touch.pageX);
+                loc.y = Number(touch.pageY);
+                loc.q = identifyQuadrant();
+                outputPos();
+                cxt.clearRect(0, 0, cord.width, cord.height);
+                loadPointer();
+            }
+        } catch (e) {
+            alert('touchMoveFunc：' + e.message);
+        }
+    }
+
+    //touchend事件
+    function touchEndFunc(evt)
+    {
+        try {
+            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            move_switch = 0;
+            console.log('end');
+        } catch (e) {
+            alert('touchEndFunc：' + e.message);
+        }
+    }
+
+    //绑定事件
+    function bindEvent()
+    {
+        document.addEventListener('touchstart', touchSatrtFunc, false);
+        document.addEventListener('touchmove', touchMoveFunc, false);
+        document.addEventListener('touchend', touchEndFunc, false);
+    }
+
+    //判断是否支持触摸事件
+    function isTouchDevice()
+    {
+        //document.getElementById("version").innerHTML = navigator.appVersion;
+        try {
+            document.createEvent("TouchEvent");
+            //alert("支持TouchEvent事件！");
+            bindEvent(); //绑定事件
+        } catch (e) {
+            alert("不支持TouchEvent事件！" + e.message);
+        }
+    }
+
+    if (navigator.userAgent.match(/(iPhone|iPod|Android|ios)/i)) {
+        isTouchDevice();
+    } else {
+        cord.onmousemove = function (e) {
+            if (move_switch == 1) {
+                loc = getLocation(e.clientX, e.clientY);
+                loc.q = identifyQuadrant();
+                outputPos();
+                cxt.clearRect(0, 0, cord.width, cord.height);
+                loadPointer();
+            }
+        };
+        cord.onmousedown = function (e) {
+            move_switch = 1;
+        };
+        cord.onmouseup = function (e) {
+            move_switch = 0;
+        };
+    }
+
+    function outputPos()
+    {
+        var message = document.getElementById("message");
+        message.innerHTML = "x=" + loc.x + " ,y=" + loc.y + " ,q=" + loc.q.toString();
+    }
+
+    function getLocation(x, y)
+    {
+        var bbox = cord.getBoundingClientRect();
+        return {
+            x: (x - bbox.left) * (cord.width / bbox.width),
+            y: (y - bbox.top) * (cord.height / bbox.height)
+
+            /*
+             * 此处不用下面两行是为了防止使用CSS和JS改变了canvas的高宽之后是表面积拉大而实际
+             * 显示像素不变而造成的坐标获取不准的情况
+             x: (x - bbox.left),
+             y: (y - bbox.top)
+             */
+        };
+    }
+
+    function drawCircle(cxt, p) {
+        cxt.beginPath();
+        cxt.strokeStyle = '#000000';
+        cxt.fillStyle = '#000000';
+        cxt.arc(p.x, p.y, p.r, 0, 2 * Math.PI, false);
+        cxt.stroke();
+        cxt.fill();
+        cxt.closePath();
+    }
+
+    function drawLine(cxt, op, tp) {
+        cxt.beginPath();
+        cxt.moveTo(op.x, op.y);
+        cxt.lineTo(tp.x, tp.y);
+        cxt.stroke();
+        cxt.closePath();
+    }
+
+    /**
+     * 确定触点坐标所属的象限
+     * @returns {number}
+     */
+    function identifyQuadrant()
+    {
+        let x = loc.x, y = loc.y;
+        if (x <= cp.x && y <= cp.y) {
+            return 1;
+        } else if (x < cp.x && y >= cp.y) {
+            return 3;
+        } else if (x > cp.x && y < cp.y) {
+            return 2;
+        } else {
+            return 4;
+        }
+    }
+
+    /**
+     * 通过触点所在象限计算对应弧度
+     * @returns {*}
+     */
+    function calcRadian()
+    {
+        let x = loc.x, y = loc.y;
+        var t;
+        if (loc.q == 1) {
+            t = Math.atan((cp.y - y) / (cp.x - x));
+            return pi + t;
+        } else if (loc.q == 2) {
+            t = Math.atan((cp.y - y) / (x - cp.x));
+            return pi * 2 - t;
+        } else if (loc.q == 3) {
+            t = Math.atan((y - cp.y) / (cp.x - x));
+            return pi - t;
+        } else {
+            t = Math.atan((y - cp.y) / (x - cp.x));
+            return t;
+        }
+    }
+
+    /**
+     * 加载指针，应用弧度
+     */
+    function loadPointer()
+    {
+        var r = calcRadian();
+        var cr, or, rr;
+        //var l=m=s=c={x:0,y:0};
+        //console.log(r,r*180/pi);
+        var mx, my, lx, ly, sx, sy, hh, cy, cx;
+        var hypo = pointer.height;
+        var hw = pointer.width / 2;
+
+        if (loc.x == cp.x && loc.y < cp.y) {
+            sx = cp.x - hw;
+            sy = cp.y - hypo;
+        } else if (loc.x == cp.x && loc.y > cp.y) {
+            sx = cp.x + hw;
+            sy = cp.y + hypo;
+        } else if (loc.q == 1) {
+            cr = r - pi;
+            or = 0.5 * pi - cr;
+
+            [lx, ly] = calcLs(cr, hypo);
+            mx = cp.x - lx;
+            my = cp.y - ly;
+
+            hh = ly / Math.sin(or) - hw;
+            sy = Math.sin(or) * hh;
+
+            cx = (ly - sy) / Math.tan(or);
+            sx = mx - cx;
+            sy = cp.y - sy;
+        } else if (loc.q == 2) {
+            cr = 2 * pi - r;
+            or = 0.5 * pi - cr;
+
+            [lx, ly] = calcLs(cr, hypo);
+            mx = cp.x + lx;
+            my = cp.y - ly;
+
+            hh = ly / Math.sin(or) + hw;
+            sy = Math.sin(or) * hh;
+
+            cx = (ly - sy) / Math.tan(or);
+            sx = mx + cx;
+            sy = cp.y - sy;
+        } else if (loc.q == 3) {
+            cr = Math.abs(r - pi);
+            or = 0.5 * pi - cr;
+
+            [lx, ly] = calcLs(cr, hypo);
+            mx = cp.x - lx;
+            my = cp.y + ly;
+
+            hh = ly / Math.sin(or) + hw;
+            sy = Math.sin(or) * hh;
+
+            cx = (ly - sy) / Math.tan(or);
+            sx = mx - cx;
+            sy = cp.y + sy;
+        } else {
+            cr = r;
+            or = 0.5 * pi - cr;
+
+            [lx, ly] = calcLs(cr, hypo);
+            mx = cp.x + lx;
+            my = cp.y + ly;
+
+            hh = ly / Math.sin(or) - hw;
+            sy = Math.sin(or) * hh;
+
+            cx = (ly - sy) / Math.tan(or);
+            sx = mx + cx;
+            sy = cp.y + sy;
+        }
+        loadClock();
+
+        rr = r - 1.5 * pi;
+        cxt.translate(sx, sy);
+        cxt.rotate(rr);
+        cxt.drawImage(pointer, 0, 0);
+
+        cxt.rotate(-rr);
+        cxt.translate(-sx, -sy);
+        //drawCircle(cxt,cp);
+    }
+
+    function calcLs(cr, hypo)
+    {
+        let lx, ly;
+        ly = Math.sin(cr) * hypo;
+        lx = Math.sqrt(Math.pow(hypo, 2) - Math.pow(ly, 2));
+        return [lx, ly];
+    }
+
+    /**
+     * 加载钟图
+     */
+    function loadClock()
+    {
+        var cx = cp.x - clock.width / 2;
+        var cy = cp.y - clock.height / 2 - 8;
+        cxt.translate(cx, cy);
+        cxt.drawImage(clock, 0, 0);
+        cxt.translate(-cx, -cy);
+    }
+</script>
