@@ -44,11 +44,18 @@
 
     var move_switch = 0;
 
+    document.body.addEventListener('touchstart', function(e){
+        startY = e.touches[0].pageY;
+    }, { passive: false });
+    document.body.addEventListener('touchmove', function(e){
+        e.preventDefault();
+    }, { passive: false });
+
     //touchstart事件
     function touchSatrtFunc(evt)
     {
         try {
-            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
             move_switch = 1;
         } catch (e) {
             alert('touchSatrtFunc：' + e.message);
@@ -59,7 +66,7 @@
     function touchMoveFunc(evt)
     {
         try {
-            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
             if (move_switch == 1) {
                 var touch = evt.touches[0]; //获取第一个触点
                 loc.x = Number(touch.pageX);
@@ -78,7 +85,7 @@
     function touchEndFunc(evt)
     {
         try {
-            //evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
+            evt.preventDefault(); //阻止触摸时浏览器的缩放、滚动条滚动等
             move_switch = 0;
             console.log('end');
         } catch (e) {
